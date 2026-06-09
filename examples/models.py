@@ -89,10 +89,3 @@ class BookToTag(Base):
 
     book: Mapped["Book"] = relationship(back_populates="tag_links")
     tag: Mapped["Tag"] = relationship(back_populates="book_links")
-
-
-engine = create_engine("sqlite:///books.db", echo=True)
-
-
-def init_db() -> None:
-    Base.metadata.create_all(engine)
