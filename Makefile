@@ -9,7 +9,7 @@ fix/format:
 fix/lint:
 	@ uvx ruff check --fix .
 
-fix: fix/format fix/lint fix/license
+fix: fix/license fix/format fix/lint
 
 check/format:
 	@ uvx ruff format --check .
