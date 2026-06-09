@@ -17,7 +17,10 @@ class AdminPage(APIRouter):
     ):
         kebab_name = name.lower().replace(" ", "-")
         return self.get(
-            f"/stat/{kebab_name}", summary=name, description=description, response_model=Stat
+            f"/stat/{kebab_name}",
+            summary=name,
+            description=description,
+            response_model=Stat,
         )
 
     def table(
