@@ -17,7 +17,7 @@ class AdminPage(APIRouter):
     ):
         kebab_name = name.lower().replace(" ", "-")
         return self.get(
-            f"/stat/{kebab_name}", description=description, response_model=Stat
+            f"/stat/{kebab_name}", summary=name, description=description, response_model=Stat
         )
 
     def table(
@@ -28,6 +28,7 @@ class AdminPage(APIRouter):
         kebab_name = name.lower().replace(" ", "-")
         return self.get(
             f"/table/{kebab_name}",
+            summary=name,
             description=description,
             response_model=Table,
         )
@@ -36,6 +37,7 @@ class AdminPage(APIRouter):
         kebab_name = name.lower().replace(" ", "-")
         return self.get(
             f"/markdown/{kebab_name}",
+            summary=name,
             response_model=str,
         )
 
@@ -47,6 +49,7 @@ class AdminPage(APIRouter):
         kebab_name = name.lower().replace(" ", "-")
         return self.get(
             f"/action/{kebab_name}",
+            summary=name,
             description=description,
         )
 
@@ -58,6 +61,7 @@ class AdminPage(APIRouter):
         kebab_name = name.lower().replace(" ", "-")
         return self.post(
             f"/action/{kebab_name}",
+            summary=name,
             description=description,
         )
 
@@ -69,6 +73,7 @@ class AdminPage(APIRouter):
         kebab_name = name.lower().replace(" ", "-")
         return self.put(
             f"/action/{kebab_name}",
+            summary=name,
             description=description,
         )
 
@@ -80,6 +85,7 @@ class AdminPage(APIRouter):
         kebab_name = name.lower().replace(" ", "-")
         return self.patch(
             f"/action/{kebab_name}",
+            summary=name,
             description=description,
         )
 
@@ -91,6 +97,7 @@ class AdminPage(APIRouter):
         kebab_name = name.lower().replace(" ", "-")
         return self.delete(
             f"/action/{kebab_name}",
+            summary=name,
             description=description,
         )
 
@@ -108,6 +115,7 @@ class AdminPage(APIRouter):
 
         return self.post(
             f"/form/{hide_path}{kebab_name}",
+            summary=name,
             description=description,
         )
 
@@ -125,6 +133,7 @@ class AdminPage(APIRouter):
 
         return self.put(
             f"/form/{hide_path}{kebab_name}",
+            summary=name,
             description=description,
         )
 
@@ -142,6 +151,7 @@ class AdminPage(APIRouter):
 
         return self.patch(
             f"/form/{hide_path}{kebab_name}",
+            summary=name,
             description=description,
         )
 
@@ -159,6 +169,7 @@ class AdminPage(APIRouter):
 
         return self.delete(
             f"/form/{hide_path}{kebab_name}",
+            summary=name,
             description=description,
         )
 
@@ -170,6 +181,7 @@ class AdminPage(APIRouter):
         kebab_name = name.lower().replace(" ", "-")
         return self.get(
             f"/area-chart/{kebab_name}",
+            summary=name,
             description=description,
             response_model=AreaChart,
         )
@@ -182,6 +194,7 @@ class AdminPage(APIRouter):
         kebab_name = name.lower().replace(" ", "-")
         return self.get(
             f"/bar-chart/{kebab_name}",
+            summary=name,
             description=description,
             response_model=BarChart,
         )
@@ -194,6 +207,7 @@ class AdminPage(APIRouter):
         kebab_name = name.lower().replace(" ", "-")
         return self.get(
             f"/line-chart/{kebab_name}",
+            summary=name,
             description=description,
             response_model=LineChart,
         )
@@ -206,6 +220,7 @@ class AdminPage(APIRouter):
         kebab_name = name.lower().replace(" ", "-")
         return self.get(
             f"/pie-chart/{kebab_name}",
+            summary=name,
             description=description,
             response_model=PieChart,
         )
