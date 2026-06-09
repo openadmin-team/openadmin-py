@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from .models import Base
+from . import models, seed
 
 DB_PATH = Path(__file__).parent / "database.sqlite"
 
@@ -25,7 +25,9 @@ async def lifespan():
     engine = await get_async_engine()
 
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(models.Base.metadata.drop_all)
+        await conn.run_sync(models.Base.metadata.create_all)
+        await seed.seed(engine)
 
     yield
 
