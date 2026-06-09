@@ -1,2 +1,7 @@
 # IDE
 .vscode
+
+# Python
+.pytest_cache
+.ruff_cache
+.venv

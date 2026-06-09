@@ -19,10 +19,10 @@ check/cves:
 	@ uv audit --preview-features audit
 
 check/security:
-	@ uvx bandit -r src -q
+	@ uvx bandit -r openadmin -q
 
 check/unused:
-	@ uvx vulture src examples --min-confidence 80
+	@ uvx vulture openadmin --min-confidence 80
 
 check/spell:
 	@ uvx codespell .
