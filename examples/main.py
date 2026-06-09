@@ -4,4 +4,6 @@
 
 from fastapi import FastAPI
 
-app = FastAPI()
+from .lifespan import lifespan
+
+app = FastAPI(lfespan=lifespan)
