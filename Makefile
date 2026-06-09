@@ -1,10 +1,15 @@
+fix/license:
+	@ uvx "reuse[charset-normalizer]" annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised openadmin/
+	@ uvx "reuse[charset-normalizer]" annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised tests/
+	@ uvx "reuse[charset-normalizer]" annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised examples/
+
 fix/format:
 	@ uvx ruff format .
 
 fix/lint:
 	@ uvx ruff check --fix .
 
-fix: fix/format fix/lint
+fix: fix/format fix/lint fix/license
 
 check/format:
 	@ uvx ruff format --check .
@@ -27,10 +32,13 @@ check/unused:
 check/spell:
 	@ uvx codespell .
 
+check/license:
+	@ uvx "reuse[charset-normalizer]" lint --subset openadmin/ tests/ examples/
+
 check/test:
 	@ uvx pytest
 
-check: check/format check/lint check/typing check/cves check/security check/unused check/spell check/test
+check: check/format check/lint check/typing check/cves check/security check/unused check/spell check/license check/test
 
 dev/run:
 	@ PYTHONPATH=. fastapi dev examples/main.py --reload
