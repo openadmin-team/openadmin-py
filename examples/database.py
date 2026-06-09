@@ -4,6 +4,7 @@
 
 from contextlib import asynccontextmanager
 from functools import lru_cache
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import Depends
@@ -15,6 +16,8 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from .models import Base
+
+DB_PATH = Path(__file__).parent / "database.sqlite"
 
 
 @asynccontextmanager
@@ -31,7 +34,7 @@ async def lifespan():
 
 @lru_cache()
 async def get_async_engine() -> AsyncEngine:
-    return create_async_engine("sqlite+aiosqlite:///./test.db")
+    return create_async_engine(f"sqlite+aiosqlite:///{DB_PATH}")
 
 
 async def get_async_sessionmaker(
