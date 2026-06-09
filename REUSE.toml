@@ -1,0 +1,16 @@
+version = 1
+
+[[annotations]]
+path = [
+    ".github/**",
+    ".gitignore",
+    ".python-version",
+    "Makefile",
+    "pyproject.toml",
+    "uv.lock",
+    "README.md",
+    "LICENSE",
+    "**/__pycache__"
+]
+SPDX-FileCopyrightText = "OpenAdmin"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
