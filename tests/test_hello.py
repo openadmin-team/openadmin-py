@@ -2,5 +2,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+
 def test_hello_world():
     assert "hello" == "hello"
