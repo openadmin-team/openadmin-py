@@ -110,7 +110,8 @@ async def seed(engine: AsyncEngine) -> None:
         await session.flush()
 
         for book in books:
-            book.genres.extend(random.sample(genres, k=random.randint(1, 3)))
+            for genre in random.sample(genres, k=random.randint(1, 3)):
+                session.add(models.BookToGenre(book_id=book.id, genre_id=genre.id))
             for tag in random.sample(tags, k=random.randint(0, 4)):
                 session.add(models.BookToTag(book_id=book.id, tag_id=tag.id))
 
