@@ -3,8 +3,48 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from contextlib import asynccontextmanager
+from functools import lru_cache
+from typing import Annotated
+
+from fastapi import Depends
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
+
+from .models import Base
 
 
 @asynccontextmanager
 async def lifespan():
+    engine = await get_async_engine()
+
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
     yield
+
+    await engine.dispose()
+
+
+@lru_cache()
+async def get_async_engine() -> AsyncEngine:
+    return create_async_engine("sqlite+aiosqlite:///./test.db")
+
+
+async def get_async_sessionmaker(
+    engine: AsyncEngine = Depends(get_async_engine),
+) -> async_sessionmaker:
+    return async_sessionmaker(engine)
+
+
+async def get_async_session(
+    sessionmaker: async_sessionmaker = Depends(get_async_sessionmaker),
+):
+    async with sessionmaker() as session:
+        yield session
+
+
+AsyncSessionDep = Annotated[AsyncSession, Depends(get_async_session)]

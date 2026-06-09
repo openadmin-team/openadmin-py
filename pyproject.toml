@@ -29,5 +29,6 @@ indent-style = "space"
 
 [dependency-groups]
 dev = [
+    "aiosqlite>=0.22.1",
     "sqlalchemy>=2.0.50",
 ]
