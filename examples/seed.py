@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 OpenAdmin
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 import random
 
 from faker import Faker
@@ -8,17 +12,49 @@ from . import models
 fake = Faker()
 
 GENRES = [
-    'Fiction', 'Non-Fiction', 'Mystery', 'Thriller', 'Science Fiction',
-    'Fantasy', 'Romance', 'Horror', 'Biography', 'History',
-    'Self-Help', 'Travel', 'Cooking', 'Science', 'Philosophy',
-    'Poetry', 'Drama', 'Children', 'Young Adult', 'Graphic Novel',
+    "Fiction",
+    "Non-Fiction",
+    "Mystery",
+    "Thriller",
+    "Science Fiction",
+    "Fantasy",
+    "Romance",
+    "Horror",
+    "Biography",
+    "History",
+    "Self-Help",
+    "Travel",
+    "Cooking",
+    "Science",
+    "Philosophy",
+    "Poetry",
+    "Drama",
+    "Children",
+    "Young Adult",
+    "Graphic Novel",
 ]
 
 TAGS = [
-    'bestseller', 'award-winner', 'classic', 'debut', 'series',
-    'standalone', 'illustrated', 'translated', 'adapted', 'hardcover',
-    'paperback', 'audiobook', 'ebook', 'signed', 'limited-edition',
-    'out-of-print', 'new-release', 'staff-pick', 'book-club', 'recommended',
+    "bestseller",
+    "award-winner",
+    "classic",
+    "debut",
+    "series",
+    "standalone",
+    "illustrated",
+    "translated",
+    "adapted",
+    "hardcover",
+    "paperback",
+    "audiobook",
+    "ebook",
+    "signed",
+    "limited-edition",
+    "out-of-print",
+    "new-release",
+    "staff-pick",
+    "book-club",
+    "recommended",
 ]
 
 
@@ -55,11 +91,17 @@ async def seed(engine: AsyncEngine) -> None:
 
         books = [
             models.Book(
-                title=fake.sentence(nb_words=random.randint(2, 6)).rstrip('.'),
-                published_year=random.randint(1900, 2025) if random.random() > 0.1 else None,
-                summary=fake.paragraph(nb_sentences=random.randint(2, 5)) if random.random() > 0.15 else None,
+                title=fake.sentence(nb_words=random.randint(2, 6)).rstrip("."),
+                published_year=random.randint(1900, 2025)
+                if random.random() > 0.1
+                else None,
+                summary=fake.paragraph(nb_sentences=random.randint(2, 5))
+                if random.random() > 0.15
+                else None,
                 author_id=random.choice(authors).id,
-                publisher_id=random.choice(publishers).id if random.random() > 0.1 else None,
+                publisher_id=random.choice(publishers).id
+                if random.random() > 0.1
+                else None,
             )
             for _ in range(100)
         ]
