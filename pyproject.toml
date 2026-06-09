@@ -7,3 +7,22 @@ requires-python = ">=3.14"
 dependencies = [
     "fastapi[standard]>=0.136.3",
 ]
+
+[tool.pyright]
+typeCheckingMode = "standard"
+venvPath = "."
+venv = ".venv"
+include = ["."]
+exclude = ["**/__pycache__", ".venv", ".ruff_cache", "**/."]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+extend-select = ["E", "F", "I"]
+ignore = ["E501"]
+fixable = ["ALL"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
