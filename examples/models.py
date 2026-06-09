@@ -29,9 +29,6 @@ class Author(Base):
 
     books: Mapped[list["Book"]] = relationship(back_populates="author")
 
-    def __repr__(self) -> str:
-        return f"<Author {self.first_name} {self.last_name}>"
-
 
 class Publisher(Base):
     __tablename__ = "publisher"
@@ -41,9 +38,6 @@ class Publisher(Base):
     country: Mapped[str | None] = mapped_column(String(100))
 
     books: Mapped[list["Book"]] = relationship(back_populates="publisher")
-
-    def __repr__(self) -> str:
-        return f"<Publisher {self.name}>"
 
 
 class Book(Base):
@@ -65,9 +59,6 @@ class Book(Base):
         back_populates="book", cascade="all, delete-orphan"
     )
 
-    def __repr__(self) -> str:
-        return f"<Book {self.title!r}>"
-
 
 class Genre(Base):
     __tablename__ = "genre"
@@ -79,9 +70,6 @@ class Genre(Base):
         secondary=BookToGenre.__table__, back_populates="genres"
     )
 
-    def __repr__(self) -> str:
-        return f"<Genre {self.name}>"
-
 
 class Tag(Base):
     __tablename__ = "tag"
@@ -90,9 +78,6 @@ class Tag(Base):
     name: Mapped[str] = mapped_column(String(100), unique=True)
 
     book_links: Mapped[list["BookToTag"]] = relationship(back_populates="tag")
-
-    def __repr__(self) -> str:
-        return f"<Tag {self.name}>"
 
 
 class BookToTag(Base):
