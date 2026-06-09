@@ -1,8 +1,8 @@
 fix/license:
 	@ uvx "reuse[charset-normalizer]" download --all
-	@ uvx "reuse[charset-normalizer]" annotate --license AGPL-3.0-or-later --recursive --skip-unrecognised openadmin/
-	@ uvx "reuse[charset-normalizer]" annotate --license AGPL-3.0-or-later --recursive --skip-unrecognised tests/
-	@ uvx "reuse[charset-normalizer]" annotate --license AGPL-3.0-or-later --recursive --skip-unrecognised examples/
+	@ uvx "reuse[charset-normalizer]" annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised openadmin/
+	@ uvx "reuse[charset-normalizer]" annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised tests/
+	@ uvx "reuse[charset-normalizer]" annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised examples/
 
 fix/format:
 	@ uvx ruff format .
