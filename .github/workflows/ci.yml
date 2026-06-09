@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  workflow_call:
+
+concurrency:
+  group: ci-${{ github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: "🧹 Lint"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/lint
+
+  format:
+    name: "🎨 Format"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/format
+
+  typecheck:
+    name: "🏷️ Typecheck"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/typecheck
+
+  unused-code:
+    name: "🗑️ Unused Code"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/unused-code
+
+  spell-check:
+    name: "✍️ Spell Check"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/spell-check
+
+  branch-name:
+    name: "🌿 Branch Name"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/branch-name
+
+  security:
+    name: "🛡️ Security"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/security
+
+  dependency-cves:
+    name: "📦 Dependency CVEs"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/dependency-cves
+
+  test:
+    name: "🧪 Test"
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+      - format
+      - typecheck
+      - unused-code
+      - spell-check
+      - branch-name
+      - security
+      - dependency-cves
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/test

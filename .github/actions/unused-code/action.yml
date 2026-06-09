@@ -1,0 +1,10 @@
+name: "🗑️ Unused Code"
+description: "Run vulture to find dead code"
+runs:
+  using: composite
+  steps:
+    - uses: astral-sh/setup-uv@v4
+      with:
+        enable-cache: true
+    - shell: bash
+      run: make check/unused

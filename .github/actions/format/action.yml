@@ -1,0 +1,10 @@
+name: "🎨 Format"
+description: "Run ruff format check"
+runs:
+  using: composite
+  steps:
+    - uses: astral-sh/setup-uv@v4
+      with:
+        enable-cache: true
+    - shell: bash
+      run: make check/format

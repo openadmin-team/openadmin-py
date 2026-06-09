@@ -1,0 +1,12 @@
+name: "🏷️ Typecheck"
+description: "Run pyright type checker"
+runs:
+  using: composite
+  steps:
+    - uses: astral-sh/setup-uv@v4
+      with:
+        enable-cache: true
+    - shell: bash
+      run: uv sync
+    - shell: bash
+      run: make check/typing

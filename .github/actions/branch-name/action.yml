@@ -1,0 +1,15 @@
+name: "🌿 Branch Name"
+description: "Validate branch name follows naming conventions"
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        BRANCH="${{ github.head_ref || github.ref_name }}"
+        PATTERN="^(main|develop|(feat|fix|chore|refactor|docs|test|release|hotfix)/[a-zA-Z0-9._-]+)$"
+        if [[ ! "$BRANCH" =~ $PATTERN ]]; then
+          echo "Branch name '$BRANCH' does not match required pattern: $PATTERN"
+          echo "Valid prefixes: feat/, fix/, chore/, refactor/, docs/, test/, release/, hotfix/"
+          exit 1
+        fi
+        echo "Branch name '$BRANCH' is valid."
