@@ -10,7 +10,8 @@ path = [
     "uv.lock",
     "README.md",
     "LICENSE",
-    "**/__pycache__"
+    "**/__pycache__",
+    "docs/**",
 ]
 SPDX-FileCopyrightText = "OpenAdmin"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
