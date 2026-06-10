@@ -13,7 +13,7 @@ typeCheckingMode = "standard"
 venvPath = "."
 venv = ".venv"
 include = ["."]
-exclude = ["**/__pycache__", ".venv", ".ruff_cache", "**/."]
+exclude = ["**/__pycache__", ".venv", ".ruff_cache", "**/.*"]
 
 [tool.ruff]
 line-length = 88
