@@ -6,7 +6,7 @@
 from openadmin.fastapi import AdminPage
 from openadmin.sqlalchemy import SQLAlchemyPagePlugin
 
-from .models import Author
+from .models import Author, Book
 
 page = AdminPage(
     "Users",
@@ -14,9 +14,14 @@ page = AdminPage(
         SQLAlchemyPagePlugin(
             tables=[
                 {
-                    "name": "Auto gen author table",
+                    "name": "Authors table",
                     "model": Author,
-                    "description": "Author admin panel",
+                    "description": "Author admin table",
+                },
+                {
+                    "name": "Books tables",
+                    "model": Book,
+                    "description": "Books admin table",
                 },
             ]
         )
