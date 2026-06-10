@@ -4,8 +4,11 @@
 
 from openadmin.plugins import PanelPlugin
 
+from .state import PluginSharedState
+
 
 class SQLAlchemyPanelPlugin(PanelPlugin):
     def __init__(
         self,
-    ): ...
+    ):
+        self.shared_state: PluginSharedState = {}
