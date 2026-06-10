@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
+from sqlalchemy import func, select
+
 from openadmin.fastapi import AdminPage
 from openadmin.sqlalchemy import SQLAlchemyPagePlugin
 
@@ -32,6 +34,25 @@ page = AdminPage(
                         Author.id,
                         Author.first_name,
                     ],
+                    "stats": [
+                        {
+                            "name": "Books per author",
+                            "description": "Number of books per author",
+                            "query": select(func.count(Author.id)).select_from(Author),
+                        },
+                        {
+                            "name": "Average books per author",
+                            "description": "Average number of books per author",
+                            "query": select(
+                                func.avg(func.count(Author.id))
+                            ).select_from(Author),
+                        },
+                        {
+                            "name": "Total books",
+                            "description": "Total number of books",
+                            "query": select(func.count(Book.id)),
+                        },
+                    ],
                 },
                 {
                     "name": "Books tables",
@@ -44,6 +65,17 @@ page = AdminPage(
                     "actions": [
                         "read",
                         "update",
+                    ],
+                    "sort": [
+                        Book.id,
+                        Book.title,
+                    ],
+                    "stats": [
+                        {
+                            "name": "Total books",
+                            "description": "Total number of books",
+                            "query": select(func.count(Book.id)),
+                        },
                     ],
                 },
             ]
