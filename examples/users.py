@@ -14,6 +14,18 @@ page = AdminPage(
     "Users",
     plugins=[
         SQLAlchemyPagePlugin(
+            stats=[
+                {
+                    "name": "Books per author",
+                    "description": "Number of books per author",
+                    "query": select(func.count(Author.id)).select_from(Author),
+                },
+                {
+                    "name": "Total books",
+                    "description": "Total number of books",
+                    "query": select(func.count(Book.id)),
+                },
+            ],
             tables=[
                 {
                     "name": "Authors table",
@@ -35,18 +47,6 @@ page = AdminPage(
                         Author.id,
                         Author.first_name,
                     ],
-                    "stats": [
-                        {
-                            "name": "Books per author",
-                            "description": "Number of books per author",
-                            "query": select(func.count(Author.id)).select_from(Author),
-                        },
-                        {
-                            "name": "Total books",
-                            "description": "Total number of books",
-                            "query": select(func.count(Book.id)),
-                        },
-                    ],
                 },
                 {
                     "name": "Books tables",
@@ -64,15 +64,8 @@ page = AdminPage(
                         Book.id,
                         Book.title,
                     ],
-                    "stats": [
-                        {
-                            "name": "Total books",
-                            "description": "Total number of books",
-                            "query": select(func.count(Book.id)),
-                        },
-                    ],
                 },
-            ]
+            ],
         )
     ],
 )

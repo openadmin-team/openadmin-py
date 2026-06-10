@@ -16,7 +16,6 @@ class Table(TypedDict):
     columns: NotRequired[List[InstrumentedAttribute]]
     actions: NotRequired[List[Literal["create", "delete", "update", "read"]]]
     sort: NotRequired[List[InstrumentedAttribute]]
-    stats: NotRequired[List[Stat]]
 
 
 class Stat(TypedDict):

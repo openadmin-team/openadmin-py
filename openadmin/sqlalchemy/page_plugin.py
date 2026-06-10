@@ -10,12 +10,15 @@ from sqlalchemy import String, Text, or_, select
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 
 from . import state
-from .types import Stat, Table
+from .types import List, Stat, Table
 
 
 class SQLAlchemyPagePlugin(PagePlugin):
-    def __init__(self, tables: list[Table]) -> None:
+    def __init__(
+        self, *, tables: List[Table] | None = None, stats: List[Stat] | None = None
+    ) -> None:
         self.tables = tables
+        self.stats = stats
         self.shared_state = state.get_shared_state()
 
     def after_page_init(self, page: AdminPageProtocol) -> None:
