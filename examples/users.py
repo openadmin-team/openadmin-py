@@ -22,6 +22,16 @@ page = AdminPage(
                         Author.first_name,
                         Author.bio,
                     ],
+                    "actions": [
+                        "create",
+                        "delete",
+                        "read",
+                        "update",
+                    ],
+                    "sort": [
+                        Author.id,
+                        Author.first_name,
+                    ],
                 },
                 {
                     "name": "Books tables",
@@ -30,6 +40,10 @@ page = AdminPage(
                     "columns": [
                         Book.id,
                         Book.title,
+                    ],
+                    "actions": [
+                        "read",
+                        "update",
                     ],
                 },
             ]
