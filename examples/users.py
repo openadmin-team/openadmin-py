@@ -19,6 +19,7 @@ page = AdminPage(
                 {
                     "name": "Auto gen author table",
                     "model": Author,
+                    "description": "Author admin panel",
                 },
             ]
         )
