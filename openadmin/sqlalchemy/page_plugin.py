@@ -10,19 +10,19 @@ from sqlalchemy import String, Text, or_, select
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 
 from . import state
-from .types import List, Stat, Table
+from .types import Stat, Table
 
 
 class SQLAlchemyPagePlugin(PagePlugin):
     def __init__(
-        self, *, tables: List[Table] | None = None, stats: List[Stat] | None = None
+        self, *, tables: list[Table] | None = None, stats: list[Stat] | None = None
     ) -> None:
         self.tables = tables
         self.stats = stats
         self.shared_state = state.get_shared_state()
 
     def after_page_init(self, page: AdminPageProtocol) -> None:
-        for table in self.tables:
+        for table in self.tables or []:
             model = table.get("model")
             default_name = f"{model.__name__} table"
             default_description = f"Admin page for {model.__name__} table"
@@ -32,11 +32,11 @@ class SQLAlchemyPagePlugin(PagePlugin):
                 description=table.get("description", default_description),
             )(self.__create_table_route(table))
 
-            for stat in table.get("stats", []):
-                page.stat(
-                    name=stat.get("name", f"{model.__name__} stat"),
-                    description=stat.get("description"),
-                )(self.__create_stat_route(stat))
+        for stat in self.stats or []:
+            page.stat(
+                name=stat.get("name", "Stat"),
+                description=stat.get("description"),
+            )(self.__create_stat_route(stat))
 
     def __create_table_route(self, table: Table):
         async def _(
@@ -46,9 +46,16 @@ class SQLAlchemyPagePlugin(PagePlugin):
             engine = self.__get_async_engine()
             model = table.get("model")
             columns = table.get("columns")
-            sort_cols = table.get("sort")
+            custom_query = table.get("query")
 
-            stmt = select(*columns) if columns else select(model)
+            if custom_query is not None and columns:
+                stmt = custom_query.with_only_columns(*columns)
+            elif custom_query is not None:
+                stmt = custom_query
+            elif columns:
+                stmt = select(*columns)
+            else:
+                stmt = select(model)
 
             if search:
                 if columns:
@@ -57,19 +64,18 @@ class SQLAlchemyPagePlugin(PagePlugin):
                         for col in columns
                         if isinstance(col.property.columns[0].type, (String, Text))
                     ]
-                else:
+                elif custom_query is None:
                     searchable = [
                         col
                         for col in model.__table__.columns
                         if isinstance(col.type, (String, Text))
                     ]
+                else:
+                    searchable = []
                 if searchable:
                     stmt = stmt.where(
                         or_(*(col.ilike(f"%{search}%") for col in searchable))
                     )
-
-            if sort_cols:
-                stmt = stmt.order_by(*sort_cols)
 
             stmt = stmt.offset(pagination.page * pagination.per_page).limit(
                 pagination.per_page
