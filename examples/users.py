@@ -41,13 +41,6 @@ page = AdminPage(
                             "query": select(func.count(Author.id)).select_from(Author),
                         },
                         {
-                            "name": "Average books per author",
-                            "description": "Average number of books per author",
-                            "query": select(
-                                func.avg(func.count(Author.id))
-                            ).select_from(Author),
-                        },
-                        {
                             "name": "Total books",
                             "description": "Total number of books",
                             "query": select(func.count(Book.id)),
