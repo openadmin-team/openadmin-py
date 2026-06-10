@@ -9,4 +9,5 @@ from sqlalchemy.orm import DeclarativeBase
 
 class Table(TypedDict):
     name: NotRequired[str]
+    description: NotRequired[str]
     model: Type[DeclarativeBase]

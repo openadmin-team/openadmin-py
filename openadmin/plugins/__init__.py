@@ -2,8 +2,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+from .page import AdminPageProtocol
 from .plugin import PagePlugin
 
 __all__ = [
     "PagePlugin",
+    "AdminPageProtocol",
 ]

@@ -5,12 +5,12 @@
 from typing import List
 
 from fastapi import APIRouter
-from openadmin.plugins import PagePluginProtocol
+from openadmin.plugins import PagePlugin
 from openadmin.types import AreaChart, BarChart, LineChart, PieChart, Stat, Table
 
 
 class AdminPage(APIRouter):
-    def __init__(self, name: str, *, plugins: List[PagePluginProtocol] | None = None):
+    def __init__(self, name: str, *, plugins: List[PagePlugin] | None = None):
         super().__init__(prefix=f"/{name.lower().replace(' ', '-')}")
 
         if plugins:

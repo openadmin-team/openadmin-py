@@ -5,12 +5,25 @@
 from sqlalchemy import func, or_, select
 
 from openadmin.fastapi import AdminPage, PaginationParamsDep, SearchQueryDep
+from openadmin.sqlalchemy import SQLAlchemyPagePlugin
 from openadmin.types import AreaChart, BarChart, PieChart, Stat, Table
 
 from .database import AsyncSessionDep
 from .models import Author, Book, BookToGenre, Genre
 
-page = AdminPage("Users")
+page = AdminPage(
+    "Users",
+    plugins=[
+        SQLAlchemyPagePlugin(
+            tables=[
+                {
+                    "name": "Auto gen author table",
+                    "model": Author,
+                },
+            ]
+        )
+    ],
+)
 
 
 @page.stat("Total Authors")
