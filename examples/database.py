@@ -35,7 +35,7 @@ async def lifespan():
 
 
 @lru_cache()
-async def get_async_engine() -> AsyncEngine:
+def get_async_engine() -> AsyncEngine:
     return create_async_engine(f"sqlite+aiosqlite:///{DB_PATH}")
 
 
