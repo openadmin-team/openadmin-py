@@ -17,11 +17,20 @@ page = AdminPage(
                     "name": "Authors table",
                     "model": Author,
                     "description": "Author admin table",
+                    "columns": [
+                        Author.id,
+                        Author.first_name,
+                        Author.bio,
+                    ],
                 },
                 {
                     "name": "Books tables",
                     "model": Book,
                     "description": "Books admin table",
+                    "columns": [
+                        Book.id,
+                        Book.title,
+                    ],
                 },
             ]
         )
