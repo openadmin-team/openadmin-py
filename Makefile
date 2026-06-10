@@ -42,4 +42,4 @@ check/test:
 check: check/format check/lint check/typing check/cves check/security check/unused check/spell check/license check/test
 
 dev/run:
-	@ PYTHONPATH=. fastapi dev examples/main.py --reload
+	@ PYTHONPATH=. fastapi dev examples/main.py --host 0.0.0.0 --port $${PORT:-8000} --reload
