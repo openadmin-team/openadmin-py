@@ -2,8 +2,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from .plugin import PagePlugin
+from .plaugin import RedisPlugin
 
-__all__ = [
-    "PagePlugin",
-]
+__all__ = ["RedisPlugin"]

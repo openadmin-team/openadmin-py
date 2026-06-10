@@ -2,10 +2,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Protocol
+from abc import ABC
 
 from .page import AdminPageProtocol
 
 
-class PagePluginProtocol(Protocol):
+class PagePlugin(ABC):
     def after_page_init(self, page: AdminPageProtocol) -> None: ...
