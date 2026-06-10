@@ -2,13 +2,20 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+from typing import List
+
 from fastapi import APIRouter
+from openadmin.plugins import PagePluginProtocol
 from openadmin.types import AreaChart, BarChart, LineChart, PieChart, Stat, Table
 
 
 class AdminPage(APIRouter):
-    def __init__(self, name: str):
+    def __init__(self, name: str, *, plugins: List[PagePluginProtocol] | None = None):
         super().__init__(prefix=f"/{name.lower().replace(' ', '-')}")
+
+        if plugins:
+            for plugin in plugins:
+                plugin.after_page_init(self)
 
     def stat(
         self,
