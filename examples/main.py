@@ -4,6 +4,14 @@
 
 from fastapi import FastAPI
 
+from openadmin.fastapi import AdminPanel
+
+from . import users
 from .lifespan import lifespan
 
 app = FastAPI(lifespan=lifespan)
+admin_panel = AdminPanel()
+
+admin_panel.include_page(users.page, tags=["Users"])
+
+app.mount("/admin", admin_panel)
