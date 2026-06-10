@@ -22,7 +22,7 @@ DB_PATH = Path(__file__).parent / "database.sqlite"
 
 @asynccontextmanager
 async def lifespan():
-    engine = await get_async_engine()
+    engine = get_async_engine()
 
     async with engine.begin() as conn:
         await conn.run_sync(models.Base.metadata.drop_all)
