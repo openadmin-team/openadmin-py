@@ -2,10 +2,13 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+from typing import List
+
 from openadmin.plugins import PagePlugin
-from sqlalchemy.orm import DeclarativeBase
+
+from .types import Table
 
 
 class SQLAlchemyPagePlugin(PagePlugin):
-    def __init__(self, model: DeclarativeBase) -> None:
-        self.model = model
+    def __init__(self, tables: List[Table]) -> None:
+        self.tables = tables
