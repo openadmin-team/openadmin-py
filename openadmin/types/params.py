@@ -9,3 +9,8 @@ from pydantic import BaseModel
 class PaginationParams(BaseModel):
     page: int
     per_page: int
+
+
+class CursorPaginationParams(BaseModel):
+    cursor: str | None
+    per_page: int

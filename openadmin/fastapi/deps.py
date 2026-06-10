@@ -5,7 +5,7 @@
 from typing import Annotated
 
 from fastapi import Depends, Query
-from openadmin.types import PaginationParams
+from openadmin.types import CursorPaginationParams, PaginationParams
 
 
 def pagination_params(
@@ -21,5 +21,15 @@ def get_search_query(
     return search
 
 
+def cursor_pagination_params(
+    per_page: int = Query(default=10, ge=1, description="Number of items to return"),
+    cursor: str | None = Query(None, description="Cursor for pagination"),
+) -> CursorPaginationParams:
+    return CursorPaginationParams(per_page=per_page, cursor=cursor)
+
+
 PaginationParamsDep = Annotated[PaginationParams, Depends(pagination_params)]
+CursorPaginationParamsDep = Annotated[
+    CursorPaginationParams, Depends(cursor_pagination_params)
+]
 SearchQueryDep = Annotated[str | None, Depends(get_search_query)]

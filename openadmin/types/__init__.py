@@ -4,7 +4,7 @@
 
 from .actions import Action
 from .charts import AreaChart, BarChart, LineChart, PieChart
-from .params import PaginationParams
+from .params import CursorPaginationParams, PaginationParams
 from .stats import Stat
 from .tables import Table
 
@@ -17,4 +17,5 @@ __all__ = [
     "Action",
     "Stat",
     "PaginationParams",
+    "CursorPaginationParams",
 ]
