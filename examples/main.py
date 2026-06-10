@@ -7,12 +7,12 @@ from fastapi import FastAPI
 from openadmin.fastapi import AdminPanel
 from openadmin.sqlalchemy import SQLAlchemyPanelPlugin
 
-from . import users
+from . import database, users
 from .lifespan import lifespan
 
 app = FastAPI(lifespan=lifespan)
 admin_panel = AdminPanel(
-    plugins=[SQLAlchemyPanelPlugin()],
+    plugins=[SQLAlchemyPanelPlugin(async_engine_dep=database.get_async_engine)],
 )
 
 admin_panel.include_page(users.page, tags=["Users"])

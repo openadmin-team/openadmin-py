@@ -46,7 +46,7 @@ async def get_async_sessionmaker(
 
 
 async def get_async_session(
-    sessionmaker: async_sessionmaker = Depends(get_async_sessionmaker),
+    sessionmaker: async_sessionmaker[AsyncSession] = Depends(get_async_sessionmaker),
 ):
     async with sessionmaker() as session:
         yield session

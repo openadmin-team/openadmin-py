@@ -8,14 +8,14 @@ from openadmin.fastapi import PaginationParamsDep, SearchQueryDep
 from openadmin.plugins import AdminPageProtocol, PagePlugin
 from openadmin.types import Table as TableResponce
 
-from .state import PluginSharedState
+from . import state
 from .types import Table
 
 
 class SQLAlchemyPagePlugin(PagePlugin):
     def __init__(self, tables: List[Table]) -> None:
         self.tables = tables
-        self.shared_state: PluginSharedState = {}
+        self.shared_state = state.get_shared_state()
 
     def after_page_init(self, page: AdminPageProtocol) -> None:
         for table in self.tables:

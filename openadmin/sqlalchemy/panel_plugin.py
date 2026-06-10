@@ -2,13 +2,15 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from openadmin.plugins import PanelPlugin
+from typing import Any, Generator
 
-from .state import PluginSharedState
+from openadmin.plugins import PanelPlugin
+from sqlalchemy.ext.asyncio import AsyncEngine
+
+from . import state
 
 
 class SQLAlchemyPanelPlugin(PanelPlugin):
-    def __init__(
-        self,
-    ):
-        self.shared_state: PluginSharedState = {}
+    def __init__(self, async_engine_dep: Generator[AsyncEngine, Any, None]):
+        self.shared_state = state.get_shared_state()
+        self.shared_state["async_engine_dep"] = async_engine_dep
