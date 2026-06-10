@@ -12,6 +12,7 @@ class Table(TypedDict):
     name: NotRequired[str]
     description: NotRequired[str]
     model: Type[DeclarativeBase]
+    query: NotRequired[Select]
     columns: NotRequired[List[InstrumentedAttribute]]
     actions: NotRequired[List[Literal["create", "delete", "update", "read"]]]
     sort: NotRequired[List[InstrumentedAttribute]]

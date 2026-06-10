@@ -18,6 +18,7 @@ page = AdminPage(
                 {
                     "name": "Authors table",
                     "model": Author,
+                    "query": select(Author).order_by(Author.first_name.desc()),
                     "description": "Author admin table",
                     "columns": [
                         Author.id,

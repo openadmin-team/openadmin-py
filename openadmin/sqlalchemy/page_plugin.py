@@ -84,7 +84,7 @@ class SQLAlchemyPagePlugin(PagePlugin):
                     for row in result.scalars().all()
                 ]
 
-            return TableResponse(data=rows) # type: ignore
+            return TableResponse(data=rows)  # type: ignore
 
         return _
 
@@ -93,7 +93,7 @@ class SQLAlchemyPagePlugin(PagePlugin):
             engine = self.__get_async_engine()
             async with AsyncSession(engine) as session:
                 result = await session.execute(stat["query"])
-                return StatResponse(value=result.scalar()) # type: ignore
+                return StatResponse(value=result.scalar())  # type: ignore
 
         return _
 
