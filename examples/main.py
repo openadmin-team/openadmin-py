@@ -12,7 +12,7 @@ from .lifespan import lifespan
 
 app = FastAPI(lifespan=lifespan)
 admin_panel = AdminPanel(
-    plugins=[SQLAlchemyPanelPlugin(async_engine_dep=database.get_async_engine)],
+    plugins=[SQLAlchemyPanelPlugin(async_engine_callback=database.get_async_engine)],
 )
 
 admin_panel.include_page(users.page, tags=["Users"])
