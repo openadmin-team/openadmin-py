@@ -18,4 +18,4 @@ class CursorPaginationParams(BaseModel):
     per_page: int
 
 
-SortParams = Literal["asc", "desc"]
+type SortParams = Literal["asc", "desc"]
