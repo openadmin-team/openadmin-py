@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
+from fastapi import Query
 from sqlalchemy import func, select
 
 from openadmin.fastapi import AdminPage, SortParamsDep
@@ -70,16 +71,3 @@ page = AdminPage(
         )
     ],
 )
-
-
-@page.table("Authors table with sort")
-def author_table(
-    username: SortParamsDep,
-):
-    return Table(
-        data=[
-            {
-                "username": username,
-            },
-        ]
-    )
