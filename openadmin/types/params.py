@@ -3,6 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
+from typing import Literal
+
 from pydantic import BaseModel
 
 
@@ -14,3 +16,6 @@ class PaginationParams(BaseModel):
 class CursorPaginationParams(BaseModel):
     cursor: str | None
     per_page: int
+
+
+SortParams = Literal["asc", "desc"]

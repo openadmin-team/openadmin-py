@@ -5,7 +5,7 @@
 from typing import Annotated
 
 from fastapi import Depends, Query
-from openadmin.types import CursorPaginationParams, PaginationParams
+from openadmin.types import CursorPaginationParams, PaginationParams, SortParams
 
 
 def pagination_params(
@@ -33,3 +33,4 @@ CursorPaginationParamsDep = Annotated[
     CursorPaginationParams, Depends(cursor_pagination_params)
 ]
 SearchQueryDep = Annotated[str | None, Depends(get_search_query)]
+SortParamsDep = Annotated[SortParams, Query(None, description="Sort parameters")]

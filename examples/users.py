@@ -5,8 +5,9 @@
 
 from sqlalchemy import func, select
 
-from openadmin.fastapi import AdminPage
+from openadmin.fastapi import AdminPage, SortParamsDep
 from openadmin.sqlalchemy import SQLAlchemyPagePlugin
+from openadmin.types import Table
 
 from .models import Author, Book
 
@@ -69,3 +70,16 @@ page = AdminPage(
         )
     ],
 )
+
+
+@page.table("Authors table with sort")
+def author_table(
+    username: SortParamsDep,
+):
+    return Table(
+        data=[
+            {
+                "username": username,
+            },
+        ]
+    )
