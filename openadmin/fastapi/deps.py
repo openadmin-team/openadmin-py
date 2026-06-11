@@ -33,4 +33,4 @@ CursorPaginationParamsDep = Annotated[
     CursorPaginationParams, Depends(cursor_pagination_params)
 ]
 SearchQueryDep = Annotated[str | None, Depends(get_search_query)]
-SortParamsDep = Annotated[SortParams, Query(None, description="Sort parameters")]
+SortParamsDep = Annotated[SortParams, Query(..., description="Sort parameters")]
