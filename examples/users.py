@@ -3,12 +3,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
-from fastapi import Query
 from sqlalchemy import func, select
 
-from openadmin.fastapi import AdminPage, SortParamsDep
+from openadmin.fastapi import AdminPage
 from openadmin.sqlalchemy import SQLAlchemyPagePlugin
-from openadmin.types import Table
 
 from .models import Author, Book
 
