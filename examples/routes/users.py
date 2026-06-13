@@ -8,7 +8,7 @@ from sqlalchemy import func, select, update
 from openadmin.fastapi import AdminPage
 from openadmin.sqlalchemy import SQLAlchemyPagePlugin
 
-from .models import Author, Book
+from ..lib.models import Author, Book
 
 page = AdminPage(
     "Users",

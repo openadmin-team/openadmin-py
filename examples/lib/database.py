@@ -17,7 +17,7 @@ from sqlalchemy.ext.asyncio import (
 
 from . import models, seed
 
-DB_PATH = Path(__file__).parent / "database.sqlite"
+DB_PATH = Path(__file__).parent.parent / "database.sqlite"
 
 
 @asynccontextmanager
