@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 
 from openadmin.fastapi import AdminPage
 from openadmin.sqlalchemy import SQLAlchemyPagePlugin
@@ -42,6 +42,15 @@ page = AdminPage(
                         "delete",
                         "read",
                         "update",
+                        {
+                            "name": "Reset password",
+                            "callback": lambda id: reset_password(id),
+                            "query": lambda id: (
+                                update(Author)
+                                .values({Author.bio: "Some text"})
+                                .where(Author.id == id)
+                            ),
+                        },
                     ],
                     "sort": [
                         Author.id,
@@ -69,3 +78,6 @@ page = AdminPage(
         )
     ],
 )
+
+
+async def reset_password(id: int) -> None: ...
