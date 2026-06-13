@@ -2,11 +2,13 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+from typing import Any
+
 from openadmin.fastapi import PaginationParamsDep, SearchQueryDep
 from openadmin.plugins import AdminPageProtocol, PagePlugin
 from openadmin.types import Stat as StatResponse
 from openadmin.types import Table as TableResponse
-from sqlalchemy import String, Text, or_, select
+from sqlalchemy import String, Text, delete, or_, select
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 
 from . import state
@@ -26,6 +28,13 @@ class SQLAlchemyPagePlugin(PagePlugin):
             model = table.get("model")
             default_name = f"{model.__name__} table"
             default_description = f"Admin page for {model.__name__} table"
+            actions = table.get("actions", [])
+
+            if "delete" in actions:
+                page.action_delete(
+                    name=f"Delete {model.__name__}",
+                    description=f"Delete record of {model.__name__}",
+                )(self.__create_model_delete_action(table))
 
             page.table(
                 name=table.get("name", default_name),
@@ -103,6 +112,16 @@ class SQLAlchemyPagePlugin(PagePlugin):
             async with AsyncSession(engine) as session:
                 result = await session.execute(stat["query"])
                 return StatResponse(value=result.scalar())  # type: ignore
+
+        return _
+
+    def __create_model_delete_action(self, table: Table):
+        async def _(id: Any) -> None:
+            engine = self.__get_async_engine()
+            model = table.get("model")
+            query = delete(model).where(model.id == id)  # type: ignore
+            async with AsyncSession(engine) as session:
+                await session.execute(query)
 
         return _
 
