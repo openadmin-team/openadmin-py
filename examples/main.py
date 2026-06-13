@@ -9,13 +9,14 @@ from openadmin.sqlalchemy import SQLAlchemyPanelPlugin
 
 from .lib import database
 from .lib.lifespan import lifespan
-from .routes import analitics, users
+from .routes import analitics, users, welcome_admin
 
 app = FastAPI(lifespan=lifespan)
 admin_panel = AdminPanel(
     plugins=[SQLAlchemyPanelPlugin(async_engine_callback=database.get_async_engine)],
 )
 
+admin_panel.include_page(welcome_admin.page)
 admin_panel.include_page(users.page, tags=["Users"])
 admin_panel.include_page(analitics.page, tags=["Analitics"])
 
