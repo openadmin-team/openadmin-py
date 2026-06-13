@@ -32,7 +32,7 @@ class Table(TypedDict):
 
 class CustomAction(TypedDict):
     name: str
-    descrition: NotRequired[str]
+    description: NotRequired[str]
     query: NotRequired[Callable[[Any], Update | Delete | Insert]]
     callback: NotRequired[Callable[[Any], Awaitable[Any]]]
 

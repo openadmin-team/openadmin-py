@@ -9,7 +9,7 @@ from openadmin.sqlalchemy import SQLAlchemyPanelPlugin
 
 from .lib import database
 from .lib.lifespan import lifespan
-from .routes import analitics, users, welcome_admin
+from .routes import analytics, users, welcome_admin
 
 app = FastAPI(lifespan=lifespan)
 admin_panel = AdminPanel(
@@ -18,6 +18,6 @@ admin_panel = AdminPanel(
 
 admin_panel.include_page(welcome_admin.page)
 admin_panel.include_page(users.page, tags=["Users"])
-admin_panel.include_page(analitics.page, tags=["Analitics"])
+admin_panel.include_page(analytics.page, tags=["Analytics"])
 
 app.mount("/admin", admin_panel)
