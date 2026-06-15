@@ -10,7 +10,7 @@ spec = {
             "name": "Users",
             "pages": [
                 {
-                    "name": "User managment",
+                    "name": "User management",
                     "description": "CRUD for users",
                     "components": [
                         {
@@ -23,7 +23,7 @@ spec = {
                         {
                             "type": "table",
                             "name": "Users",
-                            "descritpion": "Users table",
+                            "description": "Users table",
                             "url": "http://...",
                             "method": "GET",
                             "styles": {
