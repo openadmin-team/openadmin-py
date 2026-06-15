@@ -20,7 +20,7 @@ class AdminPage:
     ) -> None:
         self.name = name
         self.description = description
-        self.state: List[types.Stat | types.Table] = []
+        self.state: List[types.Component] = []
         self.router = APIRouter(prefix=f"/{name.lower().replace(' ', '-')}")
         self.key_repeat_count: Dict[str, int] = {}
 
