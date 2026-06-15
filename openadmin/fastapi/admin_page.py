@@ -124,8 +124,8 @@ class AdminPage:
 
         if kebab_name in self.key_repeat_count:
             number = self.key_repeat_count[kebab_name]
-            kebab_name = f"{kebab_name}-{number}"
             self.key_repeat_count[kebab_name] += 1
+            kebab_name = f"{kebab_name}-{number}"
         else:
             self.key_repeat_count[kebab_name] = 1
 
