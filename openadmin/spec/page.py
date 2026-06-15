@@ -11,5 +11,5 @@ from .stat import Stat
 
 class Page(BaseModel):
     name: str
-    description: str
+    description: str | None
     components: List[Stat]

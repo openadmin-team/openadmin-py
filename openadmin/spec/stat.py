@@ -12,6 +12,6 @@ from .http_methods import HttpMethod
 class Stat(BaseModel):
     type: Literal["stat"]
     name: str
-    description: str
+    description: str | None
     url: str
     method: HttpMethod

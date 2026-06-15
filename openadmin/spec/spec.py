@@ -12,4 +12,5 @@ from .section import Section
 class Spec(BaseModel):
     version: str
     name: str
+    description: str | None = None
     sections: List[Section]

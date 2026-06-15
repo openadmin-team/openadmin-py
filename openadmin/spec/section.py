@@ -11,4 +11,5 @@ from .page import Page
 
 class Section(BaseModel):
     name: str
+    description: str | None
     pages: List[Page]
