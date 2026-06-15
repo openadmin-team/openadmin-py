@@ -1,54 +1,58 @@
+# SPDX-FileCopyrightText: 2026 OpenAdmin
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 spec = {
-    'version': '1.0.0',
-    'name': "API Admin",
-    'sections': [
+    "version": "1.0.0",
+    "name": "API Admin",
+    "sections": [
         {
-            'name': 'Users',
-            'pages': [
+            "name": "Users",
+            "pages": [
                 {
-                    'name': 'User managment',
-                    'description': 'CRUD for users',
-                    'components': [
+                    "name": "User managment",
+                    "description": "CRUD for users",
+                    "components": [
                         {
-                            'type': 'stat',
-                            'name': 'Active users',
-                            'description': 'Active users',
-                            'url': 'http://...',
-                            'method': 'GET',
+                            "type": "stat",
+                            "name": "Active users",
+                            "description": "Active users",
+                            "url": "http://...",
+                            "method": "GET",
                         },
                         {
-                            'type': 'table',
-                            'name': 'Users',
-                            'descritpion': 'Users table',
-                            'url': 'http://...',
-                            'method': 'GET',
-                            'styles': {
-                                'username': {
-                                    'style': 'badge',
-                                    'color': 'green',
+                            "type": "table",
+                            "name": "Users",
+                            "descritpion": "Users table",
+                            "url": "http://...",
+                            "method": "GET",
+                            "styles": {
+                                "username": {
+                                    "style": "badge",
+                                    "color": "green",
                                 },
-                                'email': {
-                                    'style': 'row',
+                                "email": {
+                                    "style": "row",
                                 },
-                                'avatar': {
-                                    'style': 'avatar',
-                                }
+                                "avatar": {
+                                    "style": "avatar",
+                                },
                             },
-                            'actions': [
+                            "actions": [
                                 {
-                                    'name': "Ban",
-                                    'method': 'post',
-                                    'url': 'http://...',
-                                    'query': {
-                                        'name': 'id',
-                                        'ref': 'id',
-                                    }
+                                    "name": "Ban",
+                                    "method": "post",
+                                    "url": "http://...",
+                                    "query": {
+                                        "name": "id",
+                                        "ref": "id",
+                                    },
                                 }
-                            ]
-                        }
-                    ]
+                            ],
+                        },
+                    ],
                 }
-            ]
+            ],
         }
-    ]
+    ],
 }

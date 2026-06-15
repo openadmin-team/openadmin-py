@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2026 OpenAdmin
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+from typing import Literal
+
+from pydantic import BaseModel
+
+from .http_methods import HttpMethod
+
+
+class Stat(BaseModel):
+    type: Literal["stat"]
+    name: str
+    description: str
+    url: str
+    method: HttpMethod
