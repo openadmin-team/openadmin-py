@@ -4,14 +4,18 @@
 
 from typing import Union
 
+from .action import Action
 from .area_chart import AreaChart
 from .bar_chart import BarChart
+from .form import Form
 from .line_chart import LineChart
 from .pie_chart import PieChart
 from .stat import Stat
 from .table import Table
 
-type Component = Union[Stat, Table, AreaChart, BarChart, LineChart, PieChart]
+type Component = Union[
+    Stat, Table, AreaChart, BarChart, LineChart, PieChart, Action, Form
+]
 
 __all__ = [
     "AreaChart",
@@ -20,5 +24,7 @@ __all__ = [
     "LineChart",
     "PieChart",
     "Stat",
+    "Action",
     "Table",
+    "Form",
 ]

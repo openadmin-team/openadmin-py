@@ -6,7 +6,7 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-from ..http_methods import HttpMethod
+from .http_methods import HttpMethod
 
 
 class AreaChart(BaseModel):

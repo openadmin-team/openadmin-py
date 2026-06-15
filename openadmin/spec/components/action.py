@@ -9,9 +9,10 @@ from pydantic import BaseModel
 from .http_methods import HttpMethod
 
 
-class Table(BaseModel):
-    type: Literal["table"]
+class Action(BaseModel):
+    type: Literal["action"]
     name: str
     description: str | None
     url: str
     method: HttpMethod
+    is_hidden: bool
