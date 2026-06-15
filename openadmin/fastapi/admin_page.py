@@ -21,7 +21,7 @@ class AdminPage:
         self.name = name
         self.description = description
         self.state: List[types.Stat | types.Table] = []
-        self.router = APIRouter()
+        self.router = APIRouter(prefix=name.lower().replace(" ", "-"))
         self.key_repeat_count: Dict[str, int] = {}
 
     def get_page_spec(self, app: FastAPI) -> spec.Page:
