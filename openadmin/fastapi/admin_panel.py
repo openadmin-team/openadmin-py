@@ -18,6 +18,7 @@ class AdminPanel:
         self.description = description
         self.state: List[types.Section] = []
         self.app = FastAPI()
+        self.__init_spec_route(self.app)
 
     def get_panel_spec(self) -> spec.Spec:
         sections: List[spec.Section] = []
@@ -45,3 +46,8 @@ class AdminPanel:
         description: str | None = None,
         pages: List[AdminPage],
     ) -> None: ...
+
+    def __init_spec_route(self, app: FastAPI) -> None:
+        @app.get("/spec.json")
+        async def handler():
+            return self.get_panel_spec()
