@@ -6,10 +6,10 @@ from typing import List
 
 from pydantic import BaseModel
 
-from .stat import Stat
+from .component import Component
 
 
 class Page(BaseModel):
     name: str
     description: str | None
-    components: List[Stat]
+    components: List[Component]

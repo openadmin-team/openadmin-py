@@ -9,8 +9,8 @@ from pydantic import BaseModel
 from .http_methods import HttpMethod
 
 
-class Table(BaseModel):
-    type: Literal["table"]
+class LineChart(BaseModel):
+    type: Literal["line-chart"]
     name: str
     description: str | None
     url: str
