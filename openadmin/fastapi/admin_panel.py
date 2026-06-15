@@ -75,7 +75,10 @@ class AdminPanel:
         root.mount("/openadmin", self.app)
 
     def __init_spec_route(self, app: FastAPI) -> None:
-        @app.get("/spec.json")
+        @app.get(
+            "/spec.json",
+            response_model=spec.Spec,
+        )
         async def _():
             if not self.root:
                 raise HTTPException(
