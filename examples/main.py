@@ -6,7 +6,11 @@ from fastapi import FastAPI
 
 from openadmin.fastapi import AdminPanel
 
+from . import user
+
 panel = AdminPanel("Cool Admin Panel")
 app = FastAPI()
 
-app.mount("/admin", panel.app)
+panel.section("Users", pages=[user.page])
+
+panel.mount_to(app)

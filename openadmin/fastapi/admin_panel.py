@@ -4,7 +4,7 @@
 
 from typing import Dict, List
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 from openadmin import spec
 
 from . import types
@@ -20,8 +20,9 @@ class AdminPanel:
         self.app = FastAPI()
         self.key_repeat_count: Dict[str, int] = {}
         self.__init_spec_route(self.app)
+        self.root: FastAPI | None = None
 
-    def get_panel_spec(self) -> spec.Spec:
+    def get_panel_spec(self, app: FastAPI) -> spec.Spec:
         sections: List[spec.Section] = []
 
         for section in self.state:
@@ -29,7 +30,7 @@ class AdminPanel:
                 spec.Section(
                     name=section.name,
                     description=section.description,
-                    pages=[p.get_page_spec(self.app) for p in section.pages],
+                    pages=[p.get_page_spec(app) for p in section.pages],
                 )
             )
 
@@ -65,9 +66,21 @@ class AdminPanel:
         )
 
         for page in pages:
-            self.app.include_router(prefix=kebab_name, router=page.router, tags=[name])
+            self.app.include_router(
+                prefix=f"/{kebab_name}", router=page.router, tags=[name]
+            )
+
+    def mount_to(self, root: FastAPI) -> None:
+        self.root = root
+        root.mount("/openadmin", self.app)
 
     def __init_spec_route(self, app: FastAPI) -> None:
         @app.get("/spec.json")
         async def _():
-            return self.get_panel_spec()
+            if not self.root:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Admin panel should be mounted to root, user admin_panel.mount_to(app)",
+                )
+
+            return self.get_panel_spec(self.root)

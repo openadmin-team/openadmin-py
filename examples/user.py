@@ -4,7 +4,7 @@
 
 from openadmin.fastapi import AdminPage
 
-page = AdminPage("User Managment", description="CRUD Users")
+page = AdminPage("User Management", description="CRUD Users")
 
 
 @page.stat("Active users")

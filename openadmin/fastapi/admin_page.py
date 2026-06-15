@@ -21,7 +21,7 @@ class AdminPage:
         self.name = name
         self.description = description
         self.state: List[types.Stat | types.Table] = []
-        self.router = APIRouter(prefix=name.lower().replace(" ", "-"))
+        self.router = APIRouter(prefix=f"/{name.lower().replace(' ', '-')}")
         self.key_repeat_count: Dict[str, int] = {}
 
     def get_page_spec(self, app: FastAPI) -> spec.Page:
@@ -87,7 +87,7 @@ class AdminPage:
         )
 
         return self.router.get(
-            f"table/{kebab_name}",
+            f"/table/{kebab_name}",
             name=unique_name,
             description=description,
         )
@@ -119,7 +119,7 @@ class AdminPage:
         )
 
         return self.router.get(
-            f"stat/{kebab_name}",
+            f"/stat/{kebab_name}",
             name=unique_name,
             description=description,
         )
