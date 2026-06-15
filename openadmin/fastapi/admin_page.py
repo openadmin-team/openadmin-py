@@ -23,7 +23,7 @@ class AdminPage:
         self.router = APIRouter()
 
     def get_page_spec(self, app: FastAPI) -> spec.Page:
-        components = []
+        components: List[spec.Component] = []
 
         for item in self.state:
             url = app.url_path_for(

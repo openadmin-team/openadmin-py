@@ -20,7 +20,7 @@ class AdminPanel:
         self.app = FastAPI()
 
     def get_panel_spec(self) -> spec.Spec:
-        sections = []
+        sections: List[spec.Section] = []
 
         for section in self.state:
             sections.append(
