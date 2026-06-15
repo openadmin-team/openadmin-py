@@ -12,5 +12,4 @@ class BarChart(BaseModel):
     function_name: str
     name: str
     description: str | None
-    url: str
     method: spec.HttpMethod

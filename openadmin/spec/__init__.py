@@ -2,15 +2,28 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from .components import AreaChart, BarChart, Component, LineChart, PieChart, Stat, Table
+from .components import (
+    Action,
+    AreaChart,
+    BarChart,
+    Component,
+    Form,
+    LineChart,
+    PieChart,
+    Stat,
+    Table,
+)
 from .components.http_methods import HttpMethod
 from .page import Page
 from .section import Section
 from .spec import Spec
 
 __all__ = [
+    "Action",
     "AreaChart",
     "BarChart",
+    "Component",
+    "Form",
     "HttpMethod",
     "LineChart",
     "Page",
@@ -19,5 +32,4 @@ __all__ = [
     "Spec",
     "Stat",
     "Table",
-    "Component",
 ]

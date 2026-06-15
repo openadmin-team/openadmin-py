@@ -4,4 +4,4 @@
 
 from typing import Literal
 
-type HttpMethod = Literal["get", "post", "put", "patch", "head"]
+type HttpMethod = Literal["get", "post", "put", "patch", "delete", "head"]
