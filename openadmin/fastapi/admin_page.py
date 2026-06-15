@@ -2,7 +2,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import List
+import uuid
+from typing import Dict, List
 
 from fastapi import APIRouter, FastAPI
 from openadmin import spec
@@ -21,6 +22,7 @@ class AdminPage:
         self.description = description
         self.state: List[types.Stat | types.Table] = []
         self.router = APIRouter()
+        self.key_repeat_count: Dict[str, int] = {}
 
     def get_page_spec(self, app: FastAPI) -> spec.Page:
         components: List[spec.Component] = []
@@ -63,14 +65,64 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-    ): ...
+    ):
+        kebab_name = name.lower().replace(" ", "-")
+
+        if kebab_name in self.key_repeat_count:
+            number = self.key_repeat_count[kebab_name]
+            kebab_name = f"{kebab_name}-{number}"
+            self.key_repeat_count[kebab_name] += 1
+        else:
+            self.key_repeat_count[kebab_name] = 1
+
+        unique_name = f"{kebab_name}-{uuid.uuid4()}"
+
+        self.state.append(
+            types.Table(
+                function_name=unique_name,
+                method="get",
+                name=name,
+                description=description,
+            )
+        )
+
+        return self.router.get(
+            f"table/{kebab_name}",
+            name=unique_name,
+            description=description,
+        )
 
     def stat(
         self,
         name: str,
         *,
         description: str | None = None,
-    ): ...
+    ):
+        kebab_name = name.lower().replace(" ", "-")
+
+        if kebab_name in self.key_repeat_count:
+            number = self.key_repeat_count[kebab_name]
+            kebab_name = f"{kebab_name}-{number}"
+            self.key_repeat_count[kebab_name] += 1
+        else:
+            self.key_repeat_count[kebab_name] = 1
+
+        unique_name = f"{kebab_name}-{uuid.uuid4()}"
+
+        self.state.append(
+            types.Stat(
+                function_name=unique_name,
+                method="get",
+                name=name,
+                description=description,
+            )
+        )
+
+        return self.router.get(
+            f"stat/{kebab_name}",
+            name=unique_name,
+            description=description,
+        )
 
     def markdowm(
         self,
