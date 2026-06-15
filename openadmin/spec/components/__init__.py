@@ -9,6 +9,16 @@ from .bar_chart import BarChart
 from .line_chart import LineChart
 from .pie_chart import PieChart
 from .stat import Stat
-from .table import Stat as Table
+from .table import Table
 
 type Component = Union[Stat, Table, AreaChart, BarChart, LineChart, PieChart]
+
+__all__ = [
+    "AreaChart",
+    "BarChart",
+    "Component",
+    "LineChart",
+    "PieChart",
+    "Stat",
+    "Table",
+]

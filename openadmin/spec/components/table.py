@@ -6,11 +6,11 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-from .http_methods import HttpMethod
+from ..http_methods import HttpMethod
 
 
-class BarChart(BaseModel):
-    type: Literal["bar-chart"]
+class Table(BaseModel):
+    type: Literal["table"]
     name: str
     description: str | None
     url: str

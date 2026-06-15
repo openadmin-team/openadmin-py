@@ -6,7 +6,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from .component import Component
+from .components import Component
 
 
 class Page(BaseModel):

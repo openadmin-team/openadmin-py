@@ -6,11 +6,11 @@ from typing import Literal
 
 from pydantic import BaseModel
 
-from .http_methods import HttpMethod
+from ..http_methods import HttpMethod
 
 
-class AreaChart(BaseModel):
-    type: Literal["area-chart"]
+class PieChart(BaseModel):
+    type: Literal["pie-chart"]
     name: str
     description: str | None
     url: str
