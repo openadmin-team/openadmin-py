@@ -24,15 +24,15 @@ class AdminPage:
         self.state: list[types.Component] = []
         self.router = APIRouter(prefix=f"/{name.lower().replace(' ', '-')}")
         self.key_repeat_count: dict[str, int] = {}
-        self._funcs: dict[str, Callable] = {}
 
     def get_page_spec(self, app: FastAPI) -> spec.Page:
         components: list[spec.Component] = []
 
         for item in self.state:
             url = app.url_path_for(item.function_name)
-            func = self._funcs.get(item.function_name)
-            query, body, form = extract_params(func) if func else (None, None, None)
+            query, body, form = (
+                extract_params(item.func) if item.func else (None, None, None)
+            )
 
             if isinstance(item, types.Stat):
                 components.append(
@@ -137,11 +137,9 @@ class AdminPage:
             components=components,
         )
 
-    def _register(self, unique_name: str, fastapi_decorator) -> Callable:
-        """Wrap a FastAPI route decorator to capture the handler for spec introspection."""
-
+    def _wrap(self, item: types.Component, fastapi_decorator) -> Callable:
         def decorator(func: Callable) -> Callable:
-            self._funcs[unique_name] = func
+            item.func = func
             return fastapi_decorator(func)
 
         return decorator
@@ -166,21 +164,14 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Table(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.Table(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.get(
-                f"/table/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/table/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -192,21 +183,14 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Stat(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.Stat(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.get(
-                f"/stat/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/stat/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -226,22 +210,18 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Action(
-                function_name=unique_name,
-                method="post",
-                name=name,
-                description=description,
-                is_hidden=is_hiden,
-            )
+        item = types.Action(
+            function_name=unique_name,
+            method="post",
+            name=name,
+            description=description,
+            is_hidden=is_hiden,
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.post(
-                f"/action/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/action/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -254,22 +234,18 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Action(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-                is_hidden=is_hiden,
-            )
+        item = types.Action(
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            is_hidden=is_hiden,
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.get(
-                f"/action/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/action/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -282,22 +258,18 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Action(
-                function_name=unique_name,
-                method="put",
-                name=name,
-                description=description,
-                is_hidden=is_hiden,
-            )
+        item = types.Action(
+            function_name=unique_name,
+            method="put",
+            name=name,
+            description=description,
+            is_hidden=is_hiden,
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.put(
-                f"/action/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/action/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -310,22 +282,18 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Action(
-                function_name=unique_name,
-                method="patch",
-                name=name,
-                description=description,
-                is_hidden=is_hiden,
-            )
+        item = types.Action(
+            function_name=unique_name,
+            method="patch",
+            name=name,
+            description=description,
+            is_hidden=is_hiden,
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.patch(
-                f"/action/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/action/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -338,22 +306,18 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Action(
-                function_name=unique_name,
-                method="delete",
-                name=name,
-                description=description,
-                is_hidden=is_hiden,
-            )
+        item = types.Action(
+            function_name=unique_name,
+            method="delete",
+            name=name,
+            description=description,
+            is_hidden=is_hiden,
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.delete(
-                f"/action/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/action/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -366,22 +330,18 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Form(
-                function_name=unique_name,
-                method="post",
-                name=name,
-                description=description,
-                is_hiden=is_hiden,
-            )
+        item = types.Form(
+            function_name=unique_name,
+            method="post",
+            name=name,
+            description=description,
+            is_hiden=is_hiden,
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.post(
-                f"/form/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/form/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -394,22 +354,18 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Form(
-                function_name=unique_name,
-                method="put",
-                name=name,
-                description=description,
-                is_hiden=is_hiden,
-            )
+        item = types.Form(
+            function_name=unique_name,
+            method="put",
+            name=name,
+            description=description,
+            is_hiden=is_hiden,
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.put(
-                f"/form/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/form/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -422,22 +378,18 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Form(
-                function_name=unique_name,
-                method="patch",
-                name=name,
-                description=description,
-                is_hiden=is_hiden,
-            )
+        item = types.Form(
+            function_name=unique_name,
+            method="patch",
+            name=name,
+            description=description,
+            is_hiden=is_hiden,
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.patch(
-                f"/form/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/form/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -450,22 +402,18 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Form(
-                function_name=unique_name,
-                method="delete",
-                name=name,
-                description=description,
-                is_hiden=is_hiden,
-            )
+        item = types.Form(
+            function_name=unique_name,
+            method="delete",
+            name=name,
+            description=description,
+            is_hiden=is_hiden,
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.delete(
-                f"/form/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/form/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -477,21 +425,14 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.AreaChart(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.AreaChart(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.get(
-                f"/area-chart/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/area-chart/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -503,21 +444,14 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.BarChart(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.BarChart(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.get(
-                f"/bar-chart/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/bar-chart/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -529,21 +463,14 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.LineChart(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.LineChart(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.get(
-                f"/line-chart/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/line-chart/{kebab_name}", name=unique_name, description=description
             ),
         )
 
@@ -555,20 +482,13 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.PieChart(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.PieChart(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self._register(
-            unique_name,
+        self.state.append(item)
+        return self._wrap(
+            item,
             self.router.get(
-                f"/pie-chart/{kebab_name}",
-                name=unique_name,
-                description=description,
+                f"/pie-chart/{kebab_name}", name=unique_name, description=description
             ),
         )

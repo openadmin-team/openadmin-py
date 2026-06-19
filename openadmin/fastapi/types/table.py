@@ -2,13 +2,18 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from pydantic import BaseModel
+from collections.abc import Callable
+
+from pydantic import BaseModel, ConfigDict
 
 from openadmin import spec
 
 
 class Table(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     function_name: str
     method: spec.HttpMethod
     name: str
     description: str | None
+    func: Callable | None = None
