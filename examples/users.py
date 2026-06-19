@@ -8,7 +8,7 @@ from pydantic import BaseModel
 
 from openadmin.fastapi import AdminPage
 
-page = AdminPage("Users Managment")
+page = AdminPage("Users Management")
 
 
 class User(BaseModel):

@@ -4,9 +4,10 @@
 
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .http_methods import HttpMethod
+from .property import Property
 
 
 class PieChart(BaseModel):
@@ -15,3 +16,4 @@ class PieChart(BaseModel):
     description: str | None
     url: str
     method: HttpMethod
+    query: list[Property] | None = Field(None)
