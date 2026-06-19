@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import re
 import uuid
 from collections.abc import Callable
 
@@ -10,6 +11,8 @@ from openadmin import spec
 
 from . import types
 from .utils import extract_params
+
+__SPECIAL_CHARS_RE = re.compile(r"[^a-zA-Z0-9\s]")
 
 
 class AdminPage:
@@ -156,7 +159,7 @@ class AdminPage:
         return decorator
 
     def __get_kebab_and_unique_name(self, name: str) -> tuple[str, str]:
-        kebab_name = name.lower().replace(" ", "-")
+        kebab_name = __SPECIAL_CHARS_RE.sub("", name).lower().replace(" ", "-")
 
         if kebab_name in self.key_repeat_count:
             number = self.key_repeat_count[kebab_name]
