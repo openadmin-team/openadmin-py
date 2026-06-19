@@ -12,7 +12,6 @@ from fastapi.params import Form as FormParam
 from fastapi.params import Query as QueryParam
 from openadmin import spec
 
-
 _SCALAR_LIST_TYPES: dict[type, spec.PropertyType] = {
     str: "list[string]",
     int: "list[integer]",
@@ -57,7 +56,11 @@ def _model_to_properties(model: type) -> list[spec.Property]:
             nested = _model_to_properties(tp)
         elif prop_type == "list":
             inner = get_args(tp)
-            if inner and isinstance(inner[0], type) and issubclass(inner[0], pydantic.BaseModel):
+            if (
+                inner
+                and isinstance(inner[0], type)
+                and issubclass(inner[0], pydantic.BaseModel)
+            ):
                 nested = _model_to_properties(inner[0])
         display = field_info.title or field_name.replace("_", " ").title()
         alias = field_info.alias or field_name
