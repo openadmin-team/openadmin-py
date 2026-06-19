@@ -9,6 +9,7 @@ from .area_chart import AreaChart
 from .bar_chart import BarChart
 from .form import Form
 from .line_chart import LineChart
+from .markdown import Markdown
 from .pie_chart import PieChart
 from .property import Property
 from .property_type import PropertyType
@@ -16,7 +17,7 @@ from .stat import Stat
 from .table import Table
 
 type Component = Union[
-    Stat, Table, AreaChart, BarChart, LineChart, PieChart, Action, Form
+    Stat, Table, AreaChart, BarChart, LineChart, PieChart, Action, Form, Markdown
 ]
 
 __all__ = [
