@@ -137,7 +137,7 @@ class AdminPage:
             components=components,
         )
 
-    def _wrap(self, item: types.Component, fastapi_decorator) -> Callable:
+    def _wrap_user_handler(self, item: types.Component, fastapi_decorator) -> Callable:
         def decorator(func: Callable) -> Callable:
             item.func = func
             return fastapi_decorator(func)
@@ -168,7 +168,7 @@ class AdminPage:
             function_name=unique_name, method="get", name=name, description=description
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.get(
                 f"/table/{kebab_name}", name=unique_name, description=description
@@ -187,7 +187,7 @@ class AdminPage:
             function_name=unique_name, method="get", name=name, description=description
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.get(
                 f"/stat/{kebab_name}", name=unique_name, description=description
@@ -218,7 +218,7 @@ class AdminPage:
             is_hidden=is_hiden,
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.post(
                 f"/action/{kebab_name}", name=unique_name, description=description
@@ -242,7 +242,7 @@ class AdminPage:
             is_hidden=is_hiden,
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.get(
                 f"/action/{kebab_name}", name=unique_name, description=description
@@ -266,7 +266,7 @@ class AdminPage:
             is_hidden=is_hiden,
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.put(
                 f"/action/{kebab_name}", name=unique_name, description=description
@@ -290,7 +290,7 @@ class AdminPage:
             is_hidden=is_hiden,
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.patch(
                 f"/action/{kebab_name}", name=unique_name, description=description
@@ -314,7 +314,7 @@ class AdminPage:
             is_hidden=is_hiden,
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.delete(
                 f"/action/{kebab_name}", name=unique_name, description=description
@@ -338,7 +338,7 @@ class AdminPage:
             is_hiden=is_hiden,
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.post(
                 f"/form/{kebab_name}", name=unique_name, description=description
@@ -362,7 +362,7 @@ class AdminPage:
             is_hiden=is_hiden,
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.put(
                 f"/form/{kebab_name}", name=unique_name, description=description
@@ -386,7 +386,7 @@ class AdminPage:
             is_hiden=is_hiden,
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.patch(
                 f"/form/{kebab_name}", name=unique_name, description=description
@@ -410,7 +410,7 @@ class AdminPage:
             is_hiden=is_hiden,
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.delete(
                 f"/form/{kebab_name}", name=unique_name, description=description
@@ -429,7 +429,7 @@ class AdminPage:
             function_name=unique_name, method="get", name=name, description=description
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.get(
                 f"/area-chart/{kebab_name}", name=unique_name, description=description
@@ -448,7 +448,7 @@ class AdminPage:
             function_name=unique_name, method="get", name=name, description=description
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.get(
                 f"/bar-chart/{kebab_name}", name=unique_name, description=description
@@ -467,7 +467,7 @@ class AdminPage:
             function_name=unique_name, method="get", name=name, description=description
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.get(
                 f"/line-chart/{kebab_name}", name=unique_name, description=description
@@ -486,7 +486,7 @@ class AdminPage:
             function_name=unique_name, method="get", name=name, description=description
         )
         self.state.append(item)
-        return self._wrap(
+        return self._wrap_user_handler(
             item,
             self.router.get(
                 f"/pie-chart/{kebab_name}", name=unique_name, description=description
