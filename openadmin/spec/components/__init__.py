@@ -10,6 +10,8 @@ from .bar_chart import BarChart
 from .form import Form
 from .line_chart import LineChart
 from .pie_chart import PieChart
+from .property import Property
+from .property_type import PropertyType
 from .stat import Stat
 from .table import Table
 
@@ -27,4 +29,6 @@ __all__ = [
     "Action",
     "Table",
     "Form",
+    "Property",
+    "PropertyType",
 ]

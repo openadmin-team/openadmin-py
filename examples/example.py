@@ -47,6 +47,19 @@ spec = {
                                         "name": "id",
                                         "ref": "id",
                                     },
+                                    "body": [
+                                        {
+                                            "name": "email",
+                                            "type": "string",
+                                            "is_required": True,
+                                        },
+                                        {
+                                            "name": "user",
+                                            "type": "list",
+                                            "is_required": True,
+                                            "properties": [{"name"}],
+                                        },
+                                    ],
                                 }
                             ],
                         },
