@@ -9,6 +9,7 @@ from .components import (
     Component,
     Form,
     LineChart,
+    Markdown,
     PieChart,
     Property,
     PropertyType,
@@ -36,4 +37,5 @@ __all__ = [
     "Spec",
     "Stat",
     "Table",
+    "Markdown",
 ]

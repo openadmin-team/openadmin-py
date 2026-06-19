@@ -130,6 +130,17 @@ class AdminPage:
                         form=form,
                     )
                 )
+            elif isinstance(item, types.Markdown):
+                components.append(
+                    spec.Markdown(
+                        type="markdown",
+                        name=item.name,
+                        description=item.description,
+                        method=item.method,
+                        url=url,
+                        query=query,
+                    )
+                )
 
         return spec.Page(
             name=self.name,
@@ -199,7 +210,25 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-    ): ...
+    ):
+        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+
+        item = types.Markdown(
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+        )
+        self.state.append(item)
+
+        return self._wrap_user_handler(
+            item,
+            self.router.get(
+                f"/markdown/{kebab_name}",
+                name=unique_name,
+                description=description,
+            ),
+        )
 
     def action_post(
         self,
