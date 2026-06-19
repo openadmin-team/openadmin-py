@@ -2,11 +2,12 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Literal
+from typing import List, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .http_methods import HttpMethod
+from .property import Property
 
 
 class Form(BaseModel):
@@ -16,3 +17,6 @@ class Form(BaseModel):
     url: str
     method: HttpMethod
     is_hiden: bool
+    form: List[Property] | None = Field(None)
+    body: List[Property] | None = Field(None)
+    query: List[Property] | None = Field(None)
