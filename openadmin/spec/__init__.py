@@ -10,6 +10,8 @@ from .components import (
     Form,
     LineChart,
     PieChart,
+    Property,
+    PropertyType,
     Stat,
     Table,
 )
@@ -28,6 +30,8 @@ __all__ = [
     "LineChart",
     "Page",
     "PieChart",
+    "Property",
+    "PropertyType",
     "Section",
     "Spec",
     "Stat",

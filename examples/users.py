@@ -8,15 +8,23 @@ from pydantic import BaseModel
 
 from openadmin.fastapi import AdminPage
 
-page = AdminPage("Users Managment")
+page = AdminPage("Users Management")
+
+
+class ShopList(BaseModel):
+    product_name: str
+
+
+class Performance(BaseModel):
+    good: bool
 
 
 class User(BaseModel):
     email: str
     username: str
-
-
-class CreateUserReq(User): ...
+    names: List[str]
+    shop_list: List[ShopList]
+    performance: Performance
 
 
 users: List[User] = []
@@ -33,6 +41,6 @@ async def users_table() -> List[User]:
 
 
 @page.form_post("Create user")
-async def create_user(user: CreateUserReq) -> None:
-    users.append(User(email=user.email, username=user.username))
+async def create_user(user: User) -> None:
+    users.append(user)
     return None

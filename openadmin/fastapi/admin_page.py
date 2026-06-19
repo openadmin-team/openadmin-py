@@ -3,12 +3,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 import uuid
-from typing import Dict, List
+from collections.abc import Callable
 
 from fastapi import APIRouter, FastAPI
 from openadmin import spec
 
 from . import types
+from .utils import extract_params
 
 
 class AdminPage:
@@ -20,15 +21,18 @@ class AdminPage:
     ) -> None:
         self.name = name
         self.description = description
-        self.state: List[types.Component] = []
+        self.state: list[types.Component] = []
         self.router = APIRouter(prefix=f"/{name.lower().replace(' ', '-')}")
-        self.key_repeat_count: Dict[str, int] = {}
+        self.key_repeat_count: dict[str, int] = {}
 
     def get_page_spec(self, app: FastAPI) -> spec.Page:
-        components: List[spec.Component] = []
+        components: list[spec.Component] = []
 
         for item in self.state:
             url = app.url_path_for(item.function_name)
+            query, body, form = (
+                extract_params(item.func) if item.func else (None, None, None)
+            )
 
             if isinstance(item, types.Stat):
                 components.append(
@@ -38,6 +42,7 @@ class AdminPage:
                         description=item.description,
                         method=item.method,
                         url=url,
+                        query=query,
                     )
                 )
             elif isinstance(item, types.Table):
@@ -48,6 +53,9 @@ class AdminPage:
                         description=item.description,
                         method=item.method,
                         url=url,
+                        query=query,
+                        body=body,
+                        form=form,
                     )
                 )
             elif isinstance(item, types.AreaChart):
@@ -58,6 +66,7 @@ class AdminPage:
                         description=item.description,
                         method=item.method,
                         url=url,
+                        query=query,
                     )
                 )
             elif isinstance(item, types.BarChart):
@@ -68,6 +77,7 @@ class AdminPage:
                         description=item.description,
                         method=item.method,
                         url=url,
+                        query=query,
                     )
                 )
             elif isinstance(item, types.LineChart):
@@ -78,6 +88,7 @@ class AdminPage:
                         description=item.description,
                         method=item.method,
                         url=url,
+                        query=query,
                     )
                 )
             elif isinstance(item, types.PieChart):
@@ -88,6 +99,7 @@ class AdminPage:
                         description=item.description,
                         method=item.method,
                         url=url,
+                        query=query,
                     )
                 )
             elif isinstance(item, types.Action):
@@ -99,6 +111,9 @@ class AdminPage:
                         method=item.method,
                         url=url,
                         is_hidden=item.is_hidden,
+                        query=query,
+                        body=body,
+                        form=form,
                     )
                 )
             elif isinstance(item, types.Form):
@@ -110,6 +125,9 @@ class AdminPage:
                         method=item.method,
                         url=url,
                         is_hiden=item.is_hiden,
+                        query=query,
+                        body=body,
+                        form=form,
                     )
                 )
 
@@ -118,6 +136,13 @@ class AdminPage:
             description=self.description,
             components=components,
         )
+
+    def _wrap_user_handler(self, item: types.Component, fastapi_decorator) -> Callable:
+        def decorator(func: Callable) -> Callable:
+            item.func = func
+            return fastapi_decorator(func)
+
+        return decorator
 
     def __get_kebab_and_unique_name(self, name: str) -> tuple[str, str]:
         kebab_name = name.lower().replace(" ", "-")
@@ -139,19 +164,15 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Table(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.Table(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self.router.get(
-            f"/table/{kebab_name}",
-            name=unique_name,
-            description=description,
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.get(
+                f"/table/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def stat(
@@ -162,19 +183,15 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Stat(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.Stat(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self.router.get(
-            f"/stat/{kebab_name}",
-            name=unique_name,
-            description=description,
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.get(
+                f"/stat/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def markdown(
@@ -193,20 +210,19 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Action(
-                function_name=unique_name,
-                method="post",
-                name=name,
-                description=description,
-                is_hidden=is_hiden,
-            )
-        )
-
-        return self.router.post(
-            f"/action/{kebab_name}",
-            name=unique_name,
+        item = types.Action(
+            function_name=unique_name,
+            method="post",
+            name=name,
             description=description,
+            is_hidden=is_hiden,
+        )
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.post(
+                f"/action/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def action_get(
@@ -218,20 +234,19 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Action(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-                is_hidden=is_hiden,
-            )
-        )
-
-        return self.router.get(
-            f"/action/{kebab_name}",
-            name=unique_name,
+        item = types.Action(
+            function_name=unique_name,
+            method="get",
+            name=name,
             description=description,
+            is_hidden=is_hiden,
+        )
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.get(
+                f"/action/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def action_put(
@@ -243,20 +258,19 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Action(
-                function_name=unique_name,
-                method="put",
-                name=name,
-                description=description,
-                is_hidden=is_hiden,
-            )
-        )
-
-        return self.router.put(
-            f"/action/{kebab_name}",
-            name=unique_name,
+        item = types.Action(
+            function_name=unique_name,
+            method="put",
+            name=name,
             description=description,
+            is_hidden=is_hiden,
+        )
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.put(
+                f"/action/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def action_patch(
@@ -268,20 +282,19 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Action(
-                function_name=unique_name,
-                method="patch",
-                name=name,
-                description=description,
-                is_hidden=is_hiden,
-            )
-        )
-
-        return self.router.patch(
-            f"/action/{kebab_name}",
-            name=unique_name,
+        item = types.Action(
+            function_name=unique_name,
+            method="patch",
+            name=name,
             description=description,
+            is_hidden=is_hiden,
+        )
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.patch(
+                f"/action/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def action_delete(
@@ -293,20 +306,19 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Action(
-                function_name=unique_name,
-                method="delete",
-                name=name,
-                description=description,
-                is_hidden=is_hiden,
-            )
-        )
-
-        return self.router.delete(
-            f"/action/{kebab_name}",
-            name=unique_name,
+        item = types.Action(
+            function_name=unique_name,
+            method="delete",
+            name=name,
             description=description,
+            is_hidden=is_hiden,
+        )
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.delete(
+                f"/action/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def form_post(
@@ -318,20 +330,19 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Form(
-                function_name=unique_name,
-                method="post",
-                name=name,
-                description=description,
-                is_hiden=is_hiden,
-            )
-        )
-
-        return self.router.post(
-            f"/form/{kebab_name}",
-            name=unique_name,
+        item = types.Form(
+            function_name=unique_name,
+            method="post",
+            name=name,
             description=description,
+            is_hiden=is_hiden,
+        )
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.post(
+                f"/form/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def form_put(
@@ -343,20 +354,19 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Form(
-                function_name=unique_name,
-                method="put",
-                name=name,
-                description=description,
-                is_hiden=is_hiden,
-            )
-        )
-
-        return self.router.put(
-            f"/form/{kebab_name}",
-            name=unique_name,
+        item = types.Form(
+            function_name=unique_name,
+            method="put",
+            name=name,
             description=description,
+            is_hiden=is_hiden,
+        )
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.put(
+                f"/form/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def form_patch(
@@ -368,20 +378,19 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Form(
-                function_name=unique_name,
-                method="patch",
-                name=name,
-                description=description,
-                is_hiden=is_hiden,
-            )
-        )
-
-        return self.router.patch(
-            f"/form/{kebab_name}",
-            name=unique_name,
+        item = types.Form(
+            function_name=unique_name,
+            method="patch",
+            name=name,
             description=description,
+            is_hiden=is_hiden,
+        )
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.patch(
+                f"/form/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def form_delete(
@@ -393,20 +402,19 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.Form(
-                function_name=unique_name,
-                method="delete",
-                name=name,
-                description=description,
-                is_hiden=is_hiden,
-            )
-        )
-
-        return self.router.delete(
-            f"/form/{kebab_name}",
-            name=unique_name,
+        item = types.Form(
+            function_name=unique_name,
+            method="delete",
+            name=name,
             description=description,
+            is_hiden=is_hiden,
+        )
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.delete(
+                f"/form/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def area_chart(
@@ -417,19 +425,15 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.AreaChart(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.AreaChart(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self.router.get(
-            f"/area-chart/{kebab_name}",
-            name=unique_name,
-            description=description,
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.get(
+                f"/area-chart/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def bar_chart(
@@ -440,19 +444,15 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.BarChart(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.BarChart(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self.router.get(
-            f"/bar-chart/{kebab_name}",
-            name=unique_name,
-            description=description,
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.get(
+                f"/bar-chart/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def line_chart(
@@ -463,19 +463,15 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.LineChart(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.LineChart(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self.router.get(
-            f"/line-chart/{kebab_name}",
-            name=unique_name,
-            description=description,
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.get(
+                f"/line-chart/{kebab_name}", name=unique_name, description=description
+            ),
         )
 
     def pie_chart(
@@ -486,17 +482,13 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        self.state.append(
-            types.PieChart(
-                function_name=unique_name,
-                method="get",
-                name=name,
-                description=description,
-            )
+        item = types.PieChart(
+            function_name=unique_name, method="get", name=name, description=description
         )
-
-        return self.router.get(
-            f"/pie-chart/{kebab_name}",
-            name=unique_name,
-            description=description,
+        self.state.append(item)
+        return self._wrap_user_handler(
+            item,
+            self.router.get(
+                f"/pie-chart/{kebab_name}", name=unique_name, description=description
+            ),
         )

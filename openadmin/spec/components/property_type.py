@@ -4,4 +4,15 @@
 
 from typing import Literal
 
-type PropertyType = Literal["integer", "string", "bool", "list", "object", "float"]
+type PropertyType = Literal[
+    "integer",
+    "string",
+    "bool",
+    "float",
+    "object",
+    "list",
+    "list[integer]",
+    "list[string]",
+    "list[bool]",
+    "list[float]",
+]
