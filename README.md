@@ -1,4 +1,4 @@
-<div align="center">
+<!-- <div align="center">
   <img src="docs/assets/logo.png" alt="OpenAdmin" width="180" />
 
   <h1>openadmin-py</h1>
@@ -8,8 +8,8 @@
   [![License: AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-green?style=flat-square)](LICENSE)
   [![Python](https://img.shields.io/badge/python-3.14%2B-blue?style=flat-square)](https://python.org)
   [![FastAPI](https://img.shields.io/badge/built%20on-FastAPI-009688?style=flat-square)](https://fastapi.tiangolo.com)
-</div>
-
+</div> -->
+# 🚧 Project is under development 🚧
 ---
 
 **OpenAdmin** is a FastAPI-native library for building admin dashboards. Define pages with typed decorators — no frontend code, no templates, no configuration files. Every page is just a router; every widget is just an endpoint.
