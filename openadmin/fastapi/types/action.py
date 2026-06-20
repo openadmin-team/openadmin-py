@@ -3,18 +3,16 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from collections.abc import Callable
-
-from pydantic import BaseModel, ConfigDict
+from dataclasses import dataclass, field
 
 from openadmin import spec
 
 
-class Action(BaseModel):
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
+@dataclass
+class Action:
     function_name: str
     name: str
     description: str | None
     method: spec.HttpMethod
     is_hidden: bool
-    func: Callable | None = None
+    func: Callable | None = field(default=None)
