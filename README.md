@@ -12,7 +12,7 @@
 # 🚧 Project is under development 🚧
 ---
 
-**OpenAdmin** is a FastAPI-native library for building admin dashboards. Define pages with typed decorators — no frontend code, no templates, no configuration files. Every page is just a router; every widget is just an endpoint.
+**OpenAdmin** is a FastAPI-native library for building admin dashboards. Define pages with typed decorators — no frontend code, no templates, no configuration files. Every page is just a router; every widget is just an endpoint
 
 ## Features
 
