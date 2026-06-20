@@ -1,12 +1,25 @@
 [project]
-name = "openadmin-py"
+name = "openadmin"
 version = "0.1.0"
 description = "Add your description here"
+authors = [
+  { name="Mykyta Kasianenko", email="mykytakasianenko@gmail.com" },
+]
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "fastapi[standard]>=0.136.3",
 ]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "AGPL-3.0-or-later"
+license-files = ["LICENSE"]
+
+[project.urls]
+Homepage = "https://github.com/openadmin-team/openadmin-py"
+Issues = "https://github.com/openadmin-team/openadmin-py/issues"
 
 [tool.pyright]
 typeCheckingMode = "standard"
