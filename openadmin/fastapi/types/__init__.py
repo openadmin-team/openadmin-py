@@ -11,6 +11,7 @@ from .form import Form
 from .line_chart import LineChart
 from .markdown import Markdown
 from .page_protocol import PageProtocol
+from .pagination_params import PaginationParams
 from .pie_chart import PieChart
 from .section import Section
 from .stat import Stat
@@ -33,4 +34,5 @@ __all__ = [
     "PieChart",
     "Component",
     "Markdown",
+    "PaginationParams",
 ]

@@ -8,6 +8,7 @@ from typing import Annotated, get_args, get_origin, get_type_hints
 import pydantic
 
 from fastapi.params import Body as BodyParam
+from fastapi.params import Depends as DependsParam
 from fastapi.params import Form as FormParam
 from fastapi.params import Query as QueryParam
 from openadmin import spec
@@ -131,16 +132,32 @@ def extract_params(
         marker = None
         actual_type = annotation
 
+        depends_marker = None
         if get_origin(annotation) is Annotated:
             args = get_args(annotation)
             actual_type = args[0]
             for arg in args[1:]:
+                if isinstance(arg, DependsParam):
+                    depends_marker = arg
+                    break
                 if isinstance(arg, (QueryParam, BodyParam, FormParam)):
                     marker = arg
                     break
 
         if marker is None and isinstance(default, (QueryParam, BodyParam, FormParam)):
             marker = default
+
+        if depends_marker is not None:
+            dep_fn = depends_marker.dependency
+            if callable(dep_fn):
+                dep_query, dep_body, dep_form = extract_params(dep_fn)
+                if dep_query:
+                    query.extend(dep_query)
+                if dep_body:
+                    body.extend(dep_body)
+                if dep_form:
+                    form.extend(dep_form)
+            continue
 
         # FormParam must be checked before BodyParam — Form is a subclass of Body
         if isinstance(marker, QueryParam):
