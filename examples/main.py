@@ -7,15 +7,11 @@ from fastapi import FastAPI
 from openadmin.fastapi import AdminPanel
 
 from .admin import health
+from .lib import lifespan
 
-panel = AdminPanel("Cool Admin Panel")
-app = FastAPI()
+app = FastAPI(lifespan=lifespan.lifespan)
+admin_panel = AdminPanel("Awesome Admin panel")
 
-panel.section(
-    "System",
-    pages=[
-        health.page,
-    ],
-)
+admin_panel.section("System", pages=[health.page])
 
-panel.mount_to(app)
+admin_panel.mount_to(app)
