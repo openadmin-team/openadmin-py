@@ -4,8 +4,10 @@
 
 from .admin_page import AdminPage
 from .admin_panel import AdminPanel
+from .deps import PageDep
 
 __all__ = [
     "AdminPage",
     "AdminPanel",
+    "PageDep",
 ]
