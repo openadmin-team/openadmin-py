@@ -4,10 +4,6 @@
 
 from .admin_page import AdminPage
 from .admin_panel import AdminPanel
-from .deps import PageDep
+from .deps import PageDep, SearchQueryDep
 
-__all__ = [
-    "AdminPage",
-    "AdminPanel",
-    "PageDep",
-]
+__all__ = ["AdminPage", "AdminPanel", "PageDep", "SearchQueryDep"]
