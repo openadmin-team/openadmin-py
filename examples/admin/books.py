@@ -69,6 +69,26 @@ class AddBookBody(BaseModel):
     publisher_id: int | None = None
 
 
+@page.table("Books by Author", description="Number of books per author")
+async def get_books_by_author(session: AsyncSessionDep, pagination: PageDep):
+    stmt = (
+        select(models.Author, func.count(models.Book.id).label("book_count"))
+        .join(models.Book, models.Book.author_id == models.Author.id)
+        .group_by(models.Author.id)
+        .order_by(func.count(models.Book.id).desc())
+        .offset(pagination.page * pagination.per_page)
+        .limit(pagination.per_page)
+    )
+    result = await session.execute(stmt)
+    return [
+        {
+            "author": f"{author.first_name} {author.last_name}",
+            "book_count": book_count,
+        }
+        for author, book_count in result.all()
+    ]
+
+
 @page.form_post("Add Book", description="Add a new book to the catalog")
 async def add_book(body: AddBookBody, session: AsyncSessionDep):
     book = models.Book(**body.model_dump())
