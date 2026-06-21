@@ -6,20 +6,10 @@ from fastapi import FastAPI
 
 from openadmin.fastapi import AdminPanel
 
-from . import (
-    health,
-    users,
-)
+from .admin import health
 
 panel = AdminPanel("Cool Admin Panel")
 app = FastAPI()
-
-panel.section(
-    "Users",
-    pages=[
-        users.page,
-    ],
-)
 
 panel.section(
     "System",
