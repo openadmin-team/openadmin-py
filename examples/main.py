@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from openadmin.fastapi import AdminPanel
 
@@ -20,6 +21,15 @@ from .admin import (
 from .lib import lifespan
 
 app = FastAPI(lifespan=lifespan.lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 admin_panel = AdminPanel(
     "Book Library Admin", description="Manage and explore the book catalog"
 )
