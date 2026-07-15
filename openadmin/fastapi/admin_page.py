@@ -29,6 +29,8 @@ class AdminPage:
         self.state: list[types.Component] = []
         self.router = APIRouter(prefix=f"/{name.lower().replace(' ', '-')}")
         self.key_repeat_count: dict[str, int] = {}
+        self.page_count = counters.get_next("page")
+        self.page_kebab_name, _ = self.__get_kebab_and_unique_name(self.name)
 
     def get_page_spec(self, app: FastAPI) -> spec.Page:
         components: list[spec.Component] = []
@@ -147,10 +149,8 @@ class AdminPage:
                     )
                 )
 
-        kebab_name, _ = self.__get_kebab_and_unique_name(self.name)
-
         return spec.Page(
-            id=f"{kebab_name}-{counters.get_next('page')}",
+            id=f"{self.page_kebab_name}-{self.page_count}",
             name=self.name,
             description=self.description,
             icon=self.icon,
