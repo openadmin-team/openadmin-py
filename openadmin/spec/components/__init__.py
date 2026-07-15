@@ -8,6 +8,7 @@ from .action import Action
 from .area_chart import AreaChart
 from .bar_chart import BarChart
 from .form import Form
+from .icons import Icon
 from .line_chart import LineChart
 from .markdown import Markdown
 from .pie_chart import PieChart
@@ -32,4 +33,5 @@ __all__ = [
     "Form",
     "Property",
     "PropertyType",
+    "Icon",
 ]

@@ -6,10 +6,11 @@ from typing import List
 
 from pydantic import BaseModel
 
-from .components import Component
+from .components import Component, Icon
 
 
 class Page(BaseModel):
     name: str
     description: str | None
+    icon: Icon | None
     components: List[Component]

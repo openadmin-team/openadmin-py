@@ -5,6 +5,8 @@
 from dataclasses import dataclass
 from typing import Sequence
 
+from openadmin import spec
+
 from .page_protocol import PageProtocol
 
 
@@ -12,4 +14,5 @@ from .page_protocol import PageProtocol
 class Section:
     name: str
     description: str | None
+    icon: spec.Icon | None
     pages: Sequence[PageProtocol]

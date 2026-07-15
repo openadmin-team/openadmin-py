@@ -6,10 +6,12 @@ from typing import List
 
 from pydantic import BaseModel
 
+from .components import Icon
 from .page import Page
 
 
 class Section(BaseModel):
     name: str
     description: str | None
+    icon: Icon | None
     pages: List[Page]

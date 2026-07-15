@@ -20,10 +20,12 @@ class AdminPage:
         self,
         name: str,
         *,
+        icon: spec.Icon | None = None,
         description: str | None = None,
     ) -> None:
         self.name = name
         self.description = description
+        self.icon: spec.Icon | None = icon
         self.state: list[types.Component] = []
         self.router = APIRouter(prefix=f"/{name.lower().replace(' ', '-')}")
         self.key_repeat_count: dict[str, int] = {}
@@ -148,6 +150,7 @@ class AdminPage:
         return spec.Page(
             name=self.name,
             description=self.description,
+            icon=self.icon,
             components=components,
         )
 
