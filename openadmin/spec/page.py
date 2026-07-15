@@ -10,6 +10,7 @@ from .components import Component, Icon
 
 
 class Page(BaseModel):
+    id: str
     name: str
     description: str | None
     icon: Icon | None

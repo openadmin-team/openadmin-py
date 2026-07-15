@@ -11,6 +11,7 @@ from .page import Page
 
 
 class Section(BaseModel):
+    id: str
     name: str
     description: str | None
     icon: Icon | None
