@@ -30,6 +30,7 @@ class AdminPanel:
                 spec.Section(
                     name=section.name,
                     description=section.description,
+                    icon=section.icon,
                     pages=[p.get_page_spec(app) for p in section.pages],
                 )
             )
@@ -46,6 +47,7 @@ class AdminPanel:
         name: str,
         *,
         description: str | None = None,
+        icon: spec.Icon | None = None,
         pages: List[AdminPage],
     ) -> None:
         kebab_name = name.lower().replace(" ", "-")
@@ -61,6 +63,7 @@ class AdminPanel:
             types.Section(
                 name=name,
                 description=description,
+                icon=icon,
                 pages=pages,
             )
         )

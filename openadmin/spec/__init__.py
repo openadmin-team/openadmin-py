@@ -8,6 +8,7 @@ from .components import (
     BarChart,
     Component,
     Form,
+    Icon,
     LineChart,
     Markdown,
     PieChart,
@@ -38,4 +39,5 @@ __all__ = [
     "Stat",
     "Table",
     "Markdown",
+    "Icon",
 ]
