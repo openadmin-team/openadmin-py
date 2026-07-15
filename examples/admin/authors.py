@@ -12,7 +12,9 @@ from ..lib import models
 from ..lib.database import AsyncSessionDep
 
 page = AdminPage(
-    "Authors", description="Manage book authors and view productivity stats"
+    "Authors",
+    icon="users",
+    description="Manage book authors and view productivity stats",
 )
 
 

@@ -11,7 +11,9 @@ from ..lib import models
 from ..lib.database import AsyncSessionDep
 
 page = AdminPage(
-    "Reports", description="Tag assignment activity and catalog coverage reports"
+    "Reports",
+    icon="file-text",
+    description="Tag assignment activity and catalog coverage reports",
 )
 
 

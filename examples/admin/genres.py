@@ -10,7 +10,9 @@ from openadmin.fastapi.deps import PageDep
 from ..lib import models
 from ..lib.database import AsyncSessionDep
 
-page = AdminPage("Genres", description="Browse and analyze the genre taxonomy")
+page = AdminPage(
+    "Genres", icon="drama", description="Browse and analyze the genre taxonomy"
+)
 
 
 @page.stat("Total Genres")

@@ -11,7 +11,11 @@ from openadmin.fastapi.deps import PageDep, SearchQueryDep
 from ..lib import models
 from ..lib.database import AsyncSessionDep
 
-page = AdminPage("Publishers", description="Manage publishers and their catalog share")
+page = AdminPage(
+    "Publishers",
+    icon="building-2",
+    description="Manage publishers and their catalog share",
+)
 
 
 @page.stat("Total Publishers")
