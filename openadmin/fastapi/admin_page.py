@@ -9,7 +9,7 @@ from collections.abc import Callable
 from fastapi import APIRouter, FastAPI
 from openadmin import spec
 
-from . import types
+from . import counters, types
 from .utils import extract_params
 
 _SPECIAL_CHARS_RE = re.compile(r"[^a-zA-Z0-9\s]")
@@ -147,7 +147,10 @@ class AdminPage:
                     )
                 )
 
+        kebab_name, _ = self.__get_kebab_and_unique_name(self.name)
+
         return spec.Page(
+            id=f"{kebab_name}-{counters.get_next('page')}",
             name=self.name,
             description=self.description,
             icon=self.icon,
