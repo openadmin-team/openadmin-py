@@ -12,6 +12,7 @@ from .page_protocol import PageProtocol
 
 @dataclass
 class Section:
+    id: str
     name: str
     description: str | None
     icon: spec.Icon | None

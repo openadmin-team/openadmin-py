@@ -28,6 +28,7 @@ class AdminPanel:
         for section in self.state:
             sections.append(
                 spec.Section(
+                    id=section.id,
                     name=section.name,
                     description=section.description,
                     icon=section.icon,
@@ -61,6 +62,7 @@ class AdminPanel:
 
         self.state.append(
             types.Section(
+                id=kebab_name,
                 name=name,
                 description=description,
                 icon=icon,
