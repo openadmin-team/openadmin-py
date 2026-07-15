@@ -9,7 +9,11 @@ from openadmin.fastapi import AdminPage
 from ..lib import models
 from ..lib.database import AsyncSessionDep
 
-page = AdminPage("Overview", description="High-level database and catalog statistics")
+page = AdminPage(
+    "Overview",
+    icon="layout-dashboard",
+    description="High-level database and catalog statistics",
+)
 
 
 @page.stat("Total Records")

@@ -10,7 +10,9 @@ from ..lib import models
 from ..lib.database import AsyncSessionDep
 
 page = AdminPage(
-    "Analytics", description="Library-wide publication trends and insights"
+    "Analytics",
+    icon="bar-chart",
+    description="Library-wide publication trends and insights",
 )
 
 

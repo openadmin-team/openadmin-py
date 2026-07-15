@@ -4,7 +4,9 @@
 
 from openadmin.fastapi import AdminPage
 
-page = AdminPage("Health", description="System health and infrastructure metrics")
+page = AdminPage(
+    "Health", icon="heart-pulse", description="System health and infrastructure metrics"
+)
 
 
 @page.stat("API Uptime (%)")

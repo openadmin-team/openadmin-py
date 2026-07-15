@@ -12,7 +12,7 @@ from openadmin.fastapi.deps import PageDep, SearchQueryDep
 from ..lib import models
 from ..lib.database import AsyncSessionDep
 
-page = AdminPage("Books", description="Browse and manage the book catalog")
+page = AdminPage("Books", icon="book", description="Browse and manage the book catalog")
 
 
 @page.stat("Total Books")

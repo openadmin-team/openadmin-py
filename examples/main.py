@@ -34,8 +34,14 @@ admin_panel = AdminPanel(
     "Book Library Admin", description="Manage and explore the book catalog"
 )
 
-admin_panel.section("Library", pages=[books.page, authors.page, publishers.page])
-admin_panel.section("Catalog", pages=[genres.page, tags.page, analytics.page])
-admin_panel.section("System", pages=[health.page, reports.page, overview.page])
+admin_panel.section(
+    "Library", icon="library", pages=[books.page, authors.page, publishers.page]
+)
+admin_panel.section(
+    "Catalog", icon="library-big", pages=[genres.page, tags.page, analytics.page]
+)
+admin_panel.section(
+    "System", icon="server", pages=[health.page, reports.page, overview.page]
+)
 
 admin_panel.mount_to(app)
