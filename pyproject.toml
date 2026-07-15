@@ -28,6 +28,9 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["openadmin"]
 
+[tool.codespell]
+ignore-words-list = "astroid"
+
 [tool.pyright]
 typeCheckingMode = "standard"
 venvPath = "."
