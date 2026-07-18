@@ -12,6 +12,7 @@ from openadmin import spec
 class Table:
     function_name: str
     method: spec.HttpMethod
+    id: str
     name: str
     description: str | None
     func: Callable | None = field(default=None)

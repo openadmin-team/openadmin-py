@@ -45,6 +45,7 @@ class AdminPage:
                 components.append(
                     spec.Stat(
                         type="stat",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -56,6 +57,7 @@ class AdminPage:
                 components.append(
                     spec.Table(
                         type="table",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -69,6 +71,7 @@ class AdminPage:
                 components.append(
                     spec.AreaChart(
                         type="area-chart",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -80,6 +83,7 @@ class AdminPage:
                 components.append(
                     spec.BarChart(
                         type="bar-chart",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -91,6 +95,7 @@ class AdminPage:
                 components.append(
                     spec.LineChart(
                         type="line-chart",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -102,6 +107,7 @@ class AdminPage:
                 components.append(
                     spec.PieChart(
                         type="pie-chart",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -113,6 +119,7 @@ class AdminPage:
                 components.append(
                     spec.Action(
                         type="action",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -127,6 +134,7 @@ class AdminPage:
                 components.append(
                     spec.Form(
                         type="form",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -141,6 +149,7 @@ class AdminPage:
                 components.append(
                     spec.Markdown(
                         type="markdown",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -185,7 +194,11 @@ class AdminPage:
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
         item = types.Table(
-            function_name=unique_name, method="get", name=name, description=description
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -204,7 +217,11 @@ class AdminPage:
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
         item = types.Stat(
-            function_name=unique_name, method="get", name=name, description=description
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -227,6 +244,7 @@ class AdminPage:
             method="get",
             name=name,
             description=description,
+            id=kebab_name,
         )
         self.state.append(item)
 
@@ -254,6 +272,7 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -278,6 +297,7 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -302,6 +322,7 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -326,6 +347,7 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -350,6 +372,7 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -374,6 +397,7 @@ class AdminPage:
             name=name,
             description=description,
             is_hiden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -398,6 +422,7 @@ class AdminPage:
             name=name,
             description=description,
             is_hiden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -422,6 +447,7 @@ class AdminPage:
             name=name,
             description=description,
             is_hiden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -446,6 +472,7 @@ class AdminPage:
             name=name,
             description=description,
             is_hiden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -464,7 +491,11 @@ class AdminPage:
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
         item = types.AreaChart(
-            function_name=unique_name, method="get", name=name, description=description
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -483,7 +514,11 @@ class AdminPage:
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
         item = types.BarChart(
-            function_name=unique_name, method="get", name=name, description=description
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -502,7 +537,11 @@ class AdminPage:
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
         item = types.LineChart(
-            function_name=unique_name, method="get", name=name, description=description
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -521,7 +560,11 @@ class AdminPage:
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
         item = types.PieChart(
-            function_name=unique_name, method="get", name=name, description=description
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(

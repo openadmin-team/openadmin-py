@@ -11,6 +11,7 @@ from openadmin import spec
 @dataclass
 class PieChart:
     function_name: str
+    id: str
     name: str
     description: str | None
     method: spec.HttpMethod
