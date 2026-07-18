@@ -32,7 +32,10 @@ async def get_earliest_publication(session: AsyncSessionDep) -> spec.Stat:
     return result.scalar_one_or_none()
 
 
-@page.stat("Latest Publication")
+@page.stat(
+    "Latest Publication",
+    description="Most recent publication year found in the catalog",
+)
 async def get_latest_publication(session: AsyncSessionDep) -> spec.Stat:
     result = await session.execute(
         select(func.max(models.Book.published_year)).where(
@@ -47,7 +50,12 @@ async def get_latest_publication(session: AsyncSessionDep) -> spec.Stat:
     }
 
 
-@page.stat("Books with Summary")
+@page.stat(
+    "Books with Summary",
+    icon="book-check",
+    color="teal",
+    description="Number of books that include a summary",
+)
 async def get_books_with_summary(session: AsyncSessionDep) -> int:
     result = await session.execute(
         select(func.count(models.Book.id)).where(models.Book.summary.isnot(None))

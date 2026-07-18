@@ -19,13 +19,18 @@ page = AdminPage(
 )
 
 
-@page.stat("Total Authors")
+@page.stat("Total Authors", description="Total number of authors in the catalog")
 async def get_total_authors(session: AsyncSessionDep) -> spec.StatResponse:
     result = await session.execute(select(func.count(models.Author.id)))
-    return {"value": result.scalar_one(), "icon": "sun"}
+    return {"value": result.scalar_one(), "icon": "users", "color": "indigo"}
 
 
-@page.stat("Authors with Bio")
+@page.stat(
+    "Authors with Bio",
+    icon="user-check",
+    color="emerald",
+    description="Authors that have a biography on file",
+)
 async def get_authors_with_bio(session: AsyncSessionDep) -> int:
     result = await session.execute(
         select(func.count(models.Author.id)).where(models.Author.bio.isnot(None))
@@ -33,7 +38,12 @@ async def get_authors_with_bio(session: AsyncSessionDep) -> int:
     return result.scalar_one()
 
 
-@page.stat("Avg Books per Author")
+@page.stat(
+    "Avg Books per Author",
+    icon="library",
+    color="amber",
+    description="Average number of books published per author",
+)
 async def get_avg_books_per_author(session: AsyncSessionDep) -> float:
     subq = (
         select(func.count(models.Book.id).label("cnt"))
