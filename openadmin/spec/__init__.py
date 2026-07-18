@@ -19,6 +19,7 @@ from .section import Section
 from .spec import Spec
 from .stat import Stat, StatComponent, StatResponse, StatValue
 from .table import Table
+from .colors import Color
 
 __all__ = [
     "Action",
@@ -41,4 +42,5 @@ __all__ = [
     "StatResponse",
     "StatValue",
     "Stat",
+    "Color",
 ]
