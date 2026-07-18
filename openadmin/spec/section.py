@@ -6,7 +6,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from .components import Icon
+from .icons import Icon
 from .page import Page
 
 
