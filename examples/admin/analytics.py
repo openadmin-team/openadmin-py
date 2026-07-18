@@ -17,24 +17,34 @@ page = AdminPage(
 )
 
 
-@page.stat("Earliest Publication")
+@page.stat(
+    "Earliest Publication",
+    icon="sun",
+    description="This is earliest publications for the last quorder",
+    color="red",
+)
 async def get_earliest_publication(session: AsyncSessionDep) -> spec.Stat:
     result = await session.execute(
         select(func.min(models.Book.published_year)).where(
             models.Book.published_year.isnot(None)
         )
     )
-    return {"value": result.scalar_one_or_none() or "N/A", "icon": "sun-medium"}
+    return result.scalar_one_or_none()
 
 
 @page.stat("Latest Publication")
-async def get_latest_publication(session: AsyncSessionDep) -> int | str:
+async def get_latest_publication(session: AsyncSessionDep) -> spec.Stat:
     result = await session.execute(
         select(func.max(models.Book.published_year)).where(
             models.Book.published_year.isnot(None)
         )
     )
-    return result.scalar_one_or_none() or "N/A"
+
+    return {
+        "value": result.scalar_one_or_none() or "N/A",
+        "color": "blue",
+        "icon": "clock",
+    }
 
 
 @page.stat("Books with Summary")
