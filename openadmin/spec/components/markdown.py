@@ -12,6 +12,7 @@ from .property import Property
 
 class Markdown(BaseModel):
     type: Literal["markdown"]
+    id: str
     name: str
     description: str | None
     url: str

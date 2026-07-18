@@ -12,6 +12,7 @@ from .property import Property
 
 class Form(BaseModel):
     type: Literal["form"]
+    id: str
     name: str
     description: str | None
     url: str

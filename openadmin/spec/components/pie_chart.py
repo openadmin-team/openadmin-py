@@ -12,6 +12,7 @@ from .property import Property
 
 class PieChart(BaseModel):
     type: Literal["pie-chart"]
+    id: str
     name: str
     description: str | None
     url: str

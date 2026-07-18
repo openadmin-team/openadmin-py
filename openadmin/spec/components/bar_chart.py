@@ -12,6 +12,7 @@ from .property import Property
 
 class BarChart(BaseModel):
     type: Literal["bar-chart"]
+    id: str
     name: str
     description: str | None
     url: str

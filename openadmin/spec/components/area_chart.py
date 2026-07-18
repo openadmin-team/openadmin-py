@@ -12,6 +12,7 @@ from .property import Property
 
 class AreaChart(BaseModel):
     type: Literal["area-chart"]
+    id: str
     name: str
     description: str | None
     url: str
