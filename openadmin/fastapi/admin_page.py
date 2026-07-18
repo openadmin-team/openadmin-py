@@ -272,7 +272,7 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-        is_hiden: bool = False,
+        is_hidden: bool = False,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -281,7 +281,7 @@ class AdminPage:
             method="post",
             name=name,
             description=description,
-            is_hidden=is_hiden,
+            is_hidden=is_hidden,
             id=kebab_name,
         )
         self.state.append(item)
@@ -297,7 +297,7 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-        is_hiden: bool = False,
+        is_hidden: bool = False,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -306,7 +306,7 @@ class AdminPage:
             method="get",
             name=name,
             description=description,
-            is_hidden=is_hiden,
+            is_hidden=is_hidden,
             id=kebab_name,
         )
         self.state.append(item)
@@ -322,7 +322,7 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-        is_hiden: bool = False,
+        is_hidden: bool = False,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -331,7 +331,7 @@ class AdminPage:
             method="put",
             name=name,
             description=description,
-            is_hidden=is_hiden,
+            is_hidden=is_hidden,
             id=kebab_name,
         )
         self.state.append(item)
@@ -347,7 +347,7 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-        is_hiden: bool = False,
+        is_hidden: bool = False,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -356,7 +356,7 @@ class AdminPage:
             method="patch",
             name=name,
             description=description,
-            is_hidden=is_hiden,
+            is_hidden=is_hidden,
             id=kebab_name,
         )
         self.state.append(item)
@@ -372,7 +372,7 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-        is_hiden: bool = False,
+        is_hidden: bool = False,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -381,7 +381,7 @@ class AdminPage:
             method="delete",
             name=name,
             description=description,
-            is_hidden=is_hiden,
+            is_hidden=is_hidden,
             id=kebab_name,
         )
         self.state.append(item)
@@ -397,7 +397,7 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-        is_hiden: bool = False,
+        is_hidden: bool = False,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -406,7 +406,7 @@ class AdminPage:
             method="post",
             name=name,
             description=description,
-            is_hidden=is_hiden,
+            is_hidden=is_hidden,
             id=kebab_name,
         )
         self.state.append(item)
@@ -422,7 +422,7 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-        is_hiden: bool = False,
+        is_hidden: bool = False,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -431,7 +431,7 @@ class AdminPage:
             method="put",
             name=name,
             description=description,
-            is_hidden=is_hiden,
+            is_hidden=is_hidden,
             id=kebab_name,
         )
         self.state.append(item)
@@ -447,7 +447,7 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-        is_hiden: bool = False,
+        is_hidden: bool = False,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -456,7 +456,7 @@ class AdminPage:
             method="patch",
             name=name,
             description=description,
-            is_hidden=is_hiden,
+            is_hidden=is_hidden,
             id=kebab_name,
         )
         self.state.append(item)
@@ -472,7 +472,7 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-        is_hiden: bool = False,
+        is_hidden: bool = False,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -481,7 +481,7 @@ class AdminPage:
             method="delete",
             name=name,
             description=description,
-            is_hidden=is_hiden,
+            is_hidden=is_hidden,
             id=kebab_name,
         )
         self.state.append(item)
