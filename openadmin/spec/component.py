@@ -11,9 +11,17 @@ from .form import Form
 from .line_chart import LineChart
 from .markdown import Markdown
 from .pie_chart import PieChart
-from .stat import Stat
+from .stat import StatComponent
 from .table import Table
 
 type Component = Union[
-    Stat, Table, AreaChart, BarChart, LineChart, PieChart, Action, Form, Markdown
+    StatComponent,
+    Table,
+    AreaChart,
+    BarChart,
+    LineChart,
+    PieChart,
+    Action,
+    Form,
+    Markdown,
 ]

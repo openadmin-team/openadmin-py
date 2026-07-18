@@ -4,6 +4,7 @@
 
 from sqlalchemy import func, select
 
+from openadmin import spec
 from openadmin.fastapi import AdminPage
 
 from ..lib import models
@@ -17,13 +18,13 @@ page = AdminPage(
 
 
 @page.stat("Earliest Publication")
-async def get_earliest_publication(session: AsyncSessionDep) -> int | str:
+async def get_earliest_publication(session: AsyncSessionDep) -> spec.Stat:
     result = await session.execute(
         select(func.min(models.Book.published_year)).where(
             models.Book.published_year.isnot(None)
         )
     )
-    return result.scalar_one_or_none() or "N/A"
+    return {"value": result.scalar_one_or_none() or "N/A", "icon": "sun-medium"}
 
 
 @page.stat("Latest Publication")

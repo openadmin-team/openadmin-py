@@ -53,7 +53,7 @@ class AdminPage:
 
             if isinstance(item, Stat):
                 components.append(
-                    spec.Stat(
+                    spec.StatComponent(
                         type="stat",
                         id=item.id,
                         name=item.name,

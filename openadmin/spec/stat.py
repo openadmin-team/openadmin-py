@@ -11,7 +11,7 @@ from .icons import Icon
 from .property import Property
 
 
-class Stat(BaseModel):
+class StatComponent(BaseModel):
     type: Literal["stat"]
     id: str
     name: str
@@ -27,3 +27,6 @@ type StatValue = str | int | float | bool | None
 class StatResponse(TypedDict):
     value: StatValue
     icon: NotRequired[Icon]
+
+
+type Stat = StatValue | StatResponse
