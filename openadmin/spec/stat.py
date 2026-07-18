@@ -14,6 +14,7 @@ from .property import Property
 class StatComponent(BaseModel):
     type: Literal["stat"]
     id: str
+    icon: Icon | None
     name: str
     description: str | None
     url: str

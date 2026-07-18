@@ -13,6 +13,7 @@ class Stat:
     function_name: str
     method: spec.HttpMethod
     id: str
+    icon: spec.Icon | None
     name: str
     description: str | None
     func: Callable | None = field(default=None)
