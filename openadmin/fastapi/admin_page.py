@@ -56,6 +56,7 @@ class AdminPage:
                     spec.StatComponent(
                         type="stat",
                         id=item.id,
+                        color=item.color,
                         icon=item.icon,
                         name=item.name,
                         description=item.description,
@@ -224,6 +225,7 @@ class AdminPage:
         name: str,
         *,
         icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
         description: str | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
@@ -231,6 +233,7 @@ class AdminPage:
         item = Stat(
             function_name=unique_name,
             method="get",
+            color=color,
             icon=icon,
             name=name,
             description=description,

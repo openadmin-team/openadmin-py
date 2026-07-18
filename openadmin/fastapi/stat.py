@@ -14,6 +14,7 @@ class Stat:
     method: spec.HttpMethod
     id: str
     icon: spec.Icon | None
+    color: spec.Color | None
     name: str
     description: str | None
     func: Callable | None = field(default=None)

@@ -4,7 +4,7 @@
 
 from typing import Literal
 
-Color = Literal[
+type Color = Literal[
     "slate",
     "gray",
     "zinc",
