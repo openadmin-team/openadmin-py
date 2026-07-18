@@ -5,6 +5,7 @@
 from pydantic import BaseModel
 from sqlalchemy import func, select
 
+from openadmin import spec
 from openadmin.fastapi import AdminPage
 from openadmin.fastapi.deps import PageDep, SearchQueryDep
 
@@ -19,9 +20,9 @@ page = AdminPage(
 
 
 @page.stat("Total Authors")
-async def get_total_authors(session: AsyncSessionDep) -> int:
+async def get_total_authors(session: AsyncSessionDep) -> spec.StatResponse:
     result = await session.execute(select(func.count(models.Author.id)))
-    return result.scalar_one()
+    return {"value": result.scalar_one(), "icon": "sun"}
 
 
 @page.stat("Authors with Bio")
