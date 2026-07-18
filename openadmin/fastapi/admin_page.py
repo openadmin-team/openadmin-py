@@ -149,7 +149,7 @@ class AdminPage:
                         description=item.description,
                         method=item.method,
                         url=url,
-                        is_hiden=item.is_hiden,
+                        is_hidden=item.is_hidden,
                         query=query,
                         body=body,
                         form=form,
@@ -406,7 +406,7 @@ class AdminPage:
             method="post",
             name=name,
             description=description,
-            is_hiden=is_hiden,
+            is_hidden=is_hiden,
             id=kebab_name,
         )
         self.state.append(item)
@@ -431,7 +431,7 @@ class AdminPage:
             method="put",
             name=name,
             description=description,
-            is_hiden=is_hiden,
+            is_hidden=is_hiden,
             id=kebab_name,
         )
         self.state.append(item)
@@ -456,7 +456,7 @@ class AdminPage:
             method="patch",
             name=name,
             description=description,
-            is_hiden=is_hiden,
+            is_hidden=is_hiden,
             id=kebab_name,
         )
         self.state.append(item)
@@ -481,7 +481,7 @@ class AdminPage:
             method="delete",
             name=name,
             description=description,
-            is_hiden=is_hiden,
+            is_hidden=is_hiden,
             id=kebab_name,
         )
         self.state.append(item)

@@ -17,7 +17,7 @@ class Form(BaseModel):
     description: str | None
     url: str
     method: HttpMethod
-    is_hiden: bool
+    is_hidden: bool
     form: List[Property] | None = Field(None)
     body: List[Property] | None = Field(None)
     query: List[Property] | None = Field(None)

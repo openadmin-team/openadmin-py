@@ -15,5 +15,5 @@ class Form:
     name: str
     description: str | None
     method: spec.HttpMethod
-    is_hiden: bool
+    is_hidden: bool
     func: Callable | None = field(default=None)
