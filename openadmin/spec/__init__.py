@@ -17,7 +17,7 @@ from .property import Property
 from .property_type import PropertyType
 from .section import Section
 from .spec import Spec
-from .stat import Stat
+from .stat import Stat, StatResponse, StatValue
 from .table import Table
 
 __all__ = [
@@ -38,4 +38,6 @@ __all__ = [
     "Table",
     "Markdown",
     "Icon",
+    "StatResponse",
+    "StatValue",
 ]
