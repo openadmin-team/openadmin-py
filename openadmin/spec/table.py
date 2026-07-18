@@ -12,6 +12,7 @@ from .property import Property
 
 class Table(BaseModel):
     type: Literal["table"]
+    id: str
     name: str
     description: str | None
     url: str

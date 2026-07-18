@@ -9,9 +9,10 @@ from openadmin import spec
 
 
 @dataclass
-class Table:
+class AreaChart:
     function_name: str
-    method: spec.HttpMethod
+    id: str
     name: str
     description: str | None
+    method: spec.HttpMethod
     func: Callable | None = field(default=None)

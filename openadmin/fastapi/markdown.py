@@ -9,8 +9,9 @@ from openadmin import spec
 
 
 @dataclass
-class LineChart:
+class Markdown:
     function_name: str
+    id: str
     name: str
     description: str | None
     method: spec.HttpMethod

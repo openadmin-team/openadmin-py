@@ -10,8 +10,9 @@ from .http_methods import HttpMethod
 from .property import Property
 
 
-class BarChart(BaseModel):
-    type: Literal["bar-chart"]
+class PieChart(BaseModel):
+    type: Literal["pie-chart"]
+    id: str
     name: str
     description: str | None
     url: str

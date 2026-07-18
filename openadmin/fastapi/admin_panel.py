@@ -7,8 +7,8 @@ from typing import Dict, List
 from fastapi import FastAPI, HTTPException, status
 from openadmin import spec
 
-from . import types
 from .admin_page import AdminPage
+from .section import Section
 
 
 class AdminPanel:
@@ -16,7 +16,7 @@ class AdminPanel:
         self.version = "1.0.0"
         self.name = name
         self.description = description
-        self.state: List[types.Section] = []
+        self.state: List[Section] = []
         self.app = FastAPI()
         self.key_repeat_count: Dict[str, int] = {}
         self.__init_spec_route(self.app)
@@ -61,7 +61,7 @@ class AdminPanel:
             self.key_repeat_count[kebab_name] = 1
 
         self.state.append(
-            types.Section(
+            Section(
                 id=kebab_name,
                 name=name,
                 description=description,

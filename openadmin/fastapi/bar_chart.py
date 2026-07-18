@@ -9,10 +9,10 @@ from openadmin import spec
 
 
 @dataclass
-class Form:
+class BarChart:
     function_name: str
+    id: str
     name: str
     description: str | None
     method: spec.HttpMethod
-    is_hiden: bool
     func: Callable | None = field(default=None)

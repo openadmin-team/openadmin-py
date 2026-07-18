@@ -12,6 +12,7 @@ from .property import Property
 
 class LineChart(BaseModel):
     type: Literal["line-chart"]
+    id: str
     name: str
     description: str | None
     url: str

@@ -9,7 +9,17 @@ from collections.abc import Callable
 from fastapi import APIRouter, FastAPI
 from openadmin import spec
 
-from . import counters, types
+from . import counters
+from .action import Action
+from .area_chart import AreaChart
+from .bar_chart import BarChart
+from .component import Component
+from .form import Form
+from .line_chart import LineChart
+from .markdown import Markdown
+from .pie_chart import PieChart
+from .stat import Stat
+from .table import Table
 from .utils import extract_params
 
 _SPECIAL_CHARS_RE = re.compile(r"[^a-zA-Z0-9\s]")
@@ -26,7 +36,7 @@ class AdminPage:
         self.name = name
         self.description = description
         self.icon: spec.Icon | None = icon
-        self.state: list[types.Component] = []
+        self.state: list[Component] = []
         self.router = APIRouter(prefix=f"/{name.lower().replace(' ', '-')}")
         self.key_repeat_count: dict[str, int] = {}
         self.page_count = counters.get_next("page")
@@ -41,10 +51,11 @@ class AdminPage:
                 extract_params(item.func) if item.func else (None, None, None)
             )
 
-            if isinstance(item, types.Stat):
+            if isinstance(item, Stat):
                 components.append(
                     spec.Stat(
                         type="stat",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -52,10 +63,11 @@ class AdminPage:
                         query=query,
                     )
                 )
-            elif isinstance(item, types.Table):
+            elif isinstance(item, Table):
                 components.append(
                     spec.Table(
                         type="table",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -65,10 +77,11 @@ class AdminPage:
                         form=form,
                     )
                 )
-            elif isinstance(item, types.AreaChart):
+            elif isinstance(item, AreaChart):
                 components.append(
                     spec.AreaChart(
                         type="area-chart",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -76,10 +89,11 @@ class AdminPage:
                         query=query,
                     )
                 )
-            elif isinstance(item, types.BarChart):
+            elif isinstance(item, BarChart):
                 components.append(
                     spec.BarChart(
                         type="bar-chart",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -87,10 +101,11 @@ class AdminPage:
                         query=query,
                     )
                 )
-            elif isinstance(item, types.LineChart):
+            elif isinstance(item, LineChart):
                 components.append(
                     spec.LineChart(
                         type="line-chart",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -98,10 +113,11 @@ class AdminPage:
                         query=query,
                     )
                 )
-            elif isinstance(item, types.PieChart):
+            elif isinstance(item, PieChart):
                 components.append(
                     spec.PieChart(
                         type="pie-chart",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -109,10 +125,11 @@ class AdminPage:
                         query=query,
                     )
                 )
-            elif isinstance(item, types.Action):
+            elif isinstance(item, Action):
                 components.append(
                     spec.Action(
                         type="action",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -123,10 +140,11 @@ class AdminPage:
                         form=form,
                     )
                 )
-            elif isinstance(item, types.Form):
+            elif isinstance(item, Form):
                 components.append(
                     spec.Form(
                         type="form",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -137,10 +155,11 @@ class AdminPage:
                         form=form,
                     )
                 )
-            elif isinstance(item, types.Markdown):
+            elif isinstance(item, Markdown):
                 components.append(
                     spec.Markdown(
                         type="markdown",
+                        id=item.id,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -157,7 +176,7 @@ class AdminPage:
             components=components,
         )
 
-    def _wrap_user_handler(self, item: types.Component, fastapi_decorator) -> Callable:
+    def _wrap_user_handler(self, item: Component, fastapi_decorator) -> Callable:
         def decorator(func: Callable) -> Callable:
             item.func = func
             return fastapi_decorator(func)
@@ -184,8 +203,12 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Table(
-            function_name=unique_name, method="get", name=name, description=description
+        item = Table(
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -203,8 +226,12 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Stat(
-            function_name=unique_name, method="get", name=name, description=description
+        item = Stat(
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -222,11 +249,12 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Markdown(
+        item = Markdown(
             function_name=unique_name,
             method="get",
             name=name,
             description=description,
+            id=kebab_name,
         )
         self.state.append(item)
 
@@ -248,12 +276,13 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Action(
+        item = Action(
             function_name=unique_name,
             method="post",
             name=name,
             description=description,
             is_hidden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -272,12 +301,13 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Action(
+        item = Action(
             function_name=unique_name,
             method="get",
             name=name,
             description=description,
             is_hidden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -296,12 +326,13 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Action(
+        item = Action(
             function_name=unique_name,
             method="put",
             name=name,
             description=description,
             is_hidden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -320,12 +351,13 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Action(
+        item = Action(
             function_name=unique_name,
             method="patch",
             name=name,
             description=description,
             is_hidden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -344,12 +376,13 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Action(
+        item = Action(
             function_name=unique_name,
             method="delete",
             name=name,
             description=description,
             is_hidden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -368,12 +401,13 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Form(
+        item = Form(
             function_name=unique_name,
             method="post",
             name=name,
             description=description,
             is_hiden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -392,12 +426,13 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Form(
+        item = Form(
             function_name=unique_name,
             method="put",
             name=name,
             description=description,
             is_hiden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -416,12 +451,13 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Form(
+        item = Form(
             function_name=unique_name,
             method="patch",
             name=name,
             description=description,
             is_hiden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -440,12 +476,13 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.Form(
+        item = Form(
             function_name=unique_name,
             method="delete",
             name=name,
             description=description,
             is_hiden=is_hiden,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -463,8 +500,12 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.AreaChart(
-            function_name=unique_name, method="get", name=name, description=description
+        item = AreaChart(
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -482,8 +523,12 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.BarChart(
-            function_name=unique_name, method="get", name=name, description=description
+        item = BarChart(
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -501,8 +546,12 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.LineChart(
-            function_name=unique_name, method="get", name=name, description=description
+        item = LineChart(
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(
@@ -520,8 +569,12 @@ class AdminPage:
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
-        item = types.PieChart(
-            function_name=unique_name, method="get", name=name, description=description
+        item = PieChart(
+            function_name=unique_name,
+            method="get",
+            name=name,
+            description=description,
+            id=kebab_name,
         )
         self.state.append(item)
         return self._wrap_user_handler(

@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Literal
+from typing import List, Literal
 
 from pydantic import BaseModel, Field
 
@@ -10,10 +10,11 @@ from .http_methods import HttpMethod
 from .property import Property
 
 
-class PieChart(BaseModel):
-    type: Literal["pie-chart"]
+class Markdown(BaseModel):
+    type: Literal["markdown"]
+    id: str
     name: str
     description: str | None
     url: str
     method: HttpMethod
-    query: list[Property] | None = Field(None)
+    query: List[Property] | None = Field(None)

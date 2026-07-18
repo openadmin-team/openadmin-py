@@ -9,9 +9,11 @@ from openadmin import spec
 
 
 @dataclass
-class Stat:
+class Action:
     function_name: str
-    method: spec.HttpMethod
+    id: str
     name: str
     description: str | None
+    method: spec.HttpMethod
+    is_hidden: bool
     func: Callable | None = field(default=None)

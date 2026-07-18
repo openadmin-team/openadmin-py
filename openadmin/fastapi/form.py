@@ -9,9 +9,11 @@ from openadmin import spec
 
 
 @dataclass
-class PieChart:
+class Form:
     function_name: str
+    id: str
     name: str
     description: str | None
     method: spec.HttpMethod
+    is_hiden: bool
     func: Callable | None = field(default=None)
