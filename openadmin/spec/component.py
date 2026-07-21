@@ -10,7 +10,7 @@ from .bar_chart import BarChart
 from .form import Form
 from .line_chart import LineChart
 from .markdown import Markdown
-from .pie_chart import PieChart
+from .pie_chart import PieChartComponent
 from .stat import StatComponent
 from .table import Table
 
@@ -20,7 +20,7 @@ type Component = Union[
     AreaChart,
     BarChart,
     LineChart,
-    PieChart,
+    PieChartComponent,
     Action,
     Form,
     Markdown,

@@ -13,7 +13,13 @@ from .icons import Icon
 from .line_chart import LineChart
 from .markdown import Markdown
 from .page import Page
-from .pie_chart import PieChart
+from .pie_chart import (
+    PieChart,
+    PieChartComponent,
+    PieChartConfigValue,
+    PieChartData,
+    PieChartResponce,
+)
 from .property import Property
 from .property_type import PropertyType
 from .section import Section
@@ -30,7 +36,7 @@ __all__ = [
     "HttpMethod",
     "LineChart",
     "Page",
-    "PieChart",
+    "PieChartComponent",
     "Property",
     "PropertyType",
     "Section",
@@ -43,4 +49,8 @@ __all__ = [
     "StatValue",
     "Stat",
     "Color",
+    "PieChartResponce",
+    "PieChart",
+    "PieChartData",
+    "PieChartConfigValue",
 ]
