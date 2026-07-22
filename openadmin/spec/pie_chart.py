@@ -13,7 +13,7 @@ from .property import Property
 
 
 class PieChartConfigValue(TypedDict):
-    label: NotRequired[str]
+    name: NotRequired[str]
     color: NotRequired[Color]
     icon: NotRequired[Icon]
 
