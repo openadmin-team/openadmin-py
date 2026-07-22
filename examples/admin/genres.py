@@ -63,23 +63,16 @@ async def get_all_genres(session: AsyncSessionDep, pagination: PageDep):
 @page.pie_chart(
     "Genre Distribution 1",
     description="Share of books across all genres",
-    config={
-        "a": {
-            "name": "A",
-            "color": "amber",
-            "icon": "arrow-big-down",
-        }
-    },
 )
 async def get_genre_distribution_1(session: AsyncSessionDep):
     stmt = (
-        select(models.Genre.name, func.count(models.BookToGenre.book_id).label("count"))
+        select(models.Genre, func.count(models.BookToGenre.book_id).label("count"))
         .join(models.BookToGenre, models.BookToGenre.genre_id == models.Genre.id)
         .group_by(models.Genre.id)
         .order_by(func.count(models.BookToGenre.book_id).desc())
     )
     result = await session.execute(stmt)
-    return [{"label": row.name, "value": row.count} for row in result]
+    return [{**g, "count": count} for g, count in result.all()]
 
 
 @page.pie_chart("Genre Distribution 2", description="Share of books across all genres")
