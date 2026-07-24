@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Dict, List
 
 from fastapi import FastAPI, HTTPException, status
 from openadmin import spec
@@ -16,14 +15,14 @@ class AdminPanel:
         self.version = "1.0.0"
         self.name = name
         self.description = description
-        self.state: List[Section] = []
+        self.state: list[Section] = []
         self.app = FastAPI()
-        self.key_repeat_count: Dict[str, int] = {}
+        self.key_repeat_count: dict[str, int] = {}
         self.__init_spec_route(self.app)
         self.root: FastAPI | None = None
 
     def get_panel_spec(self, app: FastAPI) -> spec.Spec:
-        sections: List[spec.Section] = []
+        sections: list[spec.Section] = []
 
         for section in self.state:
             sections.append(
@@ -49,7 +48,7 @@ class AdminPanel:
         *,
         description: str | None = None,
         icon: spec.Icon | None = None,
-        pages: List[AdminPage],
+        pages: list[AdminPage],
     ) -> None:
         kebab_name = name.lower().replace(" ", "-")
 

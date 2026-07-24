@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import List, Literal
+from typing import Literal
 
 from pydantic import BaseModel, Field
 
@@ -18,6 +18,6 @@ class Form(BaseModel):
     url: str
     method: HttpMethod
     is_hidden: bool
-    form: List[Property] | None = Field(None)
-    body: List[Property] | None = Field(None)
-    query: List[Property] | None = Field(None)
+    form: list[Property] | None = Field(None)
+    body: list[Property] | None = Field(None)
+    query: list[Property] | None = Field(None)

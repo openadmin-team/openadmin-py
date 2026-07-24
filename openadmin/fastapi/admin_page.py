@@ -5,7 +5,6 @@
 import re
 import uuid
 from collections.abc import Callable
-from typing import Dict
 
 from fastapi import APIRouter, FastAPI
 from openadmin import spec
@@ -581,7 +580,7 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
-        config: Dict[str, spec.PieChartConfigValue] | None = None,
+        config: dict[str, spec.PieChartConfigValue] | None = None,
         icon: spec.Icon | None = None,
         name_key: str | None = None,
         value_key: str | None = None,

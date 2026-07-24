@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import List, Literal
+from typing import Literal
 
 from pydantic import BaseModel, Field
 
@@ -17,6 +17,6 @@ class Table(BaseModel):
     description: str | None
     url: str
     method: HttpMethod
-    form: List[Property] | None = Field(None)
-    body: List[Property] | None = Field(None)
-    query: List[Property] | None = Field(None)
+    form: list[Property] | None = Field(None)
+    body: list[Property] | None = Field(None)
+    query: list[Property] | None = Field(None)

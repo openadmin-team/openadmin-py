@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Dict, List, Literal, NotRequired, TypedDict
+from typing import Literal, NotRequired, TypedDict
 
 from pydantic import BaseModel, Field
 
@@ -22,7 +22,7 @@ class PieChartComponent(BaseModel):
     type: Literal["pie-chart"]
     id: str
     name: str
-    config: Dict[str, PieChartConfigValue] | None
+    config: dict[str, PieChartConfigValue] | None
     icon: Icon | None
     name_key: str | None
     value_key: str | None
@@ -36,11 +36,11 @@ class PieChartComponent(BaseModel):
     query: list[Property] | None = Field(None)
 
 
-type PieChartData = List[Dict[str, int | float | str]] | object
+type PieChartData = list[dict[str, int | float | str]] | object
 
 
 class PieChartResponce(TypedDict):
-    config: NotRequired[Dict[str, PieChartConfigValue]]
+    config: NotRequired[dict[str, PieChartConfigValue]]
     icon: NotRequired[Icon]
     color: NotRequired[Color]
     data: PieChartData

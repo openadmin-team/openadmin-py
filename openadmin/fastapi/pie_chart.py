@@ -4,7 +4,6 @@
 
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Dict
 
 from openadmin import spec
 
@@ -14,7 +13,7 @@ class PieChart:
     function_name: str
     id: str
     name: str
-    config: Dict[str, spec.PieChartConfigValue] | None
+    config: dict[str, spec.PieChartConfigValue] | None
     icon: spec.Icon | None
     name_key: str | None
     value_key: str | None
