@@ -31,6 +31,11 @@ page = fastapi.AdminPage(
             "icon": "sun",
         }
     },
+    color="violet",
+    icon="book-open",
+    caption="5 day streak",
+    caption_description="Reading every day this work week",
+    caption_icon="flame",
 )
 def get_books_1() -> spec.PieChart:
     return WEEKDAYS
