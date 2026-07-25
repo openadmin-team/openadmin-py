@@ -14,5 +14,10 @@ class BarChart:
     id: str
     name: str
     description: str | None
+    icon: spec.Icon | None
+    color: spec.Color | None
+    caption: str | None
+    caption_description: str | None
+    caption_icon: spec.Icon | None
     method: spec.HttpMethod
     func: Callable | None = field(default=None)

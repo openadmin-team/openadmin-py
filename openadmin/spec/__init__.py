@@ -4,7 +4,7 @@
 
 from .action import Action
 from .area_chart import AreaChart
-from .bar_chart import BarChart
+from .bar_chart import BarChartComponent
 from .colors import COLORS, Color
 from .component import Component
 from .form import Form
@@ -31,7 +31,7 @@ __all__ = [
     "COLORS",
     "Action",
     "AreaChart",
-    "BarChart",
+    "BarChartComponent",
     "Color",
     "Component",
     "Form",
