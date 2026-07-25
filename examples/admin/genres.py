@@ -44,7 +44,7 @@ async def get_books_without_genre(session: AsyncSessionDep) -> int:
     return result.scalar_one()
 
 
-@page.table("All Genres", description="All genres sorted by book count")
+@page.table("All Genres", description="All genres sorted by book count", icon='flower', color='green')
 async def get_all_genres(session: AsyncSessionDep, pagination: PageDep):
     stmt = (
         select(models.Genre, func.count(models.BookToGenre.book_id).label("book_count"))
