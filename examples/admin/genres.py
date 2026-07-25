@@ -4,6 +4,7 @@
 
 from sqlalchemy import func, select
 
+from openadmin import spec
 from openadmin.fastapi import AdminPage
 from openadmin.fastapi.deps import PageDep
 
@@ -59,8 +60,25 @@ async def get_all_genres(session: AsyncSessionDep, pagination: PageDep):
     ]
 
 
-@page.pie_chart("Genre Distribution", description="Share of books across all genres")
-async def get_genre_distribution(session: AsyncSessionDep):
+@page.pie_chart(
+    "Genre Distribution 1",
+    description="Share of books across all genres",
+    name_key="name",
+    value_key="count",
+)
+async def get_genre_distribution_1(session: AsyncSessionDep):
+    stmt = (
+        select(models.Genre, func.count(models.BookToGenre.book_id).label("count"))
+        .join(models.BookToGenre, models.BookToGenre.genre_id == models.Genre.id)
+        .group_by(models.Genre.id)
+        .order_by(func.count(models.BookToGenre.book_id).desc())
+    )
+    result = await session.execute(stmt)
+    return [{**g, "count": count} for g, count in result.all()]
+
+
+@page.pie_chart("Genre Distribution 2", description="Share of books across all genres")
+async def get_genre_distribution_2(session: AsyncSessionDep) -> spec.PieChart:
     stmt = (
         select(models.Genre.name, func.count(models.BookToGenre.book_id).label("count"))
         .join(models.BookToGenre, models.BookToGenre.genre_id == models.Genre.id)
@@ -68,7 +86,9 @@ async def get_genre_distribution(session: AsyncSessionDep):
         .order_by(func.count(models.BookToGenre.book_id).desc())
     )
     result = await session.execute(stmt)
-    return [{"label": row.name, "value": row.count} for row in result]
+    return {
+        "data": [{"name": row.name, "value": row.count} for row in result],
+    }
 
 
 @page.bar_chart("Books per Genre", description="Absolute book count for each genre")

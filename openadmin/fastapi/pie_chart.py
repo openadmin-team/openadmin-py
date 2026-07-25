@@ -13,6 +13,14 @@ class PieChart:
     function_name: str
     id: str
     name: str
+    config: dict[str, spec.PieChartConfigValue] | None
+    icon: spec.Icon | None
+    name_key: str | None
+    value_key: str | None
+    color: spec.Color | None
+    caption: str | None
+    caption_description: str | None
+    caption_icon: spec.Icon | None
     description: str | None
     method: spec.HttpMethod
     func: Callable | None = field(default=None)

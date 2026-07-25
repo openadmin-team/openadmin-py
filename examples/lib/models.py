@@ -27,7 +27,7 @@ class Author(Base):
     last_name: Mapped[str] = mapped_column(String(100))
     bio: Mapped[str | None] = mapped_column(Text)
 
-    books: Mapped[list["Book"]] = relationship(back_populates="author")
+    books: Mapped[list[Book]] = relationship(back_populates="author")
 
 
 class Publisher(Base):
@@ -37,7 +37,7 @@ class Publisher(Base):
     name: Mapped[str] = mapped_column(String(200))
     country: Mapped[str | None] = mapped_column(String(100))
 
-    books: Mapped[list["Book"]] = relationship(back_populates="publisher")
+    books: Mapped[list[Book]] = relationship(back_populates="publisher")
 
 
 class Book(Base):
@@ -50,12 +50,12 @@ class Book(Base):
     author_id: Mapped[int] = mapped_column(ForeignKey("author.id"))
     publisher_id: Mapped[int | None] = mapped_column(ForeignKey("publisher.id"))
 
-    author: Mapped["Author"] = relationship(back_populates="books")
-    publisher: Mapped["Publisher | None"] = relationship(back_populates="books")
-    genres: Mapped[list["Genre"]] = relationship(
+    author: Mapped[Author] = relationship(back_populates="books")
+    publisher: Mapped[Publisher | None] = relationship(back_populates="books")
+    genres: Mapped[list[Genre]] = relationship(
         secondary=BookToGenre.__table__, back_populates="books"
     )
-    tag_links: Mapped[list["BookToTag"]] = relationship(
+    tag_links: Mapped[list[BookToTag]] = relationship(
         back_populates="book", cascade="all, delete-orphan"
     )
 
@@ -66,7 +66,7 @@ class Genre(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100), unique=True)
 
-    books: Mapped[list["Book"]] = relationship(
+    books: Mapped[list[Book]] = relationship(
         secondary=BookToGenre.__table__, back_populates="genres"
     )
 
@@ -77,7 +77,7 @@ class Tag(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100), unique=True)
 
-    book_links: Mapped[list["BookToTag"]] = relationship(back_populates="tag")
+    book_links: Mapped[list[BookToTag]] = relationship(back_populates="tag")
 
 
 class BookToTag(Base):
@@ -87,5 +87,5 @@ class BookToTag(Base):
     tag_id: Mapped[int] = mapped_column(ForeignKey("tag.id"), primary_key=True)
     added_at: Mapped[datetime] = mapped_column(server_default=func.now())
 
-    book: Mapped["Book"] = relationship(back_populates="tag_links")
-    tag: Mapped["Tag"] = relationship(back_populates="book_links")
+    book: Mapped[Book] = relationship(back_populates="tag_links")
+    tag: Mapped[Tag] = relationship(back_populates="book_links")

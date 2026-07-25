@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import List
 
 from pydantic import BaseModel, Field
 
@@ -14,4 +13,4 @@ class Property(BaseModel):
     alias: str = Field(..., description="This name goes to body or form for backend")
     type: PropertyType
     is_required: bool
-    properties: List[Property] | None = Field(None)
+    properties: list[Property] | None = Field(None)

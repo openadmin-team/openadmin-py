@@ -117,9 +117,17 @@ class AdminPage:
                 )
             elif isinstance(item, PieChart):
                 components.append(
-                    spec.PieChart(
+                    spec.PieChartComponent(
                         type="pie-chart",
                         id=item.id,
+                        config=item.config,
+                        icon=item.icon,
+                        name_key=item.name_key,
+                        color=item.color,
+                        value_key=item.value_key,
+                        caption=item.caption,
+                        caption_icon=item.caption_icon,
+                        caption_description=item.caption_description,
                         name=item.name,
                         description=item.description,
                         method=item.method,
@@ -572,6 +580,14 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
+        config: dict[str, spec.PieChartConfigValue] | None = None,
+        icon: spec.Icon | None = None,
+        name_key: str | None = None,
+        value_key: str | None = None,
+        color: spec.Color | None = None,
+        caption: str | None = None,
+        caption_description: str | None = None,
+        caption_icon: spec.Icon | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -581,6 +597,14 @@ class AdminPage:
             name=name,
             description=description,
             id=kebab_name,
+            config=config,
+            icon=icon,
+            name_key=name_key,
+            value_key=value_key,
+            color=color,
+            caption=caption,
+            caption_description=caption_description,
+            caption_icon=caption_icon,
         )
         self.state.append(item)
         return self._wrap_user_handler(

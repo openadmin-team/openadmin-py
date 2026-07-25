@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Union
 
 from .action import Action
 from .area_chart import AreaChart
@@ -14,6 +13,14 @@ from .pie_chart import PieChart
 from .stat import Stat
 from .table import Table
 
-type Component = Union[
-    Stat, Table, AreaChart, BarChart, LineChart, PieChart, Action, Form, Markdown
-]
+type Component = (
+    Stat
+    | Table
+    | AreaChart
+    | BarChart
+    | LineChart
+    | PieChart
+    | Action
+    | Form
+    | Markdown
+)
