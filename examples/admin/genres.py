@@ -56,7 +56,13 @@ async def get_all_genres(session: AsyncSessionDep, pagination: PageDep):
     )
     result = await session.execute(stmt)
     return [
-        {"id": g.id, "name": g.name, "book_count": count} for g, count in result.all()
+        {
+            "id": g.id,
+            "name": g.name,
+            "book_count": count,
+            "__veiw__": f"{g.id} | {g.name}",
+        }
+        for g, count in result.all()
     ]
 
 
