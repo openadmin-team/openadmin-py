@@ -106,6 +106,8 @@ class AdminPage:
                         caption_icon=item.caption_icon,
                         caption_description=item.caption_description,
                         color=item.color,
+                        config=item.config,
+                        data_key=item.data_key,
                     )
                 )
             elif isinstance(item, LineChart):
@@ -544,6 +546,8 @@ class AdminPage:
         caption: str | None = None,
         caption_description: str | None = None,
         caption_icon: spec.Icon | None = None,
+        config: dict[str, spec.BarChartConfigValue] | None = None,
+        data_key: str | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -558,6 +562,8 @@ class AdminPage:
             caption_description=caption_description,
             caption=caption,
             caption_icon=caption_icon,
+            config=config,
+            data_key=data_key,
         )
         self.state.append(item)
         return self._wrap_user_handler(
