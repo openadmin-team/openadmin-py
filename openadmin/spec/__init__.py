@@ -4,7 +4,13 @@
 
 from .action import Action
 from .area_chart import AreaChart
-from .bar_chart import BarChart
+from .bar_chart import (
+    BarChart,
+    BarChartComponent,
+    BarChartConfigValue,
+    BarChartData,
+    BarChartResponce,
+)
 from .colors import COLORS, Color
 from .component import Component
 from .form import Form
@@ -32,6 +38,10 @@ __all__ = [
     "Action",
     "AreaChart",
     "BarChart",
+    "BarChartComponent",
+    "BarChartConfigValue",
+    "BarChartData",
+    "BarChartResponce",
     "Color",
     "Component",
     "Form",

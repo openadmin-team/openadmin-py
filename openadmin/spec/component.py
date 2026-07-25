@@ -5,7 +5,7 @@
 
 from .action import Action
 from .area_chart import AreaChart
-from .bar_chart import BarChart
+from .bar_chart import BarChartComponent
 from .form import Form
 from .line_chart import LineChart
 from .markdown import Markdown
@@ -17,7 +17,7 @@ type Component = (
     StatComponent
     | Table
     | AreaChart
-    | BarChart
+    | BarChartComponent
     | LineChart
     | PieChartComponent
     | Action

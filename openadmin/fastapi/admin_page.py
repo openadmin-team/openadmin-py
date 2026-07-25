@@ -93,7 +93,7 @@ class AdminPage:
                 )
             elif isinstance(item, BarChart):
                 components.append(
-                    spec.BarChart(
+                    spec.BarChartComponent(
                         type="bar-chart",
                         id=item.id,
                         name=item.name,
@@ -101,6 +101,13 @@ class AdminPage:
                         method=item.method,
                         url=url,
                         query=query,
+                        icon=item.icon,
+                        caption=item.caption,
+                        caption_icon=item.caption_icon,
+                        caption_description=item.caption_description,
+                        color=item.color,
+                        config=item.config,
+                        data_key=item.data_key,
                     )
                 )
             elif isinstance(item, LineChart):
@@ -534,6 +541,13 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
+        caption: str | None = None,
+        caption_description: str | None = None,
+        caption_icon: spec.Icon | None = None,
+        config: dict[str, spec.BarChartConfigValue] | None = None,
+        data_key: str | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -543,6 +557,13 @@ class AdminPage:
             name=name,
             description=description,
             id=kebab_name,
+            icon=icon,
+            color=color,
+            caption_description=caption_description,
+            caption=caption,
+            caption_icon=caption_icon,
+            config=config,
+            data_key=data_key,
         )
         self.state.append(item)
         return self._wrap_user_handler(
