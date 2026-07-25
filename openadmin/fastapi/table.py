@@ -14,6 +14,8 @@ class Table:
     method: spec.HttpMethod
     id: str
     name: str
+    color: spec.Color | None
+    icon: spec.Icon | None
     description: str | None
     is_hidden: bool
     func: Callable | None = field(default=None)

@@ -78,6 +78,8 @@ class AdminPage:
                         body=body,
                         form=form,
                         is_hidden=item.is_hidden,
+                        icon=item.icon,
+                        color=item.color,
                     )
                 )
             elif isinstance(item, AreaChart):
@@ -219,6 +221,8 @@ class AdminPage:
         *,
         description: str | None = None,
         is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -229,6 +233,8 @@ class AdminPage:
             description=description,
             id=kebab_name,
             is_hidden=is_hidden,
+            icon=icon,
+            color=color,
         )
         self.state.append(item)
         return self._wrap_user_handler(

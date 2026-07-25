@@ -31,7 +31,7 @@ from .property_type import PropertyType
 from .section import Section
 from .spec import Spec
 from .stat import Stat, StatComponent, StatResponse, StatValue
-from .table import TableComponent
+from .table import Table, TableComponent, TableData, TableResponse
 
 __all__ = [
     "COLORS",
@@ -63,5 +63,8 @@ __all__ = [
     "StatComponent",
     "StatResponse",
     "StatValue",
+    "Table",
     "TableComponent",
+    "TableData",
+    "TableResponse",
 ]
