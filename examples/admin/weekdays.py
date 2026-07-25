@@ -23,6 +23,7 @@ page = fastapi.AdminPage(
 
 @page.pie_chart(
     "How many books I have read 1",
+    description="Books read per weekday, week 1",
     name_key="day",
     value_key="books",
     config={
@@ -43,20 +44,24 @@ def get_books_1() -> spec.PieChart:
 
 @page.pie_chart(
     "How many books I have read 2",
+    description="Books read per weekday, week 2",
+    name_key="day",
+    value_key="books",
+    config={
+        item["day"]: {
+            "name": item["day"],
+            "color": spec.COLORS[num % len(spec.COLORS)],
+        }
+        for num, item in enumerate(WEEKDAYS)
+    },
+    color="amber",
+    icon="air-vent",
+    caption="3 day streak",
+    caption_description="Reading every day this work week",
+    caption_icon="flame",
 )
 def get_books_2() -> spec.PieChart:
-    return {
-        "data": WEEKDAYS,
-        "color": "amber",
-        "icon": "air-vent",
-        "config": {
-            item["day"]: {
-                "name": item["day"],
-                "color": spec.COLORS[num % len(spec.COLORS)],
-            }
-            for num, item in enumerate(WEEKDAYS)
-        },
-    }
+    return WEEKDAYS
 
 
 @page.pie_chart(
