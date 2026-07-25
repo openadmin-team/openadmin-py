@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Literal
+from typing import Literal, NotRequired, TypedDict
 
 from pydantic import BaseModel, Field
 
@@ -12,11 +12,19 @@ from .icons import Icon
 from .property import Property
 
 
+class BarChartConfigValue(TypedDict):
+    name: NotRequired[str]
+    color: NotRequired[Color]
+    icon: NotRequired[Icon]
+
+
 class BarChartComponent(BaseModel):
     type: Literal["bar-chart"]
     id: str
     name: str
     description: str | None
+    config: dict[str, BarChartConfigValue] | None
+    data_key: str | None
     icon: Icon | None
     color: Color | None
     caption: str | None
@@ -25,3 +33,20 @@ class BarChartComponent(BaseModel):
     url: str
     method: HttpMethod
     query: list[Property] | None = Field(None)
+
+
+type BarChartData = (
+    list[dict[str, int | float | str]]
+    | list[dict[Literal["data", "value"], int | float | str]]
+    | object
+)
+
+
+class BarChartResponce(TypedDict):
+    config: NotRequired[dict[str, BarChartConfigValue]]
+    icon: NotRequired[Icon]
+    color: NotRequired[Color]
+    data: BarChartData
+
+
+type BarChart = BarChartData | BarChartResponce
