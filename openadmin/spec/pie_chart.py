@@ -36,7 +36,11 @@ class PieChartComponent(BaseModel):
     query: list[Property] | None = Field(None)
 
 
-type PieChartData = list[dict[str, int | float | str]] | object
+type PieChartData = (
+    list[dict[str, int | float | str]]
+    | list[dict[Literal["name", "value"], int | float | str]]
+    | object
+)
 
 
 class PieChartResponce(TypedDict):

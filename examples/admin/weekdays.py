@@ -17,7 +17,7 @@ WEEKDAYS: list[dict[str, Any]] = [
 
 page = fastapi.AdminPage(
     "Week Days",
-    icon='calendar',
+    icon="calendar",
 )
 
 
@@ -27,10 +27,11 @@ page = fastapi.AdminPage(
     name_key="day",
     value_key="books",
     config={
-        "Monday": {
-            "color": "amber",
-            "icon": "sun",
+        item["day"]: {
+            "name": item["day"],
+            "color": spec.COLORS[num % len(spec.COLORS)],
         }
+        for num, item in enumerate(WEEKDAYS)
     },
     color="violet",
     icon="book-open",
@@ -47,28 +48,28 @@ def get_books_1() -> spec.PieChart:
     description="Books read per weekday, week 2",
     name_key="day",
     value_key="books",
-    config={
-        item["day"]: {
-            "name": item["day"],
-            "color": spec.COLORS[num % len(spec.COLORS)],
-        }
-        for num, item in enumerate(WEEKDAYS)
-    },
-    color="amber",
-    icon="air-vent",
     caption="3 day streak",
     caption_description="Reading every day this work week",
     caption_icon="flame",
 )
 def get_books_2() -> spec.PieChart:
-    return WEEKDAYS
+    return {
+        "data": WEEKDAYS,
+        "color": "amber",
+        "icon": "a-arrow-up",
+        "config": {
+            item["day"]: {
+                "name": item["day"],
+                "color": spec.COLORS[num % len(spec.COLORS)],
+            }
+            for num, item in enumerate(WEEKDAYS)
+        },
+    }
 
 
 @page.pie_chart(
     "How many books I have read 3",
     description="Books read per weekday, all pie chart options set",
-    name_key="day",
-    value_key="books",
     color="violet",
     icon="book-open",
     caption="5 day streak",
@@ -83,4 +84,4 @@ def get_books_2() -> spec.PieChart:
     },
 )
 def get_books_3() -> spec.PieChart:
-    return WEEKDAYS
+    return [{"name": day["day"], "value": day["value"]} for day in WEEKDAYS]
