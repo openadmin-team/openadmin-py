@@ -17,7 +17,7 @@ class TableComponent(BaseModel):
     description: str | None
     url: str
     method: HttpMethod
-    is_hidden: bool = False
+    is_hidden: bool
     form: list[Property] | None = Field(None)
     body: list[Property] | None = Field(None)
     query: list[Property] | None = Field(None)

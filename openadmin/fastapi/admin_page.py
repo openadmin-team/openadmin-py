@@ -77,6 +77,7 @@ class AdminPage:
                         query=query,
                         body=body,
                         form=form,
+                        is_hidden=item.is_hidden,
                     )
                 )
             elif isinstance(item, AreaChart):
@@ -217,6 +218,7 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
+        is_hidden: bool = False,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -226,6 +228,7 @@ class AdminPage:
             name=name,
             description=description,
             id=kebab_name,
+            is_hidden=is_hidden,
         )
         self.state.append(item)
         return self._wrap_user_handler(

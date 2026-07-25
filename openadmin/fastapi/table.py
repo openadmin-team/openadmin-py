@@ -15,4 +15,5 @@ class Table:
     id: str
     name: str
     description: str | None
+    is_hidden: bool
     func: Callable | None = field(default=None)
