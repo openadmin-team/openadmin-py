@@ -13,4 +13,14 @@ from .pie_chart import PieChartComponent
 from .stat import StatComponent
 from .table import Table
 
-type Component = StatComponent | Table | AreaChart | BarChart | LineChart | PieChartComponent | Action | Form | Markdown
+type Component = (
+    StatComponent
+    | Table
+    | AreaChart
+    | BarChart
+    | LineChart
+    | PieChartComponent
+    | Action
+    | Form
+    | Markdown
+)

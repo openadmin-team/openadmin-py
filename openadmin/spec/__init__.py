@@ -5,7 +5,7 @@
 from .action import Action
 from .area_chart import AreaChart
 from .bar_chart import BarChart
-from .colors import Color, COLORS
+from .colors import COLORS, Color
 from .component import Component
 from .form import Form
 from .http_methods import HttpMethod
@@ -28,6 +28,7 @@ from .stat import Stat, StatComponent, StatResponse, StatValue
 from .table import Table
 
 __all__ = [
+    "COLORS",
     "Action",
     "AreaChart",
     "BarChart",
@@ -53,5 +54,4 @@ __all__ = [
     "StatResponse",
     "StatValue",
     "Table",
-    "COLORS",
 ]
