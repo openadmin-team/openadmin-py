@@ -3,9 +3,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
+from typing import Any
+
 from openadmin import fastapi, spec
 
-WEEKDAYS = [
+WEEKDAYS: list[dict[str, Any]] = [
     {"day": "Monday", "books": 5},
     {"day": "Tuesday", "books": 3},
     {"day": "Wednesday", "books": 7},
@@ -13,7 +15,10 @@ WEEKDAYS = [
     {"day": "Friday", "books": 10},
 ]
 
-page = fastapi.AdminPage("Week Days")
+page = fastapi.AdminPage(
+    "Week Days",
+    icon='calendar',
+)
 
 
 @page.pie_chart(
@@ -47,3 +52,25 @@ def get_books_2() -> spec.PieChart:
             for num, item in enumerate(WEEKDAYS)
         },
     }
+
+
+@page.pie_chart(
+    "How many books I have read 3",
+    description="Books read per weekday, all pie chart options set",
+    name_key="day",
+    value_key="books",
+    color="violet",
+    icon="book-open",
+    caption="5 day streak",
+    caption_description="Reading every day this work week",
+    caption_icon="flame",
+    config={
+        item["day"]: {
+            "name": item["day"],
+            "color": spec.COLORS[num % len(spec.COLORS)],
+        }
+        for num, item in enumerate(WEEKDAYS)
+    },
+)
+def get_books_3() -> spec.PieChart:
+    return WEEKDAYS

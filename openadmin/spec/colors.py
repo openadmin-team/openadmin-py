@@ -31,7 +31,7 @@ type Color = Literal[
     "white",
 ]
 
-COLORS = [
+COLORS: list[Color] = [
     "slate",
     "gray",
     "zinc",
