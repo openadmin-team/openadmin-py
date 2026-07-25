@@ -29,7 +29,7 @@ page = fastapi.AdminPage(
     config={
         item["day"]: {
             "name": item["day"],
-            "color": spec.COLORS[num % len(spec.COLORS)],
+            "color": spec.COLORS[num + 10 % len(spec.COLORS)],
         }
         for num, item in enumerate(WEEKDAYS)
     },
@@ -60,7 +60,7 @@ def get_books_2() -> spec.PieChart:
         "config": {
             item["day"]: {
                 "name": item["day"],
-                "color": spec.COLORS[num % len(spec.COLORS)],
+                "color": spec.COLORS[num + 10 % len(spec.COLORS)],
             }
             for num, item in enumerate(WEEKDAYS)
         },
@@ -78,7 +78,7 @@ def get_books_2() -> spec.PieChart:
     config={
         item["day"]: {
             "name": item["day"],
-            "color": spec.COLORS[num % len(spec.COLORS)],
+            "color": spec.COLORS[num + 10 % len(spec.COLORS)],
         }
         for num, item in enumerate(WEEKDAYS)
     },
