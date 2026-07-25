@@ -11,11 +11,11 @@ from .line_chart import LineChart
 from .markdown import Markdown
 from .pie_chart import PieChartComponent
 from .stat import StatComponent
-from .table import Table
+from .table import TableComponent
 
 type Component = (
     StatComponent
-    | Table
+    | TableComponent
     | AreaChart
     | BarChartComponent
     | LineChart

@@ -67,7 +67,7 @@ class AdminPage:
                 )
             elif isinstance(item, Table):
                 components.append(
-                    spec.Table(
+                    spec.TableComponent(
                         type="table",
                         id=item.id,
                         name=item.name,
