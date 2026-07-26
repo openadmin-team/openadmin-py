@@ -1,3 +1,204 @@
-from openadmin import fastapi
+# SPDX-FileCopyrightText: 2026 OpenAdmin
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
-page = fastapi.AdminPage("Control Panel")
+from typing import Annotated
+
+from fastapi import Body, Depends, Form, Query
+from pydantic import BaseModel
+
+from openadmin import spec
+from openadmin.fastapi import AdminPage
+
+page = AdminPage(
+    "Control Panel",
+    icon="settings",
+    description="Every action/form parameter and response shape, demoed with example data",
+)
+
+
+def current_actor(
+    actor: str = Query("system", description="Who is performing this operation"),
+) -> str:
+    return actor
+
+
+ActorDep = Annotated[str, Depends(current_actor)]
+
+
+# ---------------------------------------------------------------------------
+# Actions — one per HTTP verb, each showing a different param source and a
+# different Action response shape. Nothing here mutates real state.
+# ---------------------------------------------------------------------------
+
+
+@page.action_get(
+    "Ping Service",
+    description="Check whether a downstream service is reachable",
+    icon="activity",
+    color="green",
+    is_hidden=False,
+)
+async def ping_service(
+    target: str = Query("api", description="Service name to ping"),
+) -> spec.Action:
+    return {
+        "icon": "activity",
+        "color": "green",
+        "toast": f"{target} responded in 12ms",
+        "message": f"Pinged '{target}' — reachable (example response, nothing was contacted)",
+    }
+
+
+class NotificationBody(BaseModel):
+    title: str
+    body: str
+    recipient: str | None = None
+
+
+@page.action_post(
+    "Send Test Notification",
+    description="Send a one-off notification through the messaging provider",
+    icon="send",
+    color="blue",
+)
+async def send_test_notification(
+    body: NotificationBody,
+    actor: ActorDep,
+    dry_run: bool = Query(True, description="Simulate without actually sending"),
+) -> str:
+    target = body.recipient or "all subscribers"
+    verb = "Would send" if dry_run else "Sent"
+    return (
+        f"{verb} '{body.title}' to {target} (requested by {actor}) — "
+        "example only, nothing was sent"
+    )
+
+
+@page.action_put(
+    "Update Feature Flag",
+    description="Flip a feature flag on or off for every user",
+    icon="toggle-left",
+    color="violet",
+    is_hidden=True,
+)
+async def update_feature_flag(
+    flag_name: str = Query(..., description="Flag key, e.g. new-dashboard"),
+    enabled: bool = Query(..., description="New flag state"),
+) -> spec.Action:
+    return {
+        "toast": f"{flag_name} -> {enabled}",
+        "message": "Preview of the change below (example data, flag was not modified)",
+        "table": [{"flag": flag_name, "previous": not enabled, "new": enabled}],
+    }
+
+
+@page.action_patch(
+    "Rotate API Key",
+    description="Issue a new API key and retire the previous one",
+    icon="key",
+    color="amber",
+)
+async def rotate_api_key(
+    key_name: str = Form(..., description="Key to rotate"),
+    expires_in_days: int = Form(30, description="Validity period for the new key"),
+) -> spec.Action:
+    return None
+
+
+@page.action_delete(
+    "Purge Temp Files",
+    description="Delete temporary files older than a given age",
+    icon="trash-2",
+    color="red",
+)
+async def purge_temp_files(
+    older_than_days: int = Query(7, ge=0, description="Age threshold in days"),
+) -> spec.Action:
+    return {
+        "message": (
+            f"Would delete files older than {older_than_days} days "
+            "(example — nothing was purged)"
+        )
+    }
+
+
+# ---------------------------------------------------------------------------
+# Forms — one per HTTP verb (post/put/patch/delete; there is no form_get).
+# ---------------------------------------------------------------------------
+
+
+class WebhookBody(BaseModel):
+    url: str
+    event: str
+    secret: str | None = None
+
+
+@page.form_post(
+    "Create Webhook",
+    description="Register a new outgoing webhook",
+    icon="webhook",
+    color="teal",
+)
+async def create_webhook(body: WebhookBody) -> spec.Form:
+    return {
+        "icon": "webhook",
+        "color": "teal",
+        "toast": "Webhook created",
+        "message": f"Would create a webhook for '{body.event}' -> {body.url}",
+        "table": {
+            "data": [{"id": 1, "url": body.url, "event": body.event}],
+            "icon": "webhook",
+            "color": "teal",
+        },
+    }
+
+
+class RateLimitBody(BaseModel):
+    requests_per_minute: int
+    burst_size: int = 0
+
+
+@page.form_put(
+    "Update Rate Limit",
+    description="Replace the current API rate-limit configuration",
+    icon="gauge",
+    color="cyan",
+    is_hidden=True,
+)
+async def update_rate_limit(body: RateLimitBody) -> spec.Form:
+    return {
+        "icon": "gauge",
+        "color": "cyan",
+        "toast": f"Rate limit set to {body.requests_per_minute}/min "
+        f"(burst {body.burst_size}) — example only, nothing was saved",
+    }
+
+
+@page.form_patch(
+    "Rename Environment",
+    description="Rename an existing deployment environment",
+    icon="pencil",
+    color="orange",
+)
+async def rename_environment(
+    environment_id: int = Query(..., description="Environment to rename"),
+    new_name: str = Body(..., embed=True, description="New environment name"),
+) -> str:
+    return (
+        f"Would rename environment #{environment_id} to '{new_name}' "
+        "(example only, nothing was renamed)"
+    )
+
+
+@page.form_delete(
+    "Schedule Config Reset",
+    description="Queue a configuration reset for the next maintenance window",
+    icon="rotate-ccw",
+    color="rose",
+    is_hidden=False,
+)
+async def schedule_config_reset(
+    config_id: int = Query(..., description="Config entry to reset"),
+) -> spec.Form:
+    return None
