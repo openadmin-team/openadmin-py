@@ -16,4 +16,6 @@ class Action:
     description: str | None
     method: spec.HttpMethod
     is_hidden: bool
+    color: spec.Color | None
+    icon: spec.Icon | None
     func: Callable | None = field(default=None)

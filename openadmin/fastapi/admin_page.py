@@ -155,6 +155,8 @@ class AdminPage:
                         method=item.method,
                         url=url,
                         is_hidden=item.is_hidden,
+                        icon=item.icon,
+                        color=item.color,
                         query=query,
                         body=body,
                         form=form,
@@ -170,6 +172,8 @@ class AdminPage:
                         method=item.method,
                         url=url,
                         is_hidden=item.is_hidden,
+                        icon=item.icon,
+                        color=item.color,
                         query=query,
                         body=body,
                         form=form,
@@ -309,6 +313,8 @@ class AdminPage:
         *,
         description: str | None = None,
         is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -318,6 +324,8 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hidden,
+            icon=icon,
+            color=color,
             id=kebab_name,
         )
         self.state.append(item)
@@ -334,6 +342,8 @@ class AdminPage:
         *,
         description: str | None = None,
         is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -343,6 +353,8 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hidden,
+            icon=icon,
+            color=color,
             id=kebab_name,
         )
         self.state.append(item)
@@ -359,6 +371,8 @@ class AdminPage:
         *,
         description: str | None = None,
         is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -368,6 +382,8 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hidden,
+            icon=icon,
+            color=color,
             id=kebab_name,
         )
         self.state.append(item)
@@ -384,6 +400,8 @@ class AdminPage:
         *,
         description: str | None = None,
         is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -393,6 +411,8 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hidden,
+            icon=icon,
+            color=color,
             id=kebab_name,
         )
         self.state.append(item)
@@ -409,6 +429,8 @@ class AdminPage:
         *,
         description: str | None = None,
         is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -418,6 +440,8 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hidden,
+            icon=icon,
+            color=color,
             id=kebab_name,
         )
         self.state.append(item)
@@ -434,6 +458,8 @@ class AdminPage:
         *,
         description: str | None = None,
         is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -443,6 +469,8 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hidden,
+            icon=icon,
+            color=color,
             id=kebab_name,
         )
         self.state.append(item)
@@ -459,6 +487,8 @@ class AdminPage:
         *,
         description: str | None = None,
         is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -468,6 +498,8 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hidden,
+            icon=icon,
+            color=color,
             id=kebab_name,
         )
         self.state.append(item)
@@ -484,6 +516,8 @@ class AdminPage:
         *,
         description: str | None = None,
         is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -493,6 +527,8 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hidden,
+            icon=icon,
+            color=color,
             id=kebab_name,
         )
         self.state.append(item)
@@ -509,6 +545,8 @@ class AdminPage:
         *,
         description: str | None = None,
         is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -518,6 +556,8 @@ class AdminPage:
             name=name,
             description=description,
             is_hidden=is_hidden,
+            icon=icon,
+            color=color,
             id=kebab_name,
         )
         self.state.append(item)

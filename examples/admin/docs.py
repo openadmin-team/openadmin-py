@@ -7,7 +7,7 @@ from openadmin import fastapi, spec
 page = fastapi.AdminPage("Docs", icon="dock")
 
 
-@page.markdown("Comany policy 1", icon="podcast", color="blue")
+@page.markdown("Company policy 1", icon="podcast", color="blue")
 def company_policy_1() -> spec.Markdown:
     return """
 # Hello World
@@ -21,7 +21,7 @@ This is new text
 """
 
 
-@page.markdown("Comany policy 2")
+@page.markdown("Company policy 2")
 def company_policy_2() -> spec.Markdown:
     return {
         "content": """
