@@ -11,6 +11,7 @@ from .admin import (
     analytics,
     authors,
     books,
+    docs,
     genres,
     health,
     overview,
@@ -33,6 +34,14 @@ app.add_middleware(
 
 admin_panel = AdminPanel(
     "Book Library Admin", description="Manage and explore the book catalog"
+)
+
+admin_panel.section(
+    "Docs",
+    icon="download-cloud",
+    pages=[
+        docs.page,
+    ],
 )
 
 admin_panel.section(
