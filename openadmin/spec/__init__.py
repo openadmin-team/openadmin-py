@@ -17,7 +17,7 @@ from .form import Form
 from .http_methods import HttpMethod
 from .icons import Icon
 from .line_chart import LineChart
-from .markdown import Markdown
+from .markdown import Markdown, MarkdownComponent, MarkdownContent, MarkdownResponse
 from .page import Page
 from .pie_chart import (
     PieChart,
@@ -49,6 +49,9 @@ __all__ = [
     "Icon",
     "LineChart",
     "Markdown",
+    "MarkdownComponent",
+    "MarkdownContent",
+    "MarkdownResponse",
     "Page",
     "PieChart",
     "PieChartComponent",

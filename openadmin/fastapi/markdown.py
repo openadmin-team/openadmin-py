@@ -14,5 +14,7 @@ class Markdown:
     id: str
     name: str
     description: str | None
+    icon: spec.Icon | None
+    color: spec.Color | None
     method: spec.HttpMethod
     func: Callable | None = field(default=None)

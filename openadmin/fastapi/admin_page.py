@@ -177,10 +177,12 @@ class AdminPage:
                 )
             elif isinstance(item, Markdown):
                 components.append(
-                    spec.Markdown(
+                    spec.MarkdownComponent(
                         type="markdown",
                         id=item.id,
                         name=item.name,
+                        icon=item.icon,
+                        color=item.color,
                         description=item.description,
                         method=item.method,
                         url=url,
@@ -276,6 +278,8 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
+        color: spec.Color | None = None,
+        icon: spec.Icon | None = None,
     ):
         kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
 
@@ -285,6 +289,8 @@ class AdminPage:
             name=name,
             description=description,
             id=kebab_name,
+            icon=icon,
+            color=color,
         )
         self.state.append(item)
 
