@@ -147,7 +147,7 @@ class AdminPage:
                 )
             elif isinstance(item, Action):
                 components.append(
-                    spec.Action(
+                    spec.ActionComponent(
                         type="action",
                         id=item.id,
                         name=item.name,
@@ -164,7 +164,7 @@ class AdminPage:
                 )
             elif isinstance(item, Form):
                 components.append(
-                    spec.Form(
+                    spec.FormComponent(
                         type="form",
                         id=item.id,
                         name=item.name,

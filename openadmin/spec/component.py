@@ -3,10 +3,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
-from .action import Action
+from .action import ActionComponent
 from .area_chart import AreaChart
 from .bar_chart import BarChartComponent
-from .form import Form
+from .form import FormComponent
 from .line_chart import LineChart
 from .markdown import MarkdownComponent
 from .pie_chart import PieChartComponent
@@ -20,7 +20,7 @@ type Component = (
     | BarChartComponent
     | LineChart
     | PieChartComponent
-    | Action
-    | Form
+    | ActionComponent
+    | FormComponent
     | MarkdownComponent
 )

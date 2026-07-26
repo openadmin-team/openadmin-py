@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from .action import Action
+from .action import Action, ActionComponent, ActionResponse
 from .area_chart import AreaChart
 from .bar_chart import (
     BarChart,
@@ -13,7 +13,7 @@ from .bar_chart import (
 )
 from .colors import COLORS, Color
 from .component import Component
-from .form import Form
+from .form import Form, FormComponent, FormResponse
 from .http_methods import HttpMethod
 from .icons import Icon
 from .line_chart import LineChart
@@ -36,6 +36,8 @@ from .table import Table, TableComponent, TableData, TableResponse
 __all__ = [
     "COLORS",
     "Action",
+    "ActionComponent",
+    "ActionResponse",
     "AreaChart",
     "BarChart",
     "BarChartComponent",
@@ -45,6 +47,8 @@ __all__ = [
     "Color",
     "Component",
     "Form",
+    "FormComponent",
+    "FormResponse",
     "HttpMethod",
     "Icon",
     "LineChart",

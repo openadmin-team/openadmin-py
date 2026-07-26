@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Literal
+from typing import Literal, NotRequired, TypedDict
 
 from pydantic import BaseModel, Field
 
@@ -12,7 +12,7 @@ from .icons import Icon
 from .property import Property
 
 
-class Form(BaseModel):
+class FormComponent(BaseModel):
     type: Literal["form"]
     id: str
     name: str
@@ -25,3 +25,14 @@ class Form(BaseModel):
     form: list[Property] | None = Field(None)
     body: list[Property] | None = Field(None)
     query: list[Property] | None = Field(None)
+
+
+class FormResponse(TypedDict):
+    icon: NotRequired[Icon]
+    color: NotRequired[Color]
+    toast: NotRequired[str]
+    table: NotRequired[dict | object]
+    message: NotRequired[str]
+
+
+type Form = FormResponse | None | str
