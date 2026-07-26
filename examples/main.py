@@ -19,6 +19,7 @@ from .admin import (
     reports,
     tags,
     weekdays,
+    control_panel,
 )
 from .lib import lifespan
 
@@ -51,7 +52,7 @@ admin_panel.section(
     "Catalog", icon="library-big", pages=[genres.page, tags.page, analytics.page]
 )
 admin_panel.section(
-    "System", icon="server", pages=[health.page, reports.page, overview.page]
+    "System", icon="server", pages=[health.page, reports.page, overview.page, control_panel.page]
 )
 admin_panel.section("Weekdays", icon="calendar-days", pages=[weekdays.page])
 
