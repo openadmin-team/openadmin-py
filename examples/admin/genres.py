@@ -85,7 +85,7 @@ async def get_genre_distribution_1(session: AsyncSessionDep):
         .order_by(func.count(models.BookToGenre.book_id).desc())
     )
     result = await session.execute(stmt)
-    return [{**g, "count": count} for g, count in result.all()]
+    return [{'genre': g.name, "count": count} for g, count in result.all()]
 
 
 @page.pie_chart("Genre Distribution 2", description="Share of books across all genres")
