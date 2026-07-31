@@ -74,7 +74,7 @@ async def get_all_genres(session: AsyncSessionDep, pagination: PageDep):
 @page.pie_chart(
     "Genre Distribution 1",
     description="Share of books across all genres",
-    name_key="name",
+    name_key="genre",
     value_key="count",
 )
 async def get_genre_distribution_1(session: AsyncSessionDep):
