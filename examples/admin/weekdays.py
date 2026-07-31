@@ -84,7 +84,7 @@ def get_books_2() -> spec.PieChart:
     },
 )
 def get_books_3() -> spec.PieChart:
-    return [{"name": day["day"], "value": day["value"]} for day in WEEKDAYS]
+    return [{"name": day["day"], "value": day["books"]} for day in WEEKDAYS]
 
 
 @page.bar_chart(
