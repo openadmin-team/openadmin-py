@@ -28,7 +28,7 @@ class TableComponent(BaseModel):
 
 
 type TableData = (
-    list[dict[str | Literal["__view__"], str | int | float | bool]] | object
+    list[dict[str | Literal["__view__"], str | int | float | bool | None]] | object
 )
 
 
