@@ -54,7 +54,12 @@ async def get_avg_books_per_author(session: AsyncSessionDep) -> float:
     return round(float(result.scalar_one() or 0), 2)
 
 
-@page.table("All Authors", description="Browse authors with search and book counts")
+@page.table(
+    "All Authors",
+    description="Browse authors with search and book counts",
+    icon="user-pen",
+    color="indigo",
+)
 async def get_all_authors(
     session: AsyncSessionDep, pagination: PageDep, search: SearchQueryDep
 ):
@@ -62,7 +67,7 @@ async def get_all_authors(
         select(models.Author, func.count(models.Book.id).label("book_count"))
         .outerjoin(models.Book, models.Book.author_id == models.Author.id)
         .group_by(models.Author.id)
-        .offset(pagination.page * pagination.per_page)
+        .offset((pagination.page - 1) * pagination.per_page)
         .limit(pagination.per_page)
     )
     if search:

@@ -56,7 +56,7 @@ async def get_all_genres(session: AsyncSessionDep, pagination: PageDep):
         .outerjoin(models.BookToGenre, models.BookToGenre.genre_id == models.Genre.id)
         .group_by(models.Genre.id)
         .order_by(func.count(models.BookToGenre.book_id).desc())
-        .offset(pagination.page * pagination.per_page)
+        .offset((pagination.page - 1) * pagination.per_page)
         .limit(pagination.per_page)
     )
     result = await session.execute(stmt)

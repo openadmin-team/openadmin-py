@@ -41,14 +41,19 @@ async def get_most_popular_tag(session: AsyncSessionDep) -> str:
     return result.scalar_one_or_none() or "N/A"
 
 
-@page.table("All Tags", description="All tags sorted by usage count")
+@page.table(
+    "All Tags",
+    description="All tags sorted by usage count",
+    icon="tag",
+    color="pink",
+)
 async def get_all_tags(session: AsyncSessionDep, pagination: PageDep):
     stmt = (
         select(models.Tag, func.count(models.BookToTag.book_id).label("usage_count"))
         .outerjoin(models.BookToTag, models.BookToTag.tag_id == models.Tag.id)
         .group_by(models.Tag.id)
         .order_by(func.count(models.BookToTag.book_id).desc())
-        .offset(pagination.page * pagination.per_page)
+        .offset((pagination.page - 1) * pagination.per_page)
         .limit(pagination.per_page)
     )
     result = await session.execute(stmt)

@@ -37,14 +37,19 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
     return result.scalar_one()
 
 
-@page.table("All Books", description="Browse all books with search and pagination")
+@page.table(
+    "All Books",
+    description="Browse all books with search and pagination",
+    icon="book",
+    color="blue",
+)
 async def get_all_books(
     session: AsyncSessionDep, pagination: PageDep, search: SearchQueryDep
 ):
     stmt = (
         select(models.Book, models.Author)
         .join(models.Author, models.Author.id == models.Book.author_id)
-        .offset(pagination.page * pagination.per_page)
+        .offset((pagination.page - 1) * pagination.per_page)
         .limit(pagination.per_page)
     )
     if search:
@@ -69,14 +74,19 @@ class AddBookBody(BaseModel):
     publisher_id: int | None = None
 
 
-@page.table("Books by Author", description="Number of books per author")
+@page.table(
+    "Books by Author",
+    description="Number of books per author",
+    icon="users-round",
+    color="violet",
+)
 async def get_books_by_author(session: AsyncSessionDep, pagination: PageDep):
     stmt = (
         select(models.Author, func.count(models.Book.id).label("book_count"))
         .join(models.Book, models.Book.author_id == models.Author.id)
         .group_by(models.Author.id)
         .order_by(func.count(models.Book.id).desc())
-        .offset(pagination.page * pagination.per_page)
+        .offset((pagination.page - 1) * pagination.per_page)
         .limit(pagination.per_page)
     )
     result = await session.execute(stmt)

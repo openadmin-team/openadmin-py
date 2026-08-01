@@ -47,7 +47,10 @@ async def get_heavily_tagged_books(session: AsyncSessionDep) -> int:
 
 
 @page.table(
-    "Most Tagged Books", description="Books with the highest number of tag assignments"
+    "Most Tagged Books",
+    description="Books with the highest number of tag assignments",
+    icon="tags",
+    color="orange",
 )
 async def get_most_tagged_books(session: AsyncSessionDep, pagination: PageDep):
     stmt = (
@@ -59,7 +62,7 @@ async def get_most_tagged_books(session: AsyncSessionDep, pagination: PageDep):
         .join(models.BookToTag, models.BookToTag.book_id == models.Book.id)
         .group_by(models.Book.id)
         .order_by(func.count(models.BookToTag.tag_id).desc())
-        .offset(pagination.page * pagination.per_page)
+        .offset((pagination.page - 1) * pagination.per_page)
         .limit(pagination.per_page)
     )
     result = await session.execute(stmt)

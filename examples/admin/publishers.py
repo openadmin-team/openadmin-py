@@ -42,7 +42,12 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
     return result.scalar_one()
 
 
-@page.table("All Publishers", description="Browse publishers with their book counts")
+@page.table(
+    "All Publishers",
+    description="Browse publishers with their book counts",
+    icon="building-2",
+    color="amber",
+)
 async def get_all_publishers(
     session: AsyncSessionDep, pagination: PageDep, search: SearchQueryDep
 ):
@@ -51,7 +56,7 @@ async def get_all_publishers(
         .outerjoin(models.Book, models.Book.publisher_id == models.Publisher.id)
         .group_by(models.Publisher.id)
         .order_by(func.count(models.Book.id).desc())
-        .offset(pagination.page * pagination.per_page)
+        .offset((pagination.page - 1) * pagination.per_page)
         .limit(pagination.per_page)
     )
     if search:
