@@ -20,6 +20,16 @@ class AdminPanel:
         self.app = FastAPI()
         self.__mount_spec_route(self.app)
 
+    @property
+    def spec(self) -> spec.Spec:
+        return {
+            "id": f"{utils.gen_id(self.name)}",
+            "name": self.name,
+            "version": self.version,
+            "description": self.description,
+            "sections": self.sections,
+        }
+
     def section(
         self,
         name: str,
@@ -46,16 +56,6 @@ class AdminPanel:
                 router=page.router,
                 tags=[name],
             )
-
-    @property
-    def spec(self) -> spec.Spec:
-        return {
-            "id": f"{utils.gen_id(self.name)}",
-            "name": self.name,
-            "version": self.version,
-            "description": self.description,
-            "sections": self.sections,
-        }
 
     def __mount_spec_route(self, app: FastAPI) -> None:
         app.get(
