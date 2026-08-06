@@ -193,4 +193,4 @@ def gen_id(seed: str) -> str:
     """Generate a unique ID based on a seed string."""
     kebab_name = _SPECIAL_CHARS_RE.sub("", seed).lower().replace(" ", "-")
     count = counter.inc(kebab_name)
-    return kebab_name + f"-{count}" if count != 0 else ""
+    return kebab_name + (f"-{count}" if count != 0 else "")
