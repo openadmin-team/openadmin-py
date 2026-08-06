@@ -20,7 +20,6 @@ class AdminPanel:
         self.app = FastAPI()
         self.__mount_spec_route(self.app)
 
-    @property
     def spec(self) -> spec.Spec:
         return {
             "id": f"{utils.gen_id(self.name)}",
@@ -61,4 +60,4 @@ class AdminPanel:
         app.get(
             "/spec.json",
             response_model=spec.Spec,
-        )(lambda: self.spec)
+        )(self.spec)
