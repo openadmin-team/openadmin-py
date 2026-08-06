@@ -4,15 +4,13 @@
 
 from typing import Literal, NotRequired, TypedDict
 
-from pydantic import BaseModel, Field
-
 from .colors import Color
 from .http_methods import HttpMethod
 from .icons import Icon
 from .property import Property
 
 
-class FormComponent(BaseModel):
+class FormComponent(TypedDict):
     type: Literal["form"]
     id: str
     name: str
@@ -22,9 +20,9 @@ class FormComponent(BaseModel):
     color: Color | None
     method: HttpMethod
     is_hidden: bool
-    form: list[Property] | None = Field(None)
-    body: list[Property] | None = Field(None)
-    query: list[Property] | None = Field(None)
+    form: NotRequired[list[Property] | None]
+    body: NotRequired[list[Property] | None]
+    query: NotRequired[list[Property] | None]
 
 
 class FormResponse(TypedDict):

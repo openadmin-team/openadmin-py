@@ -4,8 +4,6 @@
 
 from typing import Literal, NotRequired, TypedDict
 
-from pydantic import BaseModel, Field
-
 from .colors import Color
 from .http_methods import HttpMethod
 from .icons import Icon
@@ -18,7 +16,7 @@ class BarChartConfigValue(TypedDict):
     icon: NotRequired[Icon]
 
 
-class BarChartComponent(BaseModel):
+class BarChartComponent(TypedDict):
     type: Literal["bar-chart"]
     id: str
     name: str
@@ -32,7 +30,7 @@ class BarChartComponent(BaseModel):
     caption_icon: Icon | None
     url: str
     method: HttpMethod
-    query: list[Property] | None = Field(None)
+    query: NotRequired[list[Property] | None]
 
 
 type BarChartData = (

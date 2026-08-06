@@ -4,8 +4,6 @@
 
 from typing import Literal, NotRequired, TypedDict
 
-from pydantic import BaseModel, Field
-
 from .colors import Color
 from .http_methods import HttpMethod
 from .icons import Icon
@@ -18,7 +16,7 @@ class PieChartConfigValue(TypedDict):
     icon: NotRequired[Icon]
 
 
-class PieChartComponent(BaseModel):
+class PieChartComponent(TypedDict):
     type: Literal["pie-chart"]
     id: str
     name: str
@@ -33,7 +31,7 @@ class PieChartComponent(BaseModel):
     caption_icon: Icon | None
     url: str
     method: HttpMethod
-    query: list[Property] | None = Field(None)
+    query: NotRequired[list[Property] | None]
 
 
 type PieChartData = (

@@ -2,19 +2,17 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Literal
-
-from pydantic import BaseModel, Field
+from typing import Literal, NotRequired, TypedDict
 
 from .http_methods import HttpMethod
 from .property import Property
 
 
-class LineChart(BaseModel):
+class LineChart(TypedDict):
     type: Literal["line-chart"]
     id: str
     name: str
     description: str | None
     url: str
     method: HttpMethod
-    query: list[Property] | None = Field(None)
+    query: NotRequired[list[Property] | None]

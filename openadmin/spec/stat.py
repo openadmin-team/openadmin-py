@@ -4,15 +4,13 @@
 
 from typing import Literal, NotRequired, TypedDict
 
-from pydantic import BaseModel, Field
-
 from .colors import Color
 from .http_methods import HttpMethod
 from .icons import Icon
 from .property import Property
 
 
-class StatComponent(BaseModel):
+class StatComponent(TypedDict):
     type: Literal["stat"]
     id: str
     icon: Icon | None
@@ -21,7 +19,7 @@ class StatComponent(BaseModel):
     description: str | None
     url: str
     method: HttpMethod
-    query: list[Property] | None = Field(None)
+    query: NotRequired[list[Property] | None]
 
 
 type StatValue = str | int | float | bool | None

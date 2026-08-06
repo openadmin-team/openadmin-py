@@ -3,13 +3,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
-from pydantic import BaseModel
+from typing import NotRequired, TypedDict
 
 from .section import Section
 
 
-class Spec(BaseModel):
+class Spec(TypedDict):
     version: str
     name: str
-    description: str | None = None
+    description: NotRequired[str | None]
     sections: list[Section]

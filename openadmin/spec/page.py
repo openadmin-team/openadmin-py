@@ -3,13 +3,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
-from pydantic import BaseModel
+from typing import TypedDict
 
 from .component import Component
 from .icons import Icon
 
 
-class Page(BaseModel):
+class Page(TypedDict):
     id: str
     name: str
     description: str | None

@@ -4,15 +4,13 @@
 
 from typing import Literal, NotRequired, TypedDict
 
-from pydantic import BaseModel, Field
-
 from .colors import Color
 from .http_methods import HttpMethod
 from .icons import Icon
 from .property import Property
 
 
-class MarkdownComponent(BaseModel):
+class MarkdownComponent(TypedDict):
     type: Literal["markdown"]
     id: str
     name: str
@@ -21,7 +19,7 @@ class MarkdownComponent(BaseModel):
     icon: Icon | None
     url: str
     method: HttpMethod
-    query: list[Property] | None = Field(None)
+    query: NotRequired[list[Property] | None]
 
 
 type MarkdownContent = str
