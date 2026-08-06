@@ -25,7 +25,7 @@ class AdminPage:
     @property
     def spec(self) -> spec.Page:
         return {
-            "id": f"{utils.kebab_name(self.name)}-{counter.inc('page')}",
+            "id": f"{utils.gen_id(self.name)}",
             "name": self.name,
             "description": self.description,
             "icon": self.icon,
