@@ -16,16 +16,20 @@ class AdminPage:
         icon: spec.Icon | None = None,
         description: str | None = None,
     ) -> None:
+        self.id = utils.gen_id(name)
         self.name = name
         self.description = description
         self.icon: spec.Icon | None = icon
         self.components: list[spec.Component] = []
-        self.router = APIRouter()
+
+        self.router = APIRouter(
+            prefix=f"/{self.id}",
+        )
 
     @property
     def spec(self) -> spec.Page:
         return {
-            "id": f"{utils.gen_id(self.name)}",
+            "id": self.id,
             "name": self.name,
             "description": self.description,
             "icon": self.icon,
