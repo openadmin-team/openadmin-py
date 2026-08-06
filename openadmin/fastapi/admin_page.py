@@ -5,7 +5,7 @@
 from fastapi import APIRouter
 from openadmin import spec
 
-from . import counter, utils
+from . import utils
 
 
 class AdminPage:
@@ -43,16 +43,18 @@ class AdminPage:
     ):
         table_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'table',
-            'id': table_id,
-            'name': name,
-            'description': description,
-            'is_hidden': is_hidden,
-            'icon': icon,
-            'color': color,
-            'method': 'get',
-        })
+        self.components.append(
+            {
+                "type": "table",
+                "id": table_id,
+                "name": name,
+                "description": description,
+                "is_hidden": is_hidden,
+                "icon": icon,
+                "color": color,
+                "method": "get",
+            }
+        )
 
         return self.router.get(
             f"/table/{table_id}",
@@ -69,15 +71,17 @@ class AdminPage:
     ):
         stat_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'stat',
-            'id': stat_id,
-            'name': name,
-            'description': description,
-            'icon': icon,
-            'color': color,
-            'method': 'get',
-        })
+        self.components.append(
+            {
+                "type": "stat",
+                "id": stat_id,
+                "name": name,
+                "description": description,
+                "icon": icon,
+                "color": color,
+                "method": "get",
+            }
+        )
 
         return self.router.get(
             f"/stat/{stat_id}",
@@ -94,15 +98,17 @@ class AdminPage:
     ):
         markdown_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'markdown',
-            'id': markdown_id,
-            'name': name,
-            'description': description,
-            'color': color,
-            'icon': icon,
-            'method': 'get',
-        })
+        self.components.append(
+            {
+                "type": "markdown",
+                "id": markdown_id,
+                "name": name,
+                "description": description,
+                "color": color,
+                "icon": icon,
+                "method": "get",
+            }
+        )
 
         return self.router.get(
             f"/markdown/{markdown_id}",
@@ -120,16 +126,18 @@ class AdminPage:
     ):
         action_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'action',
-            'id': action_id,
-            'name': name,
-            'description': description,
-            'is_hidden': is_hidden,
-            'icon': icon,
-            'color': color,
-            'method': 'post',
-        })
+        self.components.append(
+            {
+                "type": "action",
+                "id": action_id,
+                "name": name,
+                "description": description,
+                "is_hidden": is_hidden,
+                "icon": icon,
+                "color": color,
+                "method": "post",
+            }
+        )
 
         return self.router.post(
             f"/action/{action_id}",
@@ -147,16 +155,18 @@ class AdminPage:
     ):
         action_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'action',
-            'id': action_id,
-            'name': name,
-            'description': description,
-            'is_hidden': is_hidden,
-            'icon': icon,
-            'color': color,
-            'method': 'get',
-        })
+        self.components.append(
+            {
+                "type": "action",
+                "id": action_id,
+                "name": name,
+                "description": description,
+                "is_hidden": is_hidden,
+                "icon": icon,
+                "color": color,
+                "method": "get",
+            }
+        )
 
         return self.router.get(
             f"/action/{action_id}",
@@ -174,16 +184,18 @@ class AdminPage:
     ):
         action_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'action',
-            'id': action_id,
-            'name': name,
-            'description': description,
-            'is_hidden': is_hidden,
-            'icon': icon,
-            'color': color,
-            'method': 'put',
-        })
+        self.components.append(
+            {
+                "type": "action",
+                "id": action_id,
+                "name": name,
+                "description": description,
+                "is_hidden": is_hidden,
+                "icon": icon,
+                "color": color,
+                "method": "put",
+            }
+        )
 
         return self.router.put(
             f"/action/{action_id}",
@@ -201,16 +213,18 @@ class AdminPage:
     ):
         action_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'action',
-            'id': action_id,
-            'name': name,
-            'description': description,
-            'is_hidden': is_hidden,
-            'icon': icon,
-            'color': color,
-            'method': 'patch',
-        })
+        self.components.append(
+            {
+                "type": "action",
+                "id": action_id,
+                "name": name,
+                "description": description,
+                "is_hidden": is_hidden,
+                "icon": icon,
+                "color": color,
+                "method": "patch",
+            }
+        )
 
         return self.router.patch(
             f"/action/{action_id}",
@@ -228,16 +242,18 @@ class AdminPage:
     ):
         action_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'action',
-            'id': action_id,
-            'name': name,
-            'description': description,
-            'is_hidden': is_hidden,
-            'icon': icon,
-            'color': color,
-            'method': 'delete',
-        })
+        self.components.append(
+            {
+                "type": "action",
+                "id": action_id,
+                "name": name,
+                "description": description,
+                "is_hidden": is_hidden,
+                "icon": icon,
+                "color": color,
+                "method": "delete",
+            }
+        )
 
         return self.router.delete(
             f"/action/{action_id}",
@@ -255,16 +271,18 @@ class AdminPage:
     ):
         form_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'form',
-            'id': form_id,
-            'name': name,
-            'description': description,
-            'is_hidden': is_hidden,
-            'icon': icon,
-            'color': color,
-            'method': 'post',
-        })
+        self.components.append(
+            {
+                "type": "form",
+                "id": form_id,
+                "name": name,
+                "description": description,
+                "is_hidden": is_hidden,
+                "icon": icon,
+                "color": color,
+                "method": "post",
+            }
+        )
 
         return self.router.post(
             f"/form/{form_id}",
@@ -282,16 +300,18 @@ class AdminPage:
     ):
         form_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'form',
-            'id': form_id,
-            'name': name,
-            'description': description,
-            'is_hidden': is_hidden,
-            'icon': icon,
-            'color': color,
-            'method': 'put',
-        })
+        self.components.append(
+            {
+                "type": "form",
+                "id": form_id,
+                "name": name,
+                "description": description,
+                "is_hidden": is_hidden,
+                "icon": icon,
+                "color": color,
+                "method": "put",
+            }
+        )
 
         return self.router.put(
             f"/form/{form_id}",
@@ -309,16 +329,18 @@ class AdminPage:
     ):
         form_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'form',
-            'id': form_id,
-            'name': name,
-            'description': description,
-            'is_hidden': is_hidden,
-            'icon': icon,
-            'color': color,
-            'method': 'patch',
-        })
+        self.components.append(
+            {
+                "type": "form",
+                "id": form_id,
+                "name": name,
+                "description": description,
+                "is_hidden": is_hidden,
+                "icon": icon,
+                "color": color,
+                "method": "patch",
+            }
+        )
 
         return self.router.patch(
             f"/form/{form_id}",
@@ -336,16 +358,18 @@ class AdminPage:
     ):
         form_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'form',
-            'id': form_id,
-            'name': name,
-            'description': description,
-            'is_hidden': is_hidden,
-            'icon': icon,
-            'color': color,
-            'method': 'delete',
-        })
+        self.components.append(
+            {
+                "type": "form",
+                "id": form_id,
+                "name": name,
+                "description": description,
+                "is_hidden": is_hidden,
+                "icon": icon,
+                "color": color,
+                "method": "delete",
+            }
+        )
 
         return self.router.delete(
             f"/form/{form_id}",
@@ -360,13 +384,15 @@ class AdminPage:
     ):
         area_chart_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'area-chart',
-            'id': area_chart_id,
-            'name': name,
-            'description': description,
-            'method': 'get',
-        })
+        self.components.append(
+            {
+                "type": "area-chart",
+                "id": area_chart_id,
+                "name": name,
+                "description": description,
+                "method": "get",
+            }
+        )
 
         return self.router.get(
             f"/area-chart/{area_chart_id}",
@@ -388,20 +414,22 @@ class AdminPage:
     ):
         bar_chart_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'bar-chart',
-            'id': bar_chart_id,
-            'name': name,
-            'description': description,
-            'config': config,
-            'data_key': data_key,
-            'icon': icon,
-            'color': color,
-            'caption': caption,
-            'caption_description': caption_description,
-            'caption_icon': caption_icon,
-            'method': 'get',
-        })
+        self.components.append(
+            {
+                "type": "bar-chart",
+                "id": bar_chart_id,
+                "name": name,
+                "description": description,
+                "config": config,
+                "data_key": data_key,
+                "icon": icon,
+                "color": color,
+                "caption": caption,
+                "caption_description": caption_description,
+                "caption_icon": caption_icon,
+                "method": "get",
+            }
+        )
 
         return self.router.get(
             f"/bar-chart/{bar_chart_id}",
@@ -416,13 +444,15 @@ class AdminPage:
     ):
         line_chart_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'line-chart',
-            'id': line_chart_id,
-            'name': name,
-            'description': description,
-            'method': 'get',
-        })
+        self.components.append(
+            {
+                "type": "line-chart",
+                "id": line_chart_id,
+                "name": name,
+                "description": description,
+                "method": "get",
+            }
+        )
 
         return self.router.get(
             f"/line-chart/{line_chart_id}",
@@ -445,21 +475,23 @@ class AdminPage:
     ):
         pie_chart_id = utils.gen_id(name)
 
-        self.components.append({
-            'type': 'pie-chart',
-            'id': pie_chart_id,
-            'name': name,
-            'description': description,
-            'config': config,
-            'icon': icon,
-            'name_key': name_key,
-            'value_key': value_key,
-            'color': color,
-            'caption': caption,
-            'caption_description': caption_description,
-            'caption_icon': caption_icon,
-            'method': 'get',
-        })
+        self.components.append(
+            {
+                "type": "pie-chart",
+                "id": pie_chart_id,
+                "name": name,
+                "description": description,
+                "config": config,
+                "icon": icon,
+                "name_key": name_key,
+                "value_key": value_key,
+                "color": color,
+                "caption": caption,
+                "caption_description": caption_description,
+                "caption_icon": caption_icon,
+                "method": "get",
+            }
+        )
 
         return self.router.get(
             f"/pie-chart/{pie_chart_id}",
