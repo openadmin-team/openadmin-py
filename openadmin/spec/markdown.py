@@ -17,7 +17,6 @@ class MarkdownComponent(TypedDict):
     description: str | None
     color: Color | None
     icon: Icon | None
-    url: str
     method: HttpMethod
     query: NotRequired[list[Property] | None]
 

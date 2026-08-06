@@ -2,27 +2,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-import re
-import uuid
-from collections.abc import Callable
 
-from fastapi import APIRouter, FastAPI
 from openadmin import spec
 
-from . import counters
-from .action import Action
-from .area_chart import AreaChart
-from .bar_chart import BarChart
-from .component import Component
-from .form import Form
-from .line_chart import LineChart
-from .markdown import Markdown
-from .pie_chart import PieChart
-from .stat import Stat
-from .table import Table
-from .utils import extract_params
-
-_SPECIAL_CHARS_RE = re.compile(r"[^a-zA-Z0-9\s]")
+from . import counter, utils
 
 
 class AdminPage:
@@ -36,198 +19,17 @@ class AdminPage:
         self.name = name
         self.description = description
         self.icon: spec.Icon | None = icon
-        self.state: list[Component] = []
-        self.router = APIRouter(prefix=f"/{name.lower().replace(' ', '-')}")
-        self.key_repeat_count: dict[str, int] = {}
-        self.page_count = counters.get_next("page")
-        self.page_kebab_name, _ = self.__get_kebab_and_unique_name(self.name)
+        self.components: list[spec.Component] = []
 
-        self.page: spec.Page = {
-            "id": f"{self.page_kebab_name}-{self.page_count}",
+    @property
+    def page(self) -> spec.Page:
+        return {
+            "id": f"{utils.kebab_name(self.name)}-{counter.inc('page')}",
             "name": self.name,
             "description": self.description,
             "icon": self.icon,
-            "components": [],
+            "components": self.components,
         }
-
-    def get_page_spec(self, app: FastAPI) -> spec.Page:
-        components: list[spec.Component] = []
-
-        for item in self.state:
-            url = app.url_path_for(item.function_name)
-            query, body, form = (
-                extract_params(item.func) if item.func else (None, None, None)
-            )
-
-            if isinstance(item, Stat):
-                components.append(
-                    spec.StatComponent(
-                        type="stat",
-                        id=item.id,
-                        color=item.color,
-                        icon=item.icon,
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                    )
-                )
-            elif isinstance(item, Table):
-                components.append(
-                    spec.TableComponent(
-                        type="table",
-                        id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                        body=body,
-                        form=form,
-                        is_hidden=item.is_hidden,
-                        icon=item.icon,
-                        color=item.color,
-                    )
-                )
-            elif isinstance(item, AreaChart):
-                components.append(
-                    spec.AreaChart(
-                        type="area-chart",
-                        id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                    )
-                )
-            elif isinstance(item, BarChart):
-                components.append(
-                    spec.BarChartComponent(
-                        type="bar-chart",
-                        id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                        icon=item.icon,
-                        caption=item.caption,
-                        caption_icon=item.caption_icon,
-                        caption_description=item.caption_description,
-                        color=item.color,
-                        config=item.config,
-                        data_key=item.data_key,
-                    )
-                )
-            elif isinstance(item, LineChart):
-                components.append(
-                    spec.LineChart(
-                        type="line-chart",
-                        id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                    )
-                )
-            elif isinstance(item, PieChart):
-                components.append(
-                    spec.PieChartComponent(
-                        type="pie-chart",
-                        id=item.id,
-                        config=item.config,
-                        icon=item.icon,
-                        name_key=item.name_key,
-                        color=item.color,
-                        value_key=item.value_key,
-                        caption=item.caption,
-                        caption_icon=item.caption_icon,
-                        caption_description=item.caption_description,
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                    )
-                )
-            elif isinstance(item, Action):
-                components.append(
-                    spec.ActionComponent(
-                        type="action",
-                        id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        is_hidden=item.is_hidden,
-                        icon=item.icon,
-                        color=item.color,
-                        query=query,
-                        body=body,
-                        form=form,
-                    )
-                )
-            elif isinstance(item, Form):
-                components.append(
-                    spec.FormComponent(
-                        type="form",
-                        id=item.id,
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        is_hidden=item.is_hidden,
-                        icon=item.icon,
-                        color=item.color,
-                        query=query,
-                        body=body,
-                        form=form,
-                    )
-                )
-            elif isinstance(item, Markdown):
-                components.append(
-                    spec.MarkdownComponent(
-                        type="markdown",
-                        id=item.id,
-                        name=item.name,
-                        icon=item.icon,
-                        color=item.color,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                    )
-                )
-
-        return spec.Page(
-            id=f"{self.page_kebab_name}-{self.page_count}",
-            name=self.name,
-            description=self.description,
-            icon=self.icon,
-            components=components,
-        )
-
-    def _wrap_user_handler(self, item: Component, fastapi_decorator) -> Callable:
-        def decorator(func: Callable) -> Callable:
-            item.func = func
-            return fastapi_decorator(func)
-
-        return decorator
-
-    def __get_kebab_and_unique_name(self, name: str) -> tuple[str, str]:
-        kebab_name = _SPECIAL_CHARS_RE.sub("", name).lower().replace(" ", "-")
-
-        if kebab_name in self.key_repeat_count:
-            number = self.key_repeat_count[kebab_name]
-            self.key_repeat_count[kebab_name] += 1
-            kebab_name = f"{kebab_name}-{number}"
-        else:
-            self.key_repeat_count[kebab_name] = 1
-
-        return kebab_name, f"{kebab_name}-{uuid.uuid4()}"
 
     def table(
         self,
@@ -238,19 +40,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
-
-        item = Table(
-            function_name=unique_name,
-            method="get",
-            name=name,
-            description=description,
-            id=kebab_name,
-            is_hidden=is_hidden,
-            icon=icon,
-            color=color,
-        )
-        self.state.append(item)
+        
         return self._wrap_user_handler(
             item,
             self.router.get(

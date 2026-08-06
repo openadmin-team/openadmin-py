@@ -13,6 +13,5 @@ class LineChart(TypedDict):
     id: str
     name: str
     description: str | None
-    url: str
     method: HttpMethod
     query: NotRequired[list[Property] | None]

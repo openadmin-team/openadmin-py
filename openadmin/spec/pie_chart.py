@@ -29,7 +29,6 @@ class PieChartComponent(TypedDict):
     caption: str | None
     caption_description: str | None
     caption_icon: Icon | None
-    url: str
     method: HttpMethod
     query: NotRequired[list[Property] | None]
 

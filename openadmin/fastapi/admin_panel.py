@@ -17,9 +17,6 @@ class AdminPanel:
         self.description = description
         self.sections: list[spec.Section] = []
 
-        self.app = FastAPI()
-        self.__mount_spec_route(self.app)
-
     def section(
         self,
         name: str,
@@ -37,6 +34,27 @@ class AdminPanel:
                 "pages": [page.page for page in pages],
             }
         )
+
+    @property
+    def spec(self) -> spec.Spec:
+        return {
+            "id": f"{utils.kebab_name(self.name)}-{counter.inc('page')}",
+            "name": self.name,
+            "version": self.version,
+            "description": self.description,
+            "sections": self.sections,
+        }
+
+    @property
+    def app(self) -> FastAPI:
+        app = FastAPI()
+
+        app.get(
+            "/spec.json",
+            response_model=spec.Spec,
+        )(lambda: self.spec)
+
+        return app
 
     def __mount_spec_route(self, app: FastAPI) -> None:
         def _() -> spec.Spec:
