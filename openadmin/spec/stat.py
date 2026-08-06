@@ -17,7 +17,6 @@ class StatComponent(TypedDict):
     color: Color | None
     name: str
     description: str | None
-    url: str
     method: HttpMethod
     query: NotRequired[list[Property] | None]
 

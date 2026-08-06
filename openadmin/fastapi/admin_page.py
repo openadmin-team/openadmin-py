@@ -42,6 +42,14 @@ class AdminPage:
         self.page_count = counters.get_next("page")
         self.page_kebab_name, _ = self.__get_kebab_and_unique_name(self.name)
 
+        self.page: spec.Page = {
+            "id": f"{self.page_kebab_name}-{self.page_count}",
+            "name": self.name,
+            "description": self.description,
+            "icon": self.icon,
+            "components": [],
+        }
+
     def get_page_spec(self, app: FastAPI) -> spec.Page:
         components: list[spec.Component] = []
 

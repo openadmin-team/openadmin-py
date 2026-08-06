@@ -11,5 +11,6 @@ from .section import Section
 class Spec(TypedDict):
     version: str
     name: str
+    id: str
     description: NotRequired[str | None]
     sections: list[Section]

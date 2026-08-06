@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 import inspect
+import re
 from typing import Annotated, get_args, get_origin, get_type_hints
 
 import pydantic
@@ -19,6 +20,8 @@ _SCALAR_LIST_TYPES: dict[type, spec.PropertyType] = {
     float: "list[float]",
     bool: "list[bool]",
 }
+
+_SPECIAL_CHARS_RE = re.compile(r"[^a-zA-Z0-9\s]")
 
 
 def _type_to_property_type(tp) -> spec.PropertyType:
@@ -182,3 +185,9 @@ def extract_params(
                 body.extend(_model_to_properties(actual_type))
 
     return query or None, body or None, form or None
+
+
+def kebab_name(name: str) -> str:
+    kebab_name = _SPECIAL_CHARS_RE.sub("", name).lower().replace(" ", "-")
+
+    return kebab_name

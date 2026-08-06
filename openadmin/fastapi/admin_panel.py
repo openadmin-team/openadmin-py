@@ -3,11 +3,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI
 from openadmin import spec
 
+from . import counter, utils
 from .admin_page import AdminPage
-from .section import Section
 
 
 class AdminPanel:
@@ -15,32 +15,10 @@ class AdminPanel:
         self.version = "1.0.0"
         self.name = name
         self.description = description
-        self.state: list[Section] = []
+        self.sections: list[spec.Section] = []
+
         self.app = FastAPI()
-        self.key_repeat_count: dict[str, int] = {}
-        self.__init_spec_route(self.app)
-        self.root: FastAPI | None = None
-
-    def get_panel_spec(self, app: FastAPI) -> spec.Spec:
-        sections: list[spec.Section] = []
-
-        for section in self.state:
-            sections.append(
-                spec.Section(
-                    id=section.id,
-                    name=section.name,
-                    description=section.description,
-                    icon=section.icon,
-                    pages=[p.get_page_spec(app) for p in section.pages],
-                )
-            )
-
-        return spec.Spec(
-            version=self.version,
-            name=self.name,
-            description=self.description,
-            sections=sections,
-        )
+        self.__mount_spec_route(self.app)
 
     def section(
         self,
@@ -50,44 +28,27 @@ class AdminPanel:
         icon: spec.Icon | None = None,
         pages: list[AdminPage],
     ) -> None:
-        kebab_name = name.lower().replace(" ", "-")
-
-        if kebab_name in self.key_repeat_count:
-            number = self.key_repeat_count[kebab_name]
-            kebab_name = f"{kebab_name}-{number}"
-            self.key_repeat_count[kebab_name] += 1
-        else:
-            self.key_repeat_count[kebab_name] = 1
-
-        self.state.append(
-            Section(
-                id=kebab_name,
-                name=name,
-                description=description,
-                icon=icon,
-                pages=pages,
-            )
+        self.sections.append(
+            {
+                "id": f"{utils.kebab_name(name)}-{counter.inc('section')}",
+                "name": name,
+                "description": description,
+                "icon": icon,
+                "pages": [page.page for page in pages],
+            }
         )
 
-        for page in pages:
-            self.app.include_router(
-                prefix=f"/{kebab_name}", router=page.router, tags=[name]
-            )
+    def __mount_spec_route(self, app: FastAPI) -> None:
+        def _() -> spec.Spec:
+            return {
+                "id": f"{utils.kebab_name(self.name)}-{counter.inc('page')}",
+                "name": self.name,
+                "version": self.version,
+                "description": self.description,
+                "sections": self.sections,
+            }
 
-    def mount_to(self, root: FastAPI) -> None:
-        self.root = root
-        root.mount("/openadmin", self.app)
-
-    def __init_spec_route(self, app: FastAPI) -> None:
-        @app.get(
+        app.get(
             "/spec.json",
             response_model=spec.Spec,
-        )
-        async def _():
-            if not self.root:
-                raise HTTPException(
-                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    detail="Admin panel should be mounted to root, user admin_panel.mount_to(app)",
-                )
-
-            return self.get_panel_spec(self.root)
+        )(_)

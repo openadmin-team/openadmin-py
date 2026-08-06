@@ -15,7 +15,6 @@ class TableComponent(TypedDict):
     id: str
     name: str
     description: str | None
-    url: str
     icon: Icon | None
     color: Color | None
     method: HttpMethod
