@@ -58,4 +58,4 @@ admin_panel.section(
 )
 admin_panel.section("Weekdays", icon="calendar-days", pages=[weekdays.page])
 
-admin_panel.mount_to(app)
+app.mount("/admin", admin_panel.app, name="admin_panel")
