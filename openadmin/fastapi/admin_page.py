@@ -41,13 +41,18 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
+        table_id = utils.gen_id(name)
 
-        return self._wrap_user_handler(
-            item,
-            self.router.get(
-                f"/table/{kebab_name}", name=unique_name, description=description
-            ),
-        )
+        self.components.append({
+            'type': 'table',
+            'id': table_id,
+            'name': name,
+            'description': description,
+            'is_hidden': is_hidden,
+            'icon': icon,
+            'color': color,
+            'method': 'get',
+        })
 
     def stat(
         self,
