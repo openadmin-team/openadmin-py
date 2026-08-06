@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-
+from fastapi import APIRouter
 from openadmin import spec
 
 from . import counter, utils
@@ -20,9 +20,10 @@ class AdminPage:
         self.description = description
         self.icon: spec.Icon | None = icon
         self.components: list[spec.Component] = []
+        self.router = APIRouter()
 
     @property
-    def page(self) -> spec.Page:
+    def spec(self) -> spec.Page:
         return {
             "id": f"{utils.kebab_name(self.name)}-{counter.inc('page')}",
             "name": self.name,
@@ -40,7 +41,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        
+
         return self._wrap_user_handler(
             item,
             self.router.get(
