@@ -55,9 +55,9 @@ class AdminPage:
         })
 
         return self.router.get(
-            f"/table/{table_id}", 
+            f"/table/{table_id}",
             description=description,
-        ),
+        )
 
     def stat(
         self,
@@ -67,23 +67,21 @@ class AdminPage:
         color: spec.Color | None = None,
         description: str | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        stat_id = utils.gen_id(name)
 
-        item = Stat(
-            function_name=unique_name,
-            method="get",
-            color=color,
-            icon=icon,
-            name=name,
+        self.components.append({
+            'type': 'stat',
+            'id': stat_id,
+            'name': name,
+            'description': description,
+            'icon': icon,
+            'color': color,
+            'method': 'get',
+        })
+
+        return self.router.get(
+            f"/stat/{stat_id}",
             description=description,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.get(
-                f"/stat/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def markdown(
@@ -94,26 +92,21 @@ class AdminPage:
         color: spec.Color | None = None,
         icon: spec.Icon | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        markdown_id = utils.gen_id(name)
 
-        item = Markdown(
-            function_name=unique_name,
-            method="get",
-            name=name,
+        self.components.append({
+            'type': 'markdown',
+            'id': markdown_id,
+            'name': name,
+            'description': description,
+            'color': color,
+            'icon': icon,
+            'method': 'get',
+        })
+
+        return self.router.get(
+            f"/markdown/{markdown_id}",
             description=description,
-            id=kebab_name,
-            icon=icon,
-            color=color,
-        )
-        self.state.append(item)
-
-        return self._wrap_user_handler(
-            item,
-            self.router.get(
-                f"/markdown/{kebab_name}",
-                name=unique_name,
-                description=description,
-            ),
         )
 
     def action_post(
@@ -125,24 +118,22 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        action_id = utils.gen_id(name)
 
-        item = Action(
-            function_name=unique_name,
-            method="post",
-            name=name,
+        self.components.append({
+            'type': 'action',
+            'id': action_id,
+            'name': name,
+            'description': description,
+            'is_hidden': is_hidden,
+            'icon': icon,
+            'color': color,
+            'method': 'post',
+        })
+
+        return self.router.post(
+            f"/action/{action_id}",
             description=description,
-            is_hidden=is_hidden,
-            icon=icon,
-            color=color,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.post(
-                f"/action/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def action_get(
@@ -154,24 +145,22 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        action_id = utils.gen_id(name)
 
-        item = Action(
-            function_name=unique_name,
-            method="get",
-            name=name,
+        self.components.append({
+            'type': 'action',
+            'id': action_id,
+            'name': name,
+            'description': description,
+            'is_hidden': is_hidden,
+            'icon': icon,
+            'color': color,
+            'method': 'get',
+        })
+
+        return self.router.get(
+            f"/action/{action_id}",
             description=description,
-            is_hidden=is_hidden,
-            icon=icon,
-            color=color,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.get(
-                f"/action/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def action_put(
@@ -183,24 +172,22 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        action_id = utils.gen_id(name)
 
-        item = Action(
-            function_name=unique_name,
-            method="put",
-            name=name,
+        self.components.append({
+            'type': 'action',
+            'id': action_id,
+            'name': name,
+            'description': description,
+            'is_hidden': is_hidden,
+            'icon': icon,
+            'color': color,
+            'method': 'put',
+        })
+
+        return self.router.put(
+            f"/action/{action_id}",
             description=description,
-            is_hidden=is_hidden,
-            icon=icon,
-            color=color,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.put(
-                f"/action/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def action_patch(
@@ -212,24 +199,22 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        action_id = utils.gen_id(name)
 
-        item = Action(
-            function_name=unique_name,
-            method="patch",
-            name=name,
+        self.components.append({
+            'type': 'action',
+            'id': action_id,
+            'name': name,
+            'description': description,
+            'is_hidden': is_hidden,
+            'icon': icon,
+            'color': color,
+            'method': 'patch',
+        })
+
+        return self.router.patch(
+            f"/action/{action_id}",
             description=description,
-            is_hidden=is_hidden,
-            icon=icon,
-            color=color,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.patch(
-                f"/action/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def action_delete(
@@ -241,24 +226,22 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        action_id = utils.gen_id(name)
 
-        item = Action(
-            function_name=unique_name,
-            method="delete",
-            name=name,
+        self.components.append({
+            'type': 'action',
+            'id': action_id,
+            'name': name,
+            'description': description,
+            'is_hidden': is_hidden,
+            'icon': icon,
+            'color': color,
+            'method': 'delete',
+        })
+
+        return self.router.delete(
+            f"/action/{action_id}",
             description=description,
-            is_hidden=is_hidden,
-            icon=icon,
-            color=color,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.delete(
-                f"/action/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def form_post(
@@ -270,24 +253,22 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        form_id = utils.gen_id(name)
 
-        item = Form(
-            function_name=unique_name,
-            method="post",
-            name=name,
+        self.components.append({
+            'type': 'form',
+            'id': form_id,
+            'name': name,
+            'description': description,
+            'is_hidden': is_hidden,
+            'icon': icon,
+            'color': color,
+            'method': 'post',
+        })
+
+        return self.router.post(
+            f"/form/{form_id}",
             description=description,
-            is_hidden=is_hidden,
-            icon=icon,
-            color=color,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.post(
-                f"/form/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def form_put(
@@ -299,24 +280,22 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        form_id = utils.gen_id(name)
 
-        item = Form(
-            function_name=unique_name,
-            method="put",
-            name=name,
+        self.components.append({
+            'type': 'form',
+            'id': form_id,
+            'name': name,
+            'description': description,
+            'is_hidden': is_hidden,
+            'icon': icon,
+            'color': color,
+            'method': 'put',
+        })
+
+        return self.router.put(
+            f"/form/{form_id}",
             description=description,
-            is_hidden=is_hidden,
-            icon=icon,
-            color=color,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.put(
-                f"/form/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def form_patch(
@@ -328,24 +307,22 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        form_id = utils.gen_id(name)
 
-        item = Form(
-            function_name=unique_name,
-            method="patch",
-            name=name,
+        self.components.append({
+            'type': 'form',
+            'id': form_id,
+            'name': name,
+            'description': description,
+            'is_hidden': is_hidden,
+            'icon': icon,
+            'color': color,
+            'method': 'patch',
+        })
+
+        return self.router.patch(
+            f"/form/{form_id}",
             description=description,
-            is_hidden=is_hidden,
-            icon=icon,
-            color=color,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.patch(
-                f"/form/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def form_delete(
@@ -357,24 +334,22 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        form_id = utils.gen_id(name)
 
-        item = Form(
-            function_name=unique_name,
-            method="delete",
-            name=name,
+        self.components.append({
+            'type': 'form',
+            'id': form_id,
+            'name': name,
+            'description': description,
+            'is_hidden': is_hidden,
+            'icon': icon,
+            'color': color,
+            'method': 'delete',
+        })
+
+        return self.router.delete(
+            f"/form/{form_id}",
             description=description,
-            is_hidden=is_hidden,
-            icon=icon,
-            color=color,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.delete(
-                f"/form/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def area_chart(
@@ -383,21 +358,19 @@ class AdminPage:
         *,
         description: str | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        area_chart_id = utils.gen_id(name)
 
-        item = AreaChart(
-            function_name=unique_name,
-            method="get",
-            name=name,
+        self.components.append({
+            'type': 'area-chart',
+            'id': area_chart_id,
+            'name': name,
+            'description': description,
+            'method': 'get',
+        })
+
+        return self.router.get(
+            f"/area-chart/{area_chart_id}",
             description=description,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.get(
-                f"/area-chart/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def bar_chart(
@@ -413,28 +386,26 @@ class AdminPage:
         config: dict[str, spec.BarChartConfigValue] | None = None,
         data_key: str | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        bar_chart_id = utils.gen_id(name)
 
-        item = BarChart(
-            function_name=unique_name,
-            method="get",
-            name=name,
+        self.components.append({
+            'type': 'bar-chart',
+            'id': bar_chart_id,
+            'name': name,
+            'description': description,
+            'config': config,
+            'data_key': data_key,
+            'icon': icon,
+            'color': color,
+            'caption': caption,
+            'caption_description': caption_description,
+            'caption_icon': caption_icon,
+            'method': 'get',
+        })
+
+        return self.router.get(
+            f"/bar-chart/{bar_chart_id}",
             description=description,
-            id=kebab_name,
-            icon=icon,
-            color=color,
-            caption_description=caption_description,
-            caption=caption,
-            caption_icon=caption_icon,
-            config=config,
-            data_key=data_key,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.get(
-                f"/bar-chart/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def line_chart(
@@ -443,21 +414,19 @@ class AdminPage:
         *,
         description: str | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        line_chart_id = utils.gen_id(name)
 
-        item = LineChart(
-            function_name=unique_name,
-            method="get",
-            name=name,
+        self.components.append({
+            'type': 'line-chart',
+            'id': line_chart_id,
+            'name': name,
+            'description': description,
+            'method': 'get',
+        })
+
+        return self.router.get(
+            f"/line-chart/{line_chart_id}",
             description=description,
-            id=kebab_name,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.get(
-                f"/line-chart/{kebab_name}", name=unique_name, description=description
-            ),
         )
 
     def pie_chart(
@@ -474,27 +443,25 @@ class AdminPage:
         caption_description: str | None = None,
         caption_icon: spec.Icon | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        pie_chart_id = utils.gen_id(name)
 
-        item = PieChart(
-            function_name=unique_name,
-            method="get",
-            name=name,
+        self.components.append({
+            'type': 'pie-chart',
+            'id': pie_chart_id,
+            'name': name,
+            'description': description,
+            'config': config,
+            'icon': icon,
+            'name_key': name_key,
+            'value_key': value_key,
+            'color': color,
+            'caption': caption,
+            'caption_description': caption_description,
+            'caption_icon': caption_icon,
+            'method': 'get',
+        })
+
+        return self.router.get(
+            f"/pie-chart/{pie_chart_id}",
             description=description,
-            id=kebab_name,
-            config=config,
-            icon=icon,
-            name_key=name_key,
-            value_key=value_key,
-            color=color,
-            caption=caption,
-            caption_description=caption_description,
-            caption_icon=caption_icon,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.get(
-                f"/pie-chart/{kebab_name}", name=unique_name, description=description
-            ),
         )
