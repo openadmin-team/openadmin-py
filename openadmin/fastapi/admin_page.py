@@ -54,6 +54,11 @@ class AdminPage:
             'method': 'get',
         })
 
+        return self.router.get(
+            f"/table/{table_id}", 
+            description=description,
+        ),
+
     def stat(
         self,
         name: str,
