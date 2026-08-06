@@ -13,6 +13,7 @@ from fastapi.params import Depends as DependsParam
 from fastapi.params import Form as FormParam
 from fastapi.params import Query as QueryParam
 from openadmin import spec
+from . import counter
 
 _SCALAR_LIST_TYPES: dict[type, spec.PropertyType] = {
     str: "list[string]",
@@ -186,8 +187,8 @@ def extract_params(
 
     return query or None, body or None, form or None
 
-
-def kebab_name(name: str) -> str:
-    kebab_name = _SPECIAL_CHARS_RE.sub("", name).lower().replace(" ", "-")
-
-    return kebab_name
+def gen_id(seed: str) -> str:
+    """Generate a unique ID based on a seed string."""
+    kebab_name = _SPECIAL_CHARS_RE.sub("", seed).lower().replace(" ", "-")
+    count = counter.inc(kebab_name)
+    return kebab_name + f'-{count}' if count != 0 else ''

@@ -13,7 +13,7 @@ def inc(
 
     if key not in __state:
         __state[key] = 0
-
-    __state[key] += 1
+    else:
+        __state[key] += 1
 
     return __state[key]
