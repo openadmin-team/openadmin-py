@@ -112,10 +112,14 @@ class AddAuthorBody(BaseModel):
     bio: str | None = None
 
 
-@page.form_post("Add Author", description="Register a new author in the catalog")
-async def add_author(body: AddAuthorBody, session: AsyncSessionDep):
+@page.form("Add Author", description="Register a new author in the catalog")
+async def add_author(body: AddAuthorBody, session: AsyncSessionDep) -> spec.Form:
     author = models.Author(**body.model_dump())
     session.add(author)
     await session.commit()
     await session.refresh(author)
-    return {"id": author.id, "name": f"{author.first_name} {author.last_name}"}
+    name = f"{author.first_name} {author.last_name}"
+    return {
+        "message": f"Added author '{name}'",
+        "table": {"id": author.id, "name": name},
+    }

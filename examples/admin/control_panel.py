@@ -32,8 +32,9 @@ ActorDep = Annotated[str, Depends(current_actor)]
 # ---------------------------------------------------------------------------
 
 
-@page.action_get(
+@page.action(
     "Ping Service",
+    method="get",
     description="Check whether a downstream service is reachable",
     icon="activity",
     color="green",
@@ -56,8 +57,9 @@ class NotificationBody(BaseModel):
     recipient: str | None = None
 
 
-@page.action_post(
+@page.action(
     "Send Test Notification",
+    method="post",
     description="Send a one-off notification through the messaging provider",
     icon="send",
     color="blue",
@@ -75,8 +77,9 @@ async def send_test_notification(
     )
 
 
-@page.action_put(
+@page.action(
     "Update Feature Flag",
+    method="put",
     description="Flip a feature flag on or off for every user",
     icon="toggle-left",
     color="violet",
@@ -93,8 +96,9 @@ async def update_feature_flag(
     }
 
 
-@page.action_patch(
+@page.action(
     "Rotate API Key",
+    method="patch",
     description="Issue a new API key and retire the previous one",
     icon="key",
     color="amber",
@@ -106,8 +110,9 @@ async def rotate_api_key(
     return None
 
 
-@page.action_delete(
+@page.action(
     "Purge Temp Files",
+    method="delete",
     description="Delete temporary files older than a given age",
     icon="trash-2",
     color="red",
@@ -124,7 +129,7 @@ async def purge_temp_files(
 
 
 # ---------------------------------------------------------------------------
-# Forms — one per HTTP verb (post/put/patch/delete; there is no form_get).
+# Forms — one per HTTP verb (post/put/patch/delete demoed here).
 # ---------------------------------------------------------------------------
 
 
@@ -134,8 +139,9 @@ class WebhookBody(BaseModel):
     secret: str | None = None
 
 
-@page.form_post(
+@page.form(
     "Create Webhook",
+    method="post",
     description="Register a new outgoing webhook",
     icon="webhook",
     color="teal",
@@ -159,8 +165,9 @@ class RateLimitBody(BaseModel):
     burst_size: int = 0
 
 
-@page.form_put(
+@page.form(
     "Update Rate Limit",
+    method="put",
     description="Replace the current API rate-limit configuration",
     icon="gauge",
     color="cyan",
@@ -175,8 +182,9 @@ async def update_rate_limit(body: RateLimitBody) -> spec.Form:
     }
 
 
-@page.form_patch(
+@page.form(
     "Rename Environment",
+    method="patch",
     description="Rename an existing deployment environment",
     icon="pencil",
     color="orange",
@@ -191,8 +199,9 @@ async def rename_environment(
     )
 
 
-@page.form_delete(
+@page.form(
     "Schedule Config Reset",
+    method="delete",
     description="Queue a configuration reset for the next maintenance window",
     icon="rotate-ccw",
     color="rose",

@@ -4,6 +4,7 @@
 
 from sqlalchemy import func, select, text
 
+from openadmin import spec
 from openadmin.fastapi import AdminPage
 
 from ..lib import models
@@ -78,10 +79,14 @@ Foreign keys are enforced at the application layer.
 """
 
 
-@page.action_get("Ping Database", description="Verify the database connection is alive")
-async def ping_database(session: AsyncSessionDep):
+@page.action(
+    "Ping Database",
+    method="get",
+    description="Verify the database connection is alive",
+)
+async def ping_database(session: AsyncSessionDep) -> spec.Action:
     await session.execute(text("SELECT 1"))
-    return {"status": "ok", "message": "Database is reachable"}
+    return {"message": "Database is reachable"}
 
 
 async def _all_table_counts(session: AsyncSessionDep) -> list[tuple[str, int]]:

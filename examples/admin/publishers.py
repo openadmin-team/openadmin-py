@@ -5,6 +5,7 @@
 from pydantic import BaseModel
 from sqlalchemy import func, select
 
+from openadmin import spec
 from openadmin.fastapi import AdminPage
 from openadmin.fastapi.deps import PageDep, SearchQueryDep
 
@@ -86,10 +87,13 @@ class AddPublisherBody(BaseModel):
     country: str | None = None
 
 
-@page.form_post("Add Publisher", description="Register a new publisher")
-async def add_publisher(body: AddPublisherBody, session: AsyncSessionDep):
+@page.form("Add Publisher", description="Register a new publisher")
+async def add_publisher(body: AddPublisherBody, session: AsyncSessionDep) -> spec.Form:
     publisher = models.Publisher(**body.model_dump())
     session.add(publisher)
     await session.commit()
     await session.refresh(publisher)
-    return {"id": publisher.id, "name": publisher.name}
+    return {
+        "message": f"Added publisher '{publisher.name}'",
+        "table": {"id": publisher.id, "name": publisher.name},
+    }

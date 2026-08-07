@@ -63,50 +63,6 @@ async def get_books_with_summary(session: AsyncSessionDep) -> int:
     return result.scalar_one()
 
 
-@page.line_chart(
-    "Publications by Decade", description="Number of books published per decade"
-)
-async def get_publications_by_decade(session: AsyncSessionDep):
-    stmt = (
-        select(
-            (func.floor(models.Book.published_year / 10) * 10).label("decade"),
-            func.count(models.Book.id).label("count"),
-        )
-        .where(models.Book.published_year.isnot(None))
-        .group_by("decade")
-        .order_by("decade")
-    )
-    result = await session.execute(stmt)
-    return [{"label": f"{int(row.decade)}s", "value": row.count} for row in result]
-
-
-@page.area_chart(
-    "Books Published by Era", description="Book volume across broad historical eras"
-)
-async def get_books_by_era(session: AsyncSessionDep):
-    eras: list[tuple[str, int | None, int | None]] = [
-        ("Pre-1900", None, 1900),
-        ("1900–1950", 1900, 1950),
-        ("1950–1980", 1950, 1980),
-        ("1980–2000", 1980, 2000),
-        ("2000–2010", 2000, 2010),
-        ("2010–2020", 2010, 2020),
-        ("2020+", 2020, None),
-    ]
-    rows = []
-    for label, start, end in eras:
-        stmt = select(func.count(models.Book.id)).where(
-            models.Book.published_year.isnot(None)
-        )
-        if start is not None:
-            stmt = stmt.where(models.Book.published_year >= start)
-        if end is not None:
-            stmt = stmt.where(models.Book.published_year < end)
-        count = (await session.execute(stmt)).scalar_one()
-        rows.append({"label": label, "value": count})
-    return rows
-
-
 @page.markdown("Library Overview")
 async def get_library_overview(session: AsyncSessionDep) -> str:
     total_books = (

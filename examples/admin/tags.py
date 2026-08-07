@@ -5,6 +5,7 @@
 from fastapi import Query
 from sqlalchemy import func, select
 
+from openadmin import spec
 from openadmin.fastapi import AdminPage
 from openadmin.fastapi.deps import PageDep
 
@@ -76,16 +77,24 @@ async def get_top_tags(session: AsyncSessionDep):
     return [{"label": row.name, "value": row.count} for row in result]
 
 
-@page.action_delete(
-    "Remove Tag from Book", description="Detach a specific tag from a book"
+@page.action(
+    "Remove Tag from Book",
+    method="delete",
+    description="Detach a specific tag from a book",
 )
 async def remove_tag_from_book(
     session: AsyncSessionDep,
     book_id: int = Query(..., description="Book ID"),
     tag_id: int = Query(..., description="Tag ID"),
-):
+) -> spec.Action:
     link = await session.get(models.BookToTag, (book_id, tag_id))
     if link:
         await session.delete(link)
         await session.commit()
-    return {"book_id": book_id, "tag_id": tag_id, "removed": link is not None}
+    removed = link is not None
+    return {
+        "message": f"Removed tag #{tag_id} from book #{book_id}"
+        if removed
+        else f"No such tag assignment (book #{book_id}, tag #{tag_id})",
+        "table": {"book_id": book_id, "tag_id": tag_id, "removed": removed},
+    }

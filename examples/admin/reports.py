@@ -110,39 +110,3 @@ async def get_tag_count_distribution(session: AsyncSessionDep):
             ).scalar_one()
         rows.append({"label": label, "value": count})
     return rows
-
-
-@page.area_chart(
-    "Catalog Coverage", description="Books with genre, tag, and summary metadata"
-)
-async def get_catalog_coverage(session: AsyncSessionDep):
-    total = (await session.execute(select(func.count(models.Book.id)))).scalar_one()
-    with_genre = (
-        await session.execute(
-            select(func.count(func.distinct(models.BookToGenre.book_id)))
-        )
-    ).scalar_one()
-    with_tag = (
-        await session.execute(
-            select(func.count(func.distinct(models.BookToTag.book_id)))
-        )
-    ).scalar_one()
-    with_summary = (
-        await session.execute(
-            select(func.count(models.Book.id)).where(models.Book.summary.isnot(None))
-        )
-    ).scalar_one()
-    with_publisher = (
-        await session.execute(
-            select(func.count(models.Book.id)).where(
-                models.Book.publisher_id.isnot(None)
-            )
-        )
-    ).scalar_one()
-    return [
-        {"label": "Total Books", "value": total},
-        {"label": "Has Genre", "value": with_genre},
-        {"label": "Has Tag", "value": with_tag},
-        {"label": "Has Summary", "value": with_summary},
-        {"label": "Has Publisher", "value": with_publisher},
-    ]

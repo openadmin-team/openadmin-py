@@ -6,6 +6,7 @@ from fastapi import Query
 from pydantic import BaseModel
 from sqlalchemy import func, select
 
+from openadmin import spec
 from openadmin.fastapi import AdminPage
 from openadmin.fastapi.deps import PageDep, SearchQueryDep
 
@@ -99,22 +100,31 @@ async def get_books_by_author(session: AsyncSessionDep, pagination: PageDep):
     ]
 
 
-@page.form_post("Add Book", description="Add a new book to the catalog")
-async def add_book(body: AddBookBody, session: AsyncSessionDep):
+@page.form("Add Book", description="Add a new book to the catalog")
+async def add_book(body: AddBookBody, session: AsyncSessionDep) -> spec.Form:
     book = models.Book(**body.model_dump())
     session.add(book)
     await session.commit()
     await session.refresh(book)
-    return {"id": book.id, "title": book.title}
+    return {
+        "message": f"Added book '{book.title}'",
+        "table": {"id": book.id, "title": book.title},
+    }
 
 
-@page.action_delete("Delete Book", description="Remove a book by ID")
+@page.action("Delete Book", method="delete", description="Remove a book by ID")
 async def delete_book(
     session: AsyncSessionDep,
     book_id: int = Query(..., description="Book ID to delete"),
-):
+) -> spec.Action:
     book = await session.get(models.Book, book_id)
     if book:
         await session.delete(book)
         await session.commit()
-    return {"deleted": book_id, "found": book is not None}
+    found = book is not None
+    return {
+        "message": f"Deleted book #{book_id}"
+        if found
+        else f"Book #{book_id} not found",
+        "table": {"deleted": book_id, "found": found},
+    }
