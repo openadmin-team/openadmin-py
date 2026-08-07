@@ -137,7 +137,7 @@ class AdminPage:
         self,
         name: str,
         *,
-        medthod: spec.HttpMethod = "post",
+        method: spec.HttpMethod = "post",
         description: str | None = None,
         is_hidden: bool = False,
         icon: spec.Icon | None = None,
@@ -153,19 +153,49 @@ class AdminPage:
             "is_hidden": is_hidden,
             "icon": icon,
             "color": color,
-            "method": medthod,
+            "method": method,
             "query": None,
             "body": None,
             "form": None,
         }
+
         self.components.append(item)
+
+        match method:
+            case "get":
+                fastapi_decorator = self.router.get(
+                    f"/action/{action_id}",
+                    description=description,
+                )
+            case "post":
+                fastapi_decorator = self.router.post(
+                    f"/action/{action_id}",
+                    description=description,
+                )
+            case "put":
+                fastapi_decorator = self.router.put(
+                    f"/action/{action_id}",
+                    description=description,
+                )
+            case "delete":
+                fastapi_decorator = self.router.delete(
+                    f"/action/{action_id}",
+                    description=description,
+                )
+            case "patch":
+                fastapi_decorator = self.router.patch(
+                    f"/action/{action_id}",
+                    description=description,
+                )
+            case "head":
+                fastapi_decorator = self.router.head(
+                    f"/action/{action_id}",
+                    description=description,
+                )
 
         return self.__create_action_admin_decorator(
             item,
-            self.router.post(
-                f"/action/{action_id}",
-                description=description,
-            ),
+            fastapi_decorator,
         )
 
     def form(
@@ -193,14 +223,44 @@ class AdminPage:
             "body": None,
             "form": None,
         }
+
         self.components.append(item)
+
+        match method:
+            case "get":
+                fastapi_decorator = self.router.get(
+                    f"/form/{form_id}",
+                    description=description,
+                )
+            case "post":
+                fastapi_decorator = self.router.post(
+                    f"/form/{form_id}",
+                    description=description,
+                )
+            case "put":
+                fastapi_decorator = self.router.put(
+                    f"/form/{form_id}",
+                    description=description,
+                )
+            case "delete":
+                fastapi_decorator = self.router.delete(
+                    f"/form/{form_id}",
+                    description=description,
+                )
+            case "patch":
+                fastapi_decorator = self.router.patch(
+                    f"/form/{form_id}",
+                    description=description,
+                )
+            case "head":
+                fastapi_decorator = self.router.head(
+                    f"/form/{form_id}",
+                    description=description,
+                )
 
         return self.__create_form_admin_decorator(
             item,
-            self.router.post(
-                f"/form/{form_id}",
-                description=description,
-            ),
+            fastapi_decorator,
         )
 
     def area_chart(
