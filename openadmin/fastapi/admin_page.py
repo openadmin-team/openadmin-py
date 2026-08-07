@@ -18,7 +18,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         description: str | None = None,
     ) -> None:
-        self.id = utils.gen_id(name)
+        self.id = utils.get_id(name)
         self.name = name
         self.description = description
         self.icon: spec.Icon | None = icon
@@ -47,7 +47,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        table_id = utils.gen_id(name)
+        table_id = utils.get_id(name)
         item: spec.TableComponent = {
             "type": "table",
             "id": table_id,
@@ -76,7 +76,7 @@ class AdminPage:
         color: spec.Color | None = None,
         description: str | None = None,
     ):
-        stat_id = utils.gen_id(name)
+        stat_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -103,7 +103,7 @@ class AdminPage:
         color: spec.Color | None = None,
         icon: spec.Icon | None = None,
     ):
-        markdown_id = utils.gen_id(name)
+        markdown_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -131,7 +131,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        action_id = utils.gen_id(name)
+        action_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -160,7 +160,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        action_id = utils.gen_id(name)
+        action_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -189,7 +189,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        action_id = utils.gen_id(name)
+        action_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -218,7 +218,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        action_id = utils.gen_id(name)
+        action_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -247,7 +247,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        action_id = utils.gen_id(name)
+        action_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -276,7 +276,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        form_id = utils.gen_id(name)
+        form_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -305,7 +305,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        form_id = utils.gen_id(name)
+        form_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -334,7 +334,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        form_id = utils.gen_id(name)
+        form_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -363,7 +363,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
-        form_id = utils.gen_id(name)
+        form_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -389,7 +389,7 @@ class AdminPage:
         *,
         description: str | None = None,
     ):
-        area_chart_id = utils.gen_id(name)
+        area_chart_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -419,7 +419,7 @@ class AdminPage:
         config: dict[str, spec.BarChartConfigValue] | None = None,
         data_key: str | None = None,
     ):
-        bar_chart_id = utils.gen_id(name)
+        bar_chart_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -449,7 +449,7 @@ class AdminPage:
         *,
         description: str | None = None,
     ):
-        line_chart_id = utils.gen_id(name)
+        line_chart_id = utils.get_id(name)
 
         self.components.append(
             {
@@ -480,7 +480,7 @@ class AdminPage:
         caption_description: str | None = None,
         caption_icon: spec.Icon | None = None,
     ):
-        pie_chart_id = utils.gen_id(name)
+        pie_chart_id = utils.get_id(name)
 
         self.components.append(
             {

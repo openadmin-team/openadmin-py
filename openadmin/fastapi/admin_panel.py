@@ -23,7 +23,7 @@ class AdminPanel:
     @property
     def spec(self) -> spec.Spec:
         return {
-            "id": f"{utils.gen_id(self.name)}",
+            "id": f"{utils.get_id(self.name)}",
             "name": self.name,
             "version": self.version,
             "description": self.description,
@@ -38,7 +38,7 @@ class AdminPanel:
         icon: spec.Icon | None = None,
         pages: list[AdminPage],
     ) -> None:
-        section_id = utils.gen_id(name)
+        section_id = utils.get_id(name)
 
         self.sections.append(
             {
