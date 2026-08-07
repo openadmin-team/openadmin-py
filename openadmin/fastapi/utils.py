@@ -2,194 +2,27 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-import inspect
 import re
-from typing import Annotated, get_args, get_origin, get_type_hints
+from collections.abc import Callable
 
-import pydantic
-
-from fastapi.params import Body as BodyParam
-from fastapi.params import Depends as DependsParam
-from fastapi.params import Form as FormParam
-from fastapi.params import Query as QueryParam
 from openadmin import spec
 
 from . import counter
 
-_SCALAR_LIST_TYPES: dict[type, spec.PropertyType] = {
-    str: "list[string]",
-    int: "list[integer]",
-    float: "list[float]",
-    bool: "list[bool]",
-}
-
 _SPECIAL_CHARS_RE = re.compile(r"[^a-zA-Z0-9\s]")
 
-
-def _type_to_property_type(tp) -> spec.PropertyType:
-    origin = get_origin(tp)
-    if origin is list:
-        inner = get_args(tp)
-        if inner:
-            scalar = _SCALAR_LIST_TYPES.get(inner[0])
-            if scalar:
-                return scalar
-        return "list"
-    if tp is str:
-        return "string"
-    if tp is int:
-        return "integer"
-    if tp is float:
-        return "float"
-    if tp is bool:
-        return "bool"
-    if isinstance(tp, type) and issubclass(tp, pydantic.BaseModel):
-        return "object"
-    return "string"
-
-
-def _model_to_properties(model: type) -> list[spec.Property]:
-    props = []
-    for field_name, field_info in model.model_fields.items():
-        tp = field_info.annotation
-        prop_type = _type_to_property_type(tp)
-        nested = None
-        if (
-            prop_type == "object"
-            and isinstance(tp, type)
-            and issubclass(tp, pydantic.BaseModel)
-        ):
-            nested = _model_to_properties(tp)
-        elif prop_type == "list":
-            inner = get_args(tp)
-            if (
-                inner
-                and isinstance(inner[0], type)
-                and issubclass(inner[0], pydantic.BaseModel)
-            ):
-                nested = _model_to_properties(inner[0])
-        display = field_info.title or field_name.replace("_", " ").title()
-        alias = field_info.alias or field_name
-        props.append(
-            spec.Property(
-                name=display,
-                alias=alias,
-                type=prop_type,
-                is_required=field_info.is_required(),
-                properties=nested,
-            )
-        )
-    return props
-
-
-def _make_property(param_name: str, tp, marker) -> spec.Property:
-    prop_type = _type_to_property_type(tp)
-    nested = None
-    if (
-        prop_type == "object"
-        and isinstance(tp, type)
-        and issubclass(tp, pydantic.BaseModel)
-    ):
-        nested = _model_to_properties(tp)
-
-    display = param_name.replace("_", " ").title()
-    alias = param_name
-    required = True
-
-    if marker is not None:
-        if marker.alias:
-            alias = marker.alias
-        if marker.title:
-            display = marker.title
-        required = marker.is_required()
-
-    return spec.Property(
-        name=display,
-        alias=alias,
-        type=prop_type,
-        is_required=required,
-        properties=nested,
-    )
-
-
-def extract_params(
-    func,
-) -> tuple[
-    list[spec.Property] | None, list[spec.Property] | None, list[spec.Property] | None
-]:
-    """Return (query, body, form) properties extracted from a function's signature."""
-    try:
-        hints = get_type_hints(func, include_extras=True)
-    except Exception:
-        return None, None, None
-
-    sig = inspect.signature(func)
-    query: list[spec.Property] = []
-    body: list[spec.Property] = []
-    form: list[spec.Property] = []
-
-    for param_name, param in sig.parameters.items():
-        if param_name in ("self", "cls"):
-            continue
-
-        annotation = hints.get(param_name, inspect.Parameter.empty)
-        default = param.default
-        marker = None
-        actual_type = annotation
-
-        depends_marker = None
-        if get_origin(annotation) is Annotated:
-            args = get_args(annotation)
-            actual_type = args[0]
-            for arg in args[1:]:
-                if isinstance(arg, DependsParam):
-                    depends_marker = arg
-                    break
-                if isinstance(arg, (QueryParam, BodyParam, FormParam)):
-                    marker = arg
-                    break
-
-        if marker is None and isinstance(default, (QueryParam, BodyParam, FormParam)):
-            marker = default
-
-        if depends_marker is not None:
-            dep_fn = depends_marker.dependency
-            if callable(dep_fn):
-                dep_query, dep_body, dep_form = extract_params(dep_fn)
-                if dep_query:
-                    query.extend(dep_query)
-                if dep_body:
-                    body.extend(dep_body)
-                if dep_form:
-                    form.extend(dep_form)
-            continue
-
-        # FormParam must be checked before BodyParam — Form is a subclass of Body
-        if isinstance(marker, QueryParam):
-            query.append(_make_property(param_name, actual_type, marker))
-        elif isinstance(marker, FormParam):
-            form.append(_make_property(param_name, actual_type, marker))
-        elif isinstance(marker, BodyParam):
-            if isinstance(actual_type, type) and issubclass(
-                actual_type, pydantic.BaseModel
-            ):
-                body.extend(_model_to_properties(actual_type))
-            else:
-                body.append(_make_property(param_name, actual_type, marker))
-        elif (
-            annotation is not inspect.Parameter.empty
-            and default is inspect.Parameter.empty
-        ):
-            # Unannotated Pydantic model with no default → implicit JSON body
-            if isinstance(actual_type, type) and issubclass(
-                actual_type, pydantic.BaseModel
-            ):
-                body.extend(_model_to_properties(actual_type))
-
-    return query or None, body or None, form or None
 
 def get_id(seed: str) -> str:
     """Generate a unique ID based on a seed string."""
     kebab_name = _SPECIAL_CHARS_RE.sub("", seed).lower().replace(" ", "-")
     count = counter.inc(kebab_name)
     return kebab_name + (f"-{count}" if count != 0 else "")
+
+
+def get_query_params(func: Callable) -> spec.JsonSchema | None: ...
+
+
+def get_form_params(func: Callable) -> spec.JsonSchema | None: ...
+
+
+def get_body_params(func: Callable) -> spec.JsonSchema | None: ...

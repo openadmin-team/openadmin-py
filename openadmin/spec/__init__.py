@@ -16,6 +16,7 @@ from .component import Component
 from .form import Form, FormComponent, FormResponse
 from .http_methods import HttpMethod
 from .icons import Icon
+from .json_schema import JsonSchema
 from .line_chart import LineChart
 from .markdown import Markdown, MarkdownComponent, MarkdownContent, MarkdownResponse
 from .page import Page
@@ -26,8 +27,6 @@ from .pie_chart import (
     PieChartData,
     PieChartResponce,
 )
-from .property import Property
-from .property_type import PropertyType
 from .section import Section
 from .spec import Spec
 from .stat import Stat, StatComponent, StatResponse, StatValue
@@ -51,6 +50,7 @@ __all__ = [
     "FormResponse",
     "HttpMethod",
     "Icon",
+    "JsonSchema",
     "LineChart",
     "Markdown",
     "MarkdownComponent",
@@ -62,8 +62,6 @@ __all__ = [
     "PieChartConfigValue",
     "PieChartData",
     "PieChartResponce",
-    "Property",
-    "PropertyType",
     "Section",
     "Spec",
     "Stat",
