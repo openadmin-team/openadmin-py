@@ -57,6 +57,9 @@ class AdminPage:
             "icon": icon,
             "color": color,
             "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
         }
         self.components.append(item)
 
@@ -87,6 +90,9 @@ class AdminPage:
                 "icon": icon,
                 "color": color,
                 "method": "get",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -114,6 +120,9 @@ class AdminPage:
                 "color": color,
                 "icon": icon,
                 "method": "get",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -143,6 +152,9 @@ class AdminPage:
                 "icon": icon,
                 "color": color,
                 "method": "post",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -172,6 +184,9 @@ class AdminPage:
                 "icon": icon,
                 "color": color,
                 "method": "get",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -201,6 +216,9 @@ class AdminPage:
                 "icon": icon,
                 "color": color,
                 "method": "put",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -230,6 +248,9 @@ class AdminPage:
                 "icon": icon,
                 "color": color,
                 "method": "patch",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -259,6 +280,9 @@ class AdminPage:
                 "icon": icon,
                 "color": color,
                 "method": "delete",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -288,6 +312,9 @@ class AdminPage:
                 "icon": icon,
                 "color": color,
                 "method": "post",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -317,6 +344,9 @@ class AdminPage:
                 "icon": icon,
                 "color": color,
                 "method": "put",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -346,6 +376,9 @@ class AdminPage:
                 "icon": icon,
                 "color": color,
                 "method": "patch",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -375,6 +408,9 @@ class AdminPage:
                 "icon": icon,
                 "color": color,
                 "method": "delete",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -398,6 +434,9 @@ class AdminPage:
                 "name": name,
                 "description": description,
                 "method": "get",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -435,6 +474,9 @@ class AdminPage:
                 "caption_description": caption_description,
                 "caption_icon": caption_icon,
                 "method": "get",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -458,6 +500,9 @@ class AdminPage:
                 "name": name,
                 "description": description,
                 "method": "get",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -497,6 +542,9 @@ class AdminPage:
                 "caption_description": caption_description,
                 "caption_icon": caption_icon,
                 "method": "get",
+                "query": None,
+                "body": None,
+                "form": None,
             }
         )
 
@@ -505,15 +553,13 @@ class AdminPage:
             description=description,
         )
 
-    def __create_admin_decorator[T](
+    def __create_admin_decorator(
         self, item: spec.Component, fastapi_decorator: Callable
     ):
-        def _(func: Callable[[], T]) -> Callable:
-            query, body, form = utils.extract_params(func)
-
-            item["query"] = query
-            item["body"] = body  # type: ignore
-            item["form"] = form  # type: ignore
+        def _(func: Callable) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
 
             return fastapi_decorator(func)
 
