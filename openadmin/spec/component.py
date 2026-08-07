@@ -4,10 +4,10 @@
 
 
 from .action import ActionComponent
-from .area_chart import AreaChart
+from .area_chart import AreaChartComponent
 from .bar_chart import BarChartComponent
 from .form import FormComponent
-from .line_chart import LineChart
+from .line_chart import LineChartComponent
 from .markdown import MarkdownComponent
 from .pie_chart import PieChartComponent
 from .stat import StatComponent
@@ -16,9 +16,9 @@ from .table import TableComponent
 type Component = (
     StatComponent
     | TableComponent
-    | AreaChart
+    | AreaChartComponent
     | BarChartComponent
-    | LineChart
+    | LineChartComponent
     | PieChartComponent
     | ActionComponent
     | FormComponent

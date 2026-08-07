@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from .action import Action, ActionComponent, ActionResponse
-from .area_chart import AreaChart
+from .area_chart import AreaChart, AreaChartComponent
 from .bar_chart import (
     BarChart,
     BarChartComponent,
@@ -13,11 +13,12 @@ from .bar_chart import (
 )
 from .colors import COLORS, Color
 from .component import Component
+from .error import Error
 from .form import Form, FormComponent, FormResponse
 from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
-from .line_chart import LineChart
+from .line_chart import LineChart, LineChartComponent
 from .markdown import Markdown, MarkdownComponent, MarkdownContent, MarkdownResponse
 from .page import Page
 from .pie_chart import (
@@ -31,7 +32,6 @@ from .section import Section
 from .spec import Spec
 from .stat import Stat, StatComponent, StatResponse, StatValue
 from .table import Table, TableComponent, TableData, TableResponse
-from .error import Error
 
 __all__ = [
     "COLORS",
@@ -39,6 +39,7 @@ __all__ = [
     "ActionComponent",
     "ActionResponse",
     "AreaChart",
+    "AreaChartComponent",
     "BarChart",
     "BarChartComponent",
     "BarChartConfigValue",
@@ -46,6 +47,7 @@ __all__ = [
     "BarChartResponce",
     "Color",
     "Component",
+    "Error",
     "Form",
     "FormComponent",
     "FormResponse",
@@ -53,6 +55,7 @@ __all__ = [
     "Icon",
     "JsonSchema",
     "LineChart",
+    "LineChartComponent",
     "Markdown",
     "MarkdownComponent",
     "MarkdownContent",
@@ -73,5 +76,4 @@ __all__ = [
     "TableComponent",
     "TableData",
     "TableResponse",
-    "Error",
 ]

@@ -5,6 +5,7 @@
 from typing import Literal, NotRequired, TypedDict
 
 from .colors import Color
+from .error import Error
 from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
@@ -32,4 +33,4 @@ class ActionResponse(TypedDict):
     message: NotRequired[str]
 
 
-type Action = ActionResponse | None | str
+type Action = ActionResponse | None | str | Error

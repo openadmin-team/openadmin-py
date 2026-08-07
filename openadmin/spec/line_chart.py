@@ -4,11 +4,12 @@
 
 from typing import Literal, TypedDict
 
+from .error import Error
 from .http_methods import HttpMethod
 from .json_schema import JsonSchema
 
 
-class LineChart(TypedDict):
+class LineChartComponent(TypedDict):
     type: Literal["line-chart"]
     id: str
     name: str
@@ -17,3 +18,6 @@ class LineChart(TypedDict):
     form: JsonSchema | None
     body: JsonSchema | None
     query: JsonSchema | None
+
+
+type LineChart = LineChartComponent | Error
