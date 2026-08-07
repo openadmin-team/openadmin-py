@@ -2,7 +2,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
+from typing import Any
 
 from fastapi import APIRouter
 from openadmin import spec
@@ -80,26 +81,42 @@ class AdminPage:
         description: str | None = None,
     ):
         stat_id = utils.get_id(name)
+        item: spec.StatComponent = {
+            "type": "stat",
+            "id": stat_id,
+            "name": name,
+            "description": description,
+            "icon": icon,
+            "color": color,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
 
-        self.components.append(
-            {
-                "type": "stat",
-                "id": stat_id,
-                "name": name,
-                "description": description,
-                "icon": icon,
-                "color": color,
-                "method": "get",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
+        self.components.append(item)
+
+        return self.__create_stat_admin_decorator(
+            item,
+            self.router.get(
+                f"/stat/{stat_id}",
+                description=description,
+            ),
         )
 
-        return self.router.get(
-            f"/stat/{stat_id}",
-            description=description,
-        )
+    def __create_stat_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[[Any], spec.Stat | Awaitable[spec.Stat]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
 
     def markdown(
         self,

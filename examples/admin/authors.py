@@ -31,7 +31,7 @@ async def get_total_authors(session: AsyncSessionDep) -> spec.StatResponse:
     color="emerald",
     description="Authors that have a biography on file",
 )
-async def get_authors_with_bio(session: AsyncSessionDep) -> int:
+async def get_authors_with_bio(session: AsyncSessionDep):
     result = await session.execute(
         select(func.count(models.Author.id)).where(models.Author.bio.isnot(None))
     )
