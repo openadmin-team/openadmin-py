@@ -28,16 +28,6 @@ class AdminPage:
             prefix=f"/{self.id}",
         )
 
-    @property
-    def spec(self) -> spec.Page:
-        return {
-            "id": self.id,
-            "name": self.name,
-            "description": self.description,
-            "icon": self.icon,
-            "components": self.components,
-        }
-
     def table(
         self,
         name: str,
@@ -48,6 +38,7 @@ class AdminPage:
         color: spec.Color | None = None,
     ):
         table_id = utils.get_id(name)
+
         item: spec.TableComponent = {
             "type": "table",
             "id": table_id,
@@ -61,6 +52,7 @@ class AdminPage:
             "body": None,
             "form": None,
         }
+
         self.components.append(item)
 
         return self.__create_table_admin_decorator(
@@ -80,6 +72,7 @@ class AdminPage:
         description: str | None = None,
     ):
         stat_id = utils.get_id(name)
+
         item: spec.StatComponent = {
             "type": "stat",
             "id": stat_id,
@@ -113,24 +106,27 @@ class AdminPage:
     ):
         markdown_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "markdown",
-                "id": markdown_id,
-                "name": name,
-                "description": description,
-                "color": color,
-                "icon": icon,
-                "method": "get",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.MarkdownComponent = {
+            "type": "markdown",
+            "id": markdown_id,
+            "name": name,
+            "description": description,
+            "color": color,
+            "icon": icon,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
 
-        return self.router.get(
-            f"/markdown/{markdown_id}",
-            description=description,
+        self.components.append(item)
+
+        return self.__create_markdown_admin_decorator(
+            item,
+            self.router.get(
+                f"/markdown/{markdown_id}",
+                description=description,
+            ),
         )
 
     def action(
@@ -263,33 +259,33 @@ class AdminPage:
             fastapi_decorator,
         )
 
-    def area_chart(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-    ):
-        area_chart_id = utils.get_id(name)
+    # def area_chart(
+    #     self,
+    #     name: str,
+    #     *,
+    #     description: str | None = None,
+    # ):
+    #     area_chart_id = utils.get_id(name)
 
-        item: spec.AreaChart = {
-            "type": "area-chart",
-            "id": area_chart_id,
-            "name": name,
-            "description": description,
-            "method": "get",
-            "query": None,
-            "body": None,
-            "form": None,
-        }
-        self.components.append(item)
+    #     item: spec.AreaChart = {
+    #         "type": "area-chart",
+    #         "id": area_chart_id,
+    #         "name": name,
+    #         "description": description,
+    #         "method": "get",
+    #         "query": None,
+    #         "body": None,
+    #         "form": None,
+    #     }
+    #     self.components.append(item)
 
-        return self.__create_area_chart_admin_decorator(
-            item,
-            self.router.get(
-                f"/area-chart/{area_chart_id}",
-                description=description,
-            ),
-        )
+    #     return self.__create_area_chart_admin_decorator(
+    #         item,
+    #         self.router.get(
+    #             f"/area-chart/{area_chart_id}",
+    #             description=description,
+    #         ),
+    #     )
 
     def bar_chart(
         self,
@@ -323,6 +319,7 @@ class AdminPage:
             "body": None,
             "form": None,
         }
+
         self.components.append(item)
 
         return self.__create_bar_chart_admin_decorator(
@@ -333,33 +330,34 @@ class AdminPage:
             ),
         )
 
-    def line_chart(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-    ):
-        line_chart_id = utils.get_id(name)
+    # def line_chart(
+    #     self,
+    #     name: str,
+    #     *,
+    #     description: str | None = None,
+    # ):
+    #     line_chart_id = utils.get_id(name)
 
-        item: spec.LineChart = {
-            "type": "line-chart",
-            "id": line_chart_id,
-            "name": name,
-            "description": description,
-            "method": "get",
-            "query": None,
-            "body": None,
-            "form": None,
-        }
-        self.components.append(item)
+    #     item: spec.LineChart = {
+    #         "type": "line-chart",
+    #         "id": line_chart_id,
+    #         "name": name,
+    #         "description": description,
+    #         "method": "get",
+    #         "query": None,
+    #         "body": None,
+    #         "form": None,
+    #     }
 
-        return self.__create_line_chart_admin_decorator(
-            item,
-            self.router.get(
-                f"/line-chart/{line_chart_id}",
-                description=description,
-            ),
-        )
+    #     self.components.append(item)
+
+    #     return self.__create_line_chart_admin_decorator(
+    #         item,
+    #         self.router.get(
+    #             f"/line-chart/{line_chart_id}",
+    #             description=description,
+    #         ),
+    #     )
 
     def pie_chart(
         self,
@@ -395,6 +393,7 @@ class AdminPage:
             "body": None,
             "form": None,
         }
+
         self.components.append(item)
 
         return self.__create_pie_chart_admin_decorator(
@@ -404,6 +403,16 @@ class AdminPage:
                 description=description,
             ),
         )
+
+    @property
+    def spec(self) -> spec.Page:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "icon": self.icon,
+            "components": self.components,
+        }
 
     def __create_stat_admin_decorator(
         self,
@@ -493,29 +502,45 @@ class AdminPage:
 
         return _
 
-    def __create_line_chart_admin_decorator(
+    # def __create_line_chart_admin_decorator(
+    #     self,
+    #     item: spec.Component,
+    #     fastapi_decorator: Callable,
+    # ):
+    #     def _(
+    #         func: Callable[..., spec.LineChart | Awaitable[spec.LineChart]],
+    #     ) -> Callable:
+    #         item["query"] = utils.get_query_params(func)
+    #         item["body"] = utils.get_body_params(func)
+    #         item["form"] = utils.get_form_params(func)
+
+    #         return fastapi_decorator(func)
+
+    #     return _
+
+    # def __create_area_chart_admin_decorator(
+    #     self,
+    #     item: spec.Component,
+    #     fastapi_decorator: Callable,
+    # ):
+    #     def _(
+    #         func: Callable[..., spec.AreaChart | Awaitable[spec.AreaChart]],
+    #     ) -> Callable:
+    #         item["query"] = utils.get_query_params(func)
+    #         item["body"] = utils.get_body_params(func)
+    #         item["form"] = utils.get_form_params(func)
+
+    #         return fastapi_decorator(func)
+
+    #     return _
+
+    def __create_markdown_admin_decorator(
         self,
         item: spec.Component,
         fastapi_decorator: Callable,
     ):
         def _(
-            func: Callable[..., spec.LineChart | Awaitable[spec.LineChart]],
-        ) -> Callable:
-            item["query"] = utils.get_query_params(func)
-            item["body"] = utils.get_body_params(func)
-            item["form"] = utils.get_form_params(func)
-
-            return fastapi_decorator(func)
-
-        return _
-
-    def __create_area_chart_admin_decorator(
-        self,
-        item: spec.Component,
-        fastapi_decorator: Callable,
-    ):
-        def _(
-            func: Callable[..., spec.AreaChart | Awaitable[spec.AreaChart]],
+            func: Callable[..., spec.Markdown | Awaitable[spec.Markdown]],
         ) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
