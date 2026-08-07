@@ -133,10 +133,11 @@ class AdminPage:
             description=description,
         )
 
-    def action_post(
+    def action(
         self,
         name: str,
         *,
+        medthod: spec.HttpMethod = "post",
         description: str | None = None,
         is_hidden: bool = False,
         icon: spec.Icon | None = None,
@@ -152,7 +153,7 @@ class AdminPage:
             "is_hidden": is_hidden,
             "icon": icon,
             "color": color,
-            "method": "post",
+            "method": medthod,
             "query": None,
             "body": None,
             "form": None,
@@ -167,146 +168,11 @@ class AdminPage:
             ),
         )
 
-    def action_get(
+    def form(
         self,
         name: str,
         *,
-        description: str | None = None,
-        is_hidden: bool = False,
-        icon: spec.Icon | None = None,
-        color: spec.Color | None = None,
-    ):
-        action_id = utils.get_id(name)
-
-        item: spec.ActionComponent = {
-            "type": "action",
-            "id": action_id,
-            "name": name,
-            "description": description,
-            "is_hidden": is_hidden,
-            "icon": icon,
-            "color": color,
-            "method": "get",
-            "query": None,
-            "body": None,
-            "form": None,
-        }
-        self.components.append(item)
-
-        return self.__create_action_admin_decorator(
-            item,
-            self.router.get(
-                f"/action/{action_id}",
-                description=description,
-            ),
-        )
-
-    def action_put(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hidden: bool = False,
-        icon: spec.Icon | None = None,
-        color: spec.Color | None = None,
-    ):
-        action_id = utils.get_id(name)
-
-        item: spec.ActionComponent = {
-            "type": "action",
-            "id": action_id,
-            "name": name,
-            "description": description,
-            "is_hidden": is_hidden,
-            "icon": icon,
-            "color": color,
-            "method": "put",
-            "query": None,
-            "body": None,
-            "form": None,
-        }
-        self.components.append(item)
-
-        return self.__create_action_admin_decorator(
-            item,
-            self.router.put(
-                f"/action/{action_id}",
-                description=description,
-            ),
-        )
-
-    def action_patch(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hidden: bool = False,
-        icon: spec.Icon | None = None,
-        color: spec.Color | None = None,
-    ):
-        action_id = utils.get_id(name)
-
-        item: spec.ActionComponent = {
-            "type": "action",
-            "id": action_id,
-            "name": name,
-            "description": description,
-            "is_hidden": is_hidden,
-            "icon": icon,
-            "color": color,
-            "method": "patch",
-            "query": None,
-            "body": None,
-            "form": None,
-        }
-        self.components.append(item)
-
-        return self.__create_action_admin_decorator(
-            item,
-            self.router.patch(
-                f"/action/{action_id}",
-                description=description,
-            ),
-        )
-
-    def action_delete(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hidden: bool = False,
-        icon: spec.Icon | None = None,
-        color: spec.Color | None = None,
-    ):
-        action_id = utils.get_id(name)
-
-        item: spec.ActionComponent = {
-            "type": "action",
-            "id": action_id,
-            "name": name,
-            "description": description,
-            "is_hidden": is_hidden,
-            "icon": icon,
-            "color": color,
-            "method": "delete",
-            "query": None,
-            "body": None,
-            "form": None,
-        }
-        self.components.append(item)
-
-        return self.__create_action_admin_decorator(
-            item,
-            self.router.delete(
-                f"/action/{action_id}",
-                description=description,
-            ),
-        )
-
-    def form_post(
-        self,
-        name: str,
-        *,
+        method: spec.HttpMethod = "post",
         description: str | None = None,
         is_hidden: bool = False,
         icon: spec.Icon | None = None,
@@ -322,7 +188,7 @@ class AdminPage:
             "is_hidden": is_hidden,
             "icon": icon,
             "color": color,
-            "method": "post",
+            "method": method,
             "query": None,
             "body": None,
             "form": None,
@@ -332,108 +198,6 @@ class AdminPage:
         return self.__create_form_admin_decorator(
             item,
             self.router.post(
-                f"/form/{form_id}",
-                description=description,
-            ),
-        )
-
-    def form_put(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hidden: bool = False,
-        icon: spec.Icon | None = None,
-        color: spec.Color | None = None,
-    ):
-        form_id = utils.get_id(name)
-
-        item: spec.FormComponent = {
-            "type": "form",
-            "id": form_id,
-            "name": name,
-            "description": description,
-            "is_hidden": is_hidden,
-            "icon": icon,
-            "color": color,
-            "method": "put",
-            "query": None,
-            "body": None,
-            "form": None,
-        }
-        self.components.append(item)
-
-        return self.__create_form_admin_decorator(
-            item,
-            self.router.put(
-                f"/form/{form_id}",
-                description=description,
-            ),
-        )
-
-    def form_patch(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hidden: bool = False,
-        icon: spec.Icon | None = None,
-        color: spec.Color | None = None,
-    ):
-        form_id = utils.get_id(name)
-
-        item: spec.FormComponent = {
-            "type": "form",
-            "id": form_id,
-            "name": name,
-            "description": description,
-            "is_hidden": is_hidden,
-            "icon": icon,
-            "color": color,
-            "method": "patch",
-            "query": None,
-            "body": None,
-            "form": None,
-        }
-        self.components.append(item)
-
-        return self.__create_form_admin_decorator(
-            item,
-            self.router.patch(
-                f"/form/{form_id}",
-                description=description,
-            ),
-        )
-
-    def form_delete(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hidden: bool = False,
-        icon: spec.Icon | None = None,
-        color: spec.Color | None = None,
-    ):
-        form_id = utils.get_id(name)
-
-        item: spec.FormComponent = {
-            "type": "form",
-            "id": form_id,
-            "name": name,
-            "description": description,
-            "is_hidden": is_hidden,
-            "icon": icon,
-            "color": color,
-            "method": "delete",
-            "query": None,
-            "body": None,
-            "form": None,
-        }
-        self.components.append(item)
-
-        return self.__create_form_admin_decorator(
-            item,
-            self.router.delete(
                 f"/form/{form_id}",
                 description=description,
             ),
