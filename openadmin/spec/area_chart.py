@@ -2,10 +2,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Literal, NotRequired, TypedDict
+from typing import Literal, TypedDict
 
 from .http_methods import HttpMethod
-from .property import Property
+from .json_schema import JsonSchema
 
 
 class AreaChart(TypedDict):
@@ -14,4 +14,6 @@ class AreaChart(TypedDict):
     name: str
     description: str | None
     method: HttpMethod
-    query: NotRequired[list[Property] | None]
+    form: JsonSchema | None
+    body: JsonSchema | None
+    query: JsonSchema | None

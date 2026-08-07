@@ -7,7 +7,7 @@ from typing import Literal, NotRequired, TypedDict
 from .colors import Color
 from .http_methods import HttpMethod
 from .icons import Icon
-from .property import Property
+from .json_schema import JsonSchema
 
 
 class PieChartConfigValue(TypedDict):
@@ -30,7 +30,9 @@ class PieChartComponent(TypedDict):
     caption_description: str | None
     caption_icon: Icon | None
     method: HttpMethod
-    query: NotRequired[list[Property] | None]
+    form: JsonSchema | None
+    body: JsonSchema | None
+    query: JsonSchema | None
 
 
 type PieChartData = (

@@ -7,7 +7,7 @@ from typing import Literal, NotRequired, TypedDict
 from .colors import Color
 from .http_methods import HttpMethod
 from .icons import Icon
-from .property import Property
+from .json_schema import JsonSchema
 
 
 class StatComponent(TypedDict):
@@ -18,7 +18,9 @@ class StatComponent(TypedDict):
     name: str
     description: str | None
     method: HttpMethod
-    query: NotRequired[list[Property] | None]
+    form: JsonSchema | None
+    body: JsonSchema | None
+    query: JsonSchema | None
 
 
 type StatValue = str | int | float | bool | None

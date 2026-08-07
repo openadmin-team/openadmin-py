@@ -7,7 +7,7 @@ from typing import Literal, NotRequired, TypedDict
 from .colors import Color
 from .http_methods import HttpMethod
 from .icons import Icon
-from .property import Property
+from .json_schema import JsonSchema
 
 
 class FormComponent(TypedDict):
@@ -19,9 +19,9 @@ class FormComponent(TypedDict):
     color: Color | None
     method: HttpMethod
     is_hidden: bool
-    form: NotRequired[list[Property] | None]
-    body: NotRequired[list[Property] | None]
-    query: NotRequired[list[Property] | None]
+    form: JsonSchema | None
+    body: JsonSchema | None
+    query: JsonSchema | None
 
 
 class FormResponse(TypedDict):
