@@ -61,4 +61,6 @@ class AdminPanel:
         app.get(
             "/spec.json",
             response_model=spec.Spec,
+            summary="Get the OpenAdmin specification",
+            description="Returns the OpenAdmin specification for this admin panel.",
         )(lambda: self.spec)
