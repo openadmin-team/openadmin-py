@@ -568,3 +568,102 @@ class AdminPage:
             return fastapi_decorator(func)
 
         return _
+
+    def __create_table_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[[Any], spec.Table | Awaitable[spec.Table]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
+    def __create_action_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[[Any], spec.Action | Awaitable[spec.Action]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
+    def __create_form_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[[Any], spec.Form | Awaitable[spec.Form]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
+    def __create_pie_chart_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[[Any], spec.PieChart | Awaitable[spec.PieChart]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
+    def __create_bar_chart_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[[Any], spec.BarChart | Awaitable[spec.BarChart]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
+    def __create_line_chart_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[[Any], spec.LineChart | Awaitable[spec.LineChart]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
+    def __create_area_chart_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[[Any], spec.AreaChart | Awaitable[spec.AreaChart]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
