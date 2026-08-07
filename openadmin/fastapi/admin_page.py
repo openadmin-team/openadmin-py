@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+from collections.abc import Callable
+
 from fastapi import APIRouter
 from openadmin import spec
 
@@ -46,23 +48,24 @@ class AdminPage:
         color: spec.Color | None = None,
     ):
         table_id = utils.gen_id(name)
+        item: spec.TableComponent = {
+            "type": "table",
+            "id": table_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": "get",
+        }
+        self.components.append(item)
 
-        self.components.append(
-            {
-                "type": "table",
-                "id": table_id,
-                "name": name,
-                "description": description,
-                "is_hidden": is_hidden,
-                "icon": icon,
-                "color": color,
-                "method": "get",
-            }
-        )
-
-        return self.router.get(
-            f"/table/{table_id}",
-            description=description,
+        return self.__create_admin_decorator(
+            item,
+            self.router.get(
+                f"/table/{table_id}",
+                description=description,
+            ),
         )
 
     def stat(
@@ -501,3 +504,18 @@ class AdminPage:
             f"/pie-chart/{pie_chart_id}",
             description=description,
         )
+
+    def __create_admin_decorator[T](
+        self, item: spec.Component, 
+        fastapi_decorator: Callable
+    ):
+        def _(func: Callable[[], T]) -> Callable:
+            query, body, form = utils.extract_params(func)
+
+            item["query"] = query
+            item["body"] = body  # type: ignore
+            item["form"] = form  # type: ignore
+
+            return fastapi_decorator(func)
+
+        return _
