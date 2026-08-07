@@ -64,8 +64,7 @@ class AdminPage:
         }
         self.components.append(item)
 
-        return self.__create_admin_decorator(
-            item,
+        return (
             self.router.get(
                 f"/table/{table_id}",
                 description=description,
@@ -103,20 +102,6 @@ class AdminPage:
                 description=description,
             ),
         )
-
-    def __create_stat_admin_decorator(
-        self,
-        item: spec.Component,
-        fastapi_decorator: Callable,
-    ):
-        def _(func: Callable[[Any], spec.Stat | Awaitable[spec.Stat]]) -> Callable:
-            item["query"] = utils.get_query_params(func)
-            item["body"] = utils.get_body_params(func)
-            item["form"] = utils.get_form_params(func)
-
-            return fastapi_decorator(func)
-
-        return _
 
     def markdown(
         self,
@@ -570,12 +555,12 @@ class AdminPage:
             description=description,
         )
 
-    def __create_admin_decorator(
+    def __create_stat_admin_decorator(
         self,
         item: spec.Component,
         fastapi_decorator: Callable,
     ):
-        def _(func: Callable) -> Callable:
+        def _(func: Callable[[Any], spec.Stat | Awaitable[spec.Stat]]) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
