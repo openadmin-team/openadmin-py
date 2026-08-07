@@ -64,7 +64,8 @@ class AdminPage:
         }
         self.components.append(item)
 
-        return (
+        return self.__create_table_admin_decorator(
+            item,
             self.router.get(
                 f"/table/{table_id}",
                 description=description,
@@ -144,25 +145,27 @@ class AdminPage:
     ):
         action_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "action",
-                "id": action_id,
-                "name": name,
-                "description": description,
-                "is_hidden": is_hidden,
-                "icon": icon,
-                "color": color,
-                "method": "post",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.ActionComponent = {
+            "type": "action",
+            "id": action_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": "post",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.post(
-            f"/action/{action_id}",
-            description=description,
+        return self.__create_action_admin_decorator(
+            item,
+            self.router.post(
+                f"/action/{action_id}",
+                description=description,
+            ),
         )
 
     def action_get(
@@ -176,25 +179,27 @@ class AdminPage:
     ):
         action_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "action",
-                "id": action_id,
-                "name": name,
-                "description": description,
-                "is_hidden": is_hidden,
-                "icon": icon,
-                "color": color,
-                "method": "get",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.ActionComponent = {
+            "type": "action",
+            "id": action_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.get(
-            f"/action/{action_id}",
-            description=description,
+        return self.__create_action_admin_decorator(
+            item,
+            self.router.get(
+                f"/action/{action_id}",
+                description=description,
+            ),
         )
 
     def action_put(
@@ -208,25 +213,27 @@ class AdminPage:
     ):
         action_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "action",
-                "id": action_id,
-                "name": name,
-                "description": description,
-                "is_hidden": is_hidden,
-                "icon": icon,
-                "color": color,
-                "method": "put",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.ActionComponent = {
+            "type": "action",
+            "id": action_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": "put",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.put(
-            f"/action/{action_id}",
-            description=description,
+        return self.__create_action_admin_decorator(
+            item,
+            self.router.put(
+                f"/action/{action_id}",
+                description=description,
+            ),
         )
 
     def action_patch(
@@ -240,25 +247,27 @@ class AdminPage:
     ):
         action_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "action",
-                "id": action_id,
-                "name": name,
-                "description": description,
-                "is_hidden": is_hidden,
-                "icon": icon,
-                "color": color,
-                "method": "patch",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.ActionComponent = {
+            "type": "action",
+            "id": action_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": "patch",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.patch(
-            f"/action/{action_id}",
-            description=description,
+        return self.__create_action_admin_decorator(
+            item,
+            self.router.patch(
+                f"/action/{action_id}",
+                description=description,
+            ),
         )
 
     def action_delete(
@@ -272,25 +281,27 @@ class AdminPage:
     ):
         action_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "action",
-                "id": action_id,
-                "name": name,
-                "description": description,
-                "is_hidden": is_hidden,
-                "icon": icon,
-                "color": color,
-                "method": "delete",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.ActionComponent = {
+            "type": "action",
+            "id": action_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": "delete",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.delete(
-            f"/action/{action_id}",
-            description=description,
+        return self.__create_action_admin_decorator(
+            item,
+            self.router.delete(
+                f"/action/{action_id}",
+                description=description,
+            ),
         )
 
     def form_post(
@@ -304,25 +315,27 @@ class AdminPage:
     ):
         form_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "form",
-                "id": form_id,
-                "name": name,
-                "description": description,
-                "is_hidden": is_hidden,
-                "icon": icon,
-                "color": color,
-                "method": "post",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.FormComponent = {
+            "type": "form",
+            "id": form_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": "post",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.post(
-            f"/form/{form_id}",
-            description=description,
+        return self.__create_form_admin_decorator(
+            item,
+            self.router.post(
+                f"/form/{form_id}",
+                description=description,
+            ),
         )
 
     def form_put(
@@ -336,25 +349,27 @@ class AdminPage:
     ):
         form_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "form",
-                "id": form_id,
-                "name": name,
-                "description": description,
-                "is_hidden": is_hidden,
-                "icon": icon,
-                "color": color,
-                "method": "put",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.FormComponent = {
+            "type": "form",
+            "id": form_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": "put",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.put(
-            f"/form/{form_id}",
-            description=description,
+        return self.__create_form_admin_decorator(
+            item,
+            self.router.put(
+                f"/form/{form_id}",
+                description=description,
+            ),
         )
 
     def form_patch(
@@ -368,25 +383,27 @@ class AdminPage:
     ):
         form_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "form",
-                "id": form_id,
-                "name": name,
-                "description": description,
-                "is_hidden": is_hidden,
-                "icon": icon,
-                "color": color,
-                "method": "patch",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.FormComponent = {
+            "type": "form",
+            "id": form_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": "patch",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.patch(
-            f"/form/{form_id}",
-            description=description,
+        return self.__create_form_admin_decorator(
+            item,
+            self.router.patch(
+                f"/form/{form_id}",
+                description=description,
+            ),
         )
 
     def form_delete(
@@ -400,25 +417,27 @@ class AdminPage:
     ):
         form_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "form",
-                "id": form_id,
-                "name": name,
-                "description": description,
-                "is_hidden": is_hidden,
-                "icon": icon,
-                "color": color,
-                "method": "delete",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.FormComponent = {
+            "type": "form",
+            "id": form_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": "delete",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.delete(
-            f"/form/{form_id}",
-            description=description,
+        return self.__create_form_admin_decorator(
+            item,
+            self.router.delete(
+                f"/form/{form_id}",
+                description=description,
+            ),
         )
 
     def area_chart(
@@ -429,22 +448,24 @@ class AdminPage:
     ):
         area_chart_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "area-chart",
-                "id": area_chart_id,
-                "name": name,
-                "description": description,
-                "method": "get",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.AreaChart = {
+            "type": "area-chart",
+            "id": area_chart_id,
+            "name": name,
+            "description": description,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.get(
-            f"/area-chart/{area_chart_id}",
-            description=description,
+        return self.__create_area_chart_admin_decorator(
+            item,
+            self.router.get(
+                f"/area-chart/{area_chart_id}",
+                description=description,
+            ),
         )
 
     def bar_chart(
@@ -462,29 +483,31 @@ class AdminPage:
     ):
         bar_chart_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "bar-chart",
-                "id": bar_chart_id,
-                "name": name,
-                "description": description,
-                "config": config,
-                "data_key": data_key,
-                "icon": icon,
-                "color": color,
-                "caption": caption,
-                "caption_description": caption_description,
-                "caption_icon": caption_icon,
-                "method": "get",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.BarChartComponent = {
+            "type": "bar-chart",
+            "id": bar_chart_id,
+            "name": name,
+            "description": description,
+            "config": config,
+            "data_key": data_key,
+            "icon": icon,
+            "color": color,
+            "caption": caption,
+            "caption_description": caption_description,
+            "caption_icon": caption_icon,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.get(
-            f"/bar-chart/{bar_chart_id}",
-            description=description,
+        return self.__create_bar_chart_admin_decorator(
+            item,
+            self.router.get(
+                f"/bar-chart/{bar_chart_id}",
+                description=description,
+            ),
         )
 
     def line_chart(
@@ -495,22 +518,24 @@ class AdminPage:
     ):
         line_chart_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "line-chart",
-                "id": line_chart_id,
-                "name": name,
-                "description": description,
-                "method": "get",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.LineChart = {
+            "type": "line-chart",
+            "id": line_chart_id,
+            "name": name,
+            "description": description,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.get(
-            f"/line-chart/{line_chart_id}",
-            description=description,
+        return self.__create_line_chart_admin_decorator(
+            item,
+            self.router.get(
+                f"/line-chart/{line_chart_id}",
+                description=description,
+            ),
         )
 
     def pie_chart(
@@ -529,30 +554,32 @@ class AdminPage:
     ):
         pie_chart_id = utils.get_id(name)
 
-        self.components.append(
-            {
-                "type": "pie-chart",
-                "id": pie_chart_id,
-                "name": name,
-                "description": description,
-                "config": config,
-                "icon": icon,
-                "name_key": name_key,
-                "value_key": value_key,
-                "color": color,
-                "caption": caption,
-                "caption_description": caption_description,
-                "caption_icon": caption_icon,
-                "method": "get",
-                "query": None,
-                "body": None,
-                "form": None,
-            }
-        )
+        item: spec.PieChartComponent = {
+            "type": "pie-chart",
+            "id": pie_chart_id,
+            "name": name,
+            "description": description,
+            "config": config,
+            "icon": icon,
+            "name_key": name_key,
+            "value_key": value_key,
+            "color": color,
+            "caption": caption,
+            "caption_description": caption_description,
+            "caption_icon": caption_icon,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+        self.components.append(item)
 
-        return self.router.get(
-            f"/pie-chart/{pie_chart_id}",
-            description=description,
+        return self.__create_pie_chart_admin_decorator(
+            item,
+            self.router.get(
+                f"/pie-chart/{pie_chart_id}",
+                description=description,
+            ),
         )
 
     def __create_stat_admin_decorator(
@@ -616,7 +643,9 @@ class AdminPage:
         item: spec.Component,
         fastapi_decorator: Callable,
     ):
-        def _(func: Callable[[Any], spec.PieChart | Awaitable[spec.PieChart]]) -> Callable:
+        def _(
+            func: Callable[[Any], spec.PieChart | Awaitable[spec.PieChart]],
+        ) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
@@ -630,7 +659,9 @@ class AdminPage:
         item: spec.Component,
         fastapi_decorator: Callable,
     ):
-        def _(func: Callable[[Any], spec.BarChart | Awaitable[spec.BarChart]]) -> Callable:
+        def _(
+            func: Callable[[Any], spec.BarChart | Awaitable[spec.BarChart]],
+        ) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
@@ -644,7 +675,9 @@ class AdminPage:
         item: spec.Component,
         fastapi_decorator: Callable,
     ):
-        def _(func: Callable[[Any], spec.LineChart | Awaitable[spec.LineChart]]) -> Callable:
+        def _(
+            func: Callable[[Any], spec.LineChart | Awaitable[spec.LineChart]],
+        ) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
@@ -658,7 +691,9 @@ class AdminPage:
         item: spec.Component,
         fastapi_decorator: Callable,
     ):
-        def _(func: Callable[[Any], spec.AreaChart | Awaitable[spec.AreaChart]]) -> Callable:
+        def _(
+            func: Callable[[Any], spec.AreaChart | Awaitable[spec.AreaChart]],
+        ) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
@@ -666,4 +701,3 @@ class AdminPage:
             return fastapi_decorator(func)
 
         return _
-
