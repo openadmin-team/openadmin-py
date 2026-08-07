@@ -31,6 +31,7 @@ from .section import Section
 from .spec import Spec
 from .stat import Stat, StatComponent, StatResponse, StatValue
 from .table import Table, TableComponent, TableData, TableResponse
+from .error import Error
 
 __all__ = [
     "COLORS",
@@ -72,4 +73,5 @@ __all__ = [
     "TableComponent",
     "TableData",
     "TableResponse",
+    "Error",
 ]

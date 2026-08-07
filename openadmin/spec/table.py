@@ -8,6 +8,7 @@ from .colors import Color
 from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
+from .error import Error
 
 
 class TableComponent(TypedDict):
@@ -35,4 +36,4 @@ class TableResponse(TypedDict):
     color: NotRequired[Color]
 
 
-type Table = TableData | TableResponse
+type Table = TableData | TableResponse | Error
