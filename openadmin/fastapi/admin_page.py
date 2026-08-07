@@ -554,7 +554,9 @@ class AdminPage:
         )
 
     def __create_admin_decorator(
-        self, item: spec.Component, fastapi_decorator: Callable
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
     ):
         def _(func: Callable) -> Callable:
             item["query"] = utils.get_query_params(func)
