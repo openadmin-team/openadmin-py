@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from collections.abc import Awaitable, Callable
-from typing import Any
 
 from fastapi import APIRouter
 from openadmin import spec
@@ -587,7 +586,7 @@ class AdminPage:
         item: spec.Component,
         fastapi_decorator: Callable,
     ):
-        def _(func: Callable[[Any], spec.Stat | Awaitable[spec.Stat]]) -> Callable:
+        def _(func: Callable[..., spec.Stat | Awaitable[spec.Stat]]) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
@@ -601,7 +600,7 @@ class AdminPage:
         item: spec.Component,
         fastapi_decorator: Callable,
     ):
-        def _(func: Callable[[Any], spec.Table | Awaitable[spec.Table]]) -> Callable:
+        def _(func: Callable[..., spec.Table | Awaitable[spec.Table]]) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
@@ -615,7 +614,7 @@ class AdminPage:
         item: spec.Component,
         fastapi_decorator: Callable,
     ):
-        def _(func: Callable[[Any], spec.Action | Awaitable[spec.Action]]) -> Callable:
+        def _(func: Callable[..., spec.Action | Awaitable[spec.Action]]) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
@@ -629,7 +628,7 @@ class AdminPage:
         item: spec.Component,
         fastapi_decorator: Callable,
     ):
-        def _(func: Callable[[Any], spec.Form | Awaitable[spec.Form]]) -> Callable:
+        def _(func: Callable[..., spec.Form | Awaitable[spec.Form]]) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
@@ -644,7 +643,7 @@ class AdminPage:
         fastapi_decorator: Callable,
     ):
         def _(
-            func: Callable[[Any], spec.PieChart | Awaitable[spec.PieChart]],
+            func: Callable[..., spec.PieChart | Awaitable[spec.PieChart]],
         ) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
@@ -660,7 +659,7 @@ class AdminPage:
         fastapi_decorator: Callable,
     ):
         def _(
-            func: Callable[[Any], spec.BarChart | Awaitable[spec.BarChart]],
+            func: Callable[..., spec.BarChart | Awaitable[spec.BarChart]],
         ) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
@@ -676,7 +675,7 @@ class AdminPage:
         fastapi_decorator: Callable,
     ):
         def _(
-            func: Callable[[Any], spec.LineChart | Awaitable[spec.LineChart]],
+            func: Callable[..., spec.LineChart | Awaitable[spec.LineChart]],
         ) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
@@ -692,7 +691,7 @@ class AdminPage:
         fastapi_decorator: Callable,
     ):
         def _(
-            func: Callable[[Any], spec.AreaChart | Awaitable[spec.AreaChart]],
+            func: Callable[..., spec.AreaChart | Awaitable[spec.AreaChart]],
         ) -> Callable:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
