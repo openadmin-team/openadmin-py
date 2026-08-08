@@ -2,9 +2,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import NotRequired, TypedDict
+from typing import TypedDict
 
 
 class Error(TypedDict):
     message: str
-    code: NotRequired[str]
