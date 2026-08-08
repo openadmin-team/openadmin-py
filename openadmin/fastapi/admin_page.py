@@ -211,7 +211,7 @@ class AdminPage:
         filed_config: dict[str, spec.FieldConfig] = {}
 
         for filed, config in (fields or {}).items():
-            filed_config[filed] = {
+            filed_config[filed] = {  # type: ignore
                 "color": config.get("color"),
                 "icon": config.get("icon"),
                 "reference": getattr(
@@ -456,7 +456,7 @@ class AdminPage:
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
 
-            func.__openadmin_table_id__ = item["id"]
+            func.__openadmin_table_id__ = item["id"]  # type: ignore
 
             return fastapi_decorator(func)
 
