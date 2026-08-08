@@ -110,9 +110,21 @@ class AddAuthorBody(BaseModel):
     first_name: str
     last_name: str
     bio: str | None = None
+    friend: int
 
 
-@page.form("Add Author", description="Register a new author in the catalog")
+@page.form(
+    "Add Author",
+    description="Register a new author in the catalog",
+    fields={
+        "friend": {
+            "reference": get_all_authors,
+            "icon": "user",
+            "color": "blue",
+            "reference_field": "id",
+        }
+    },
+)
 async def add_author(body: AddAuthorBody, session: AsyncSessionDep) -> spec.Form:
     author = models.Author(**body.model_dump())
     session.add(author)

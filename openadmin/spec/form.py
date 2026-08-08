@@ -12,6 +12,7 @@ from .json_schema import JsonSchema
 
 class FieldConfig(TypedDict):
     reference: NotRequired[str | None]
+    reference_field: NotRequired[str]
     icon: NotRequired[Icon]
     color: NotRequired[Color]
 

@@ -221,6 +221,7 @@ class AdminPage:
                 )
                 if isinstance(config.get("reference"), Callable)
                 else config.get("reference"),
+                "reference_field": config.get("reference_field"),
             }
 
         item: spec.FormComponent = {

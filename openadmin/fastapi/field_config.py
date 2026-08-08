@@ -10,5 +10,6 @@ from openadmin import spec
 
 class FieldConfig(TypedDict):
     reference: NotRequired[str | Callable | None]
+    reference_field: NotRequired[str]
     icon: NotRequired[spec.Icon]
     color: NotRequired[spec.Color]
