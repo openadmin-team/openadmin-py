@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import type { FieldConfig } from '../types/spec'
 import type { ResolvedField } from '../utils/jsonSchema'
+import MultiReferencePicker from './MultiReferencePicker.vue'
 import ReferencePicker from './ReferencePicker.vue'
 
 const props = defineProps<{
@@ -13,6 +14,7 @@ const props = defineProps<{
 const emit = defineEmits<{ 'update:modelValue': [value: unknown] }>()
 
 const reference = computed(() => props.fieldConfig?.reference ?? null)
+const isMultiReference = computed(() => reference.value !== null && props.field.widget.kind === 'array')
 const inputId = computed(() => `field-${props.field.name}`)
 
 function update(value: unknown) {
@@ -57,8 +59,18 @@ function onJsonInput(event: Event) {
 </script>
 
 <template>
+  <MultiReferencePicker
+    v-if="reference && isMultiReference"
+    :reference-id="reference"
+    :reference-field="fieldConfig?.reference_field ?? 'id'"
+    :model-value="(modelValue as unknown[] | undefined)"
+    :input-id="inputId"
+    :input-name="field.name"
+    @update:model-value="update"
+  />
+
   <ReferencePicker
-    v-if="reference"
+    v-else-if="reference"
     :reference-id="reference"
     :reference-field="fieldConfig?.reference_field ?? 'id'"
     :model-value="modelValue"

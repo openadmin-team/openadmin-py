@@ -9,7 +9,6 @@ const props = defineProps<{
 const emit = defineEmits<{ 'update:modelValue': [value: boolean] }>()
 
 function close() {
-  console.log('[Modal] close() called, current modelValue =', props.modelValue)
   emit('update:modelValue', false)
 }
 
@@ -35,19 +34,17 @@ onBeforeUnmount(() => {
 
 <template>
   <Teleport to="body">
-    <Transition name="modal">
-      <div v-if="modelValue" class="modal-backdrop" @mousedown.self="close">
-        <div class="modal-dialog" role="dialog" aria-modal="true" :aria-label="title">
-          <header class="modal-header">
-            <h2>{{ title }}</h2>
-            <button type="button" class="modal-close" aria-label="Close" @click="close">✕</button>
-          </header>
-          <div class="modal-body">
-            <slot />
-          </div>
+    <div v-if="modelValue" class="modal-backdrop" @mousedown.self="close">
+      <div class="modal-dialog" role="dialog" aria-modal="true" :aria-label="title">
+        <header class="modal-header">
+          <h2>{{ title }}</h2>
+          <button type="button" class="modal-close" aria-label="Close" @click="close">✕</button>
+        </header>
+        <div class="modal-body">
+          <slot />
         </div>
       </div>
-    </Transition>
+    </div>
   </Teleport>
 </template>
 
@@ -104,25 +101,5 @@ onBeforeUnmount(() => {
 
 .modal-body {
   padding: 1.1rem;
-}
-
-.modal-enter-active,
-.modal-leave-active {
-  transition: opacity 0.15s ease;
-}
-
-.modal-enter-active .modal-dialog,
-.modal-leave-active .modal-dialog {
-  transition: transform 0.15s ease;
-}
-
-.modal-enter-from,
-.modal-leave-to {
-  opacity: 0;
-}
-
-.modal-enter-from .modal-dialog,
-.modal-leave-to .modal-dialog {
-  transform: translateY(-8px);
 }
 </style>
