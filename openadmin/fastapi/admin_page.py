@@ -8,6 +8,7 @@ from fastapi import APIRouter
 from openadmin import spec
 
 from . import utils
+from .field_config import FieldConfig
 
 
 class AdminPage:
@@ -199,12 +200,28 @@ class AdminPage:
         name: str,
         *,
         method: spec.HttpMethod = "post",
+        fields: dict[str, FieldConfig] | None = None,
         description: str | None = None,
         is_hidden: bool = False,
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
         form_id = utils.get_id(name)
+
+        filed_config: dict[str, spec.FieldConfig] = {}
+
+        for filed, config in (fields or {}).items():
+            filed_config[filed] = {
+                "color": config.get("color"),
+                "icon": config.get("icon"),
+                "reference": getattr(
+                    config.get("reference"),
+                    "__openadmin_table_id__",
+                    config.get("reference"),
+                )
+                if isinstance(config.get("reference"), Callable)
+                else config.get("reference"),
+            }
 
         item: spec.FormComponent = {
             "type": "form",
@@ -218,6 +235,7 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
+            "fields": filed_config,
         }
 
         self.components.append(item)
@@ -437,6 +455,8 @@ class AdminPage:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
+
+            func.__openadmin_table_id__ = item["id"]
 
             return fastapi_decorator(func)
 

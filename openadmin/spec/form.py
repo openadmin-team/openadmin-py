@@ -10,11 +10,18 @@ from .icons import Icon
 from .json_schema import JsonSchema
 
 
+class FieldConfig(TypedDict):
+    reference: NotRequired[str | None]
+    icon: NotRequired[Icon]
+    color: NotRequired[Color]
+
+
 class FormComponent(TypedDict):
     type: Literal["form"]
     id: str
     name: str
     description: str | None
+    fields: dict[str, FieldConfig] | None
     icon: Icon | None
     color: Color | None
     method: HttpMethod
