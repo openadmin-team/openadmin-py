@@ -29,7 +29,7 @@ build-backend = "hatchling.build"
 packages = ["openadmin"]
 
 [tool.codespell]
-ignore-words-list = "astroid"
+ignore-words-list = "astroid,dependant"
 
 [tool.pyright]
 typeCheckingMode = "standard"
