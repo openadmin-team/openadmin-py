@@ -64,24 +64,25 @@ onBeforeUnmount(() => {
 .modal-dialog {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-lg);
   width: 100%;
   max-width: 32rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-2);
 }
 
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.1rem;
+  padding: 1.1rem 1.25rem;
   border-bottom: 1px solid var(--border);
 }
 
 .modal-header h2 {
   margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .modal-close {
@@ -90,8 +91,8 @@ onBeforeUnmount(() => {
   color: var(--text-muted);
   font-size: 1rem;
   line-height: 1;
-  padding: 0.2rem 0.4rem;
-  border-radius: 0.3rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius-md);
 }
 
 .modal-close:hover {
@@ -100,6 +101,6 @@ onBeforeUnmount(() => {
 }
 
 .modal-body {
-  padding: 1.1rem;
+  padding: 1.25rem;
 }
 </style>

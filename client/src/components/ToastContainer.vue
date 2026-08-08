@@ -27,25 +27,28 @@ const { toasts, dismiss } = useToast()
 }
 
 .toast {
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  color: white;
-  font-size: 0.875rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.75rem 1rem 0.75rem 0.85rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--text-faint);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.85rem;
+  box-shadow: var(--shadow-2);
   cursor: pointer;
   word-break: break-word;
 }
 
 .toast--success {
-  background: #16a34a;
+  border-left-color: var(--sticker-green);
 }
 
 .toast--error {
-  background: #dc2626;
+  border-left-color: var(--danger);
 }
 
 .toast--info {
-  background: #334155;
+  border-left-color: var(--primary);
 }
 
 .toast-enter-active,

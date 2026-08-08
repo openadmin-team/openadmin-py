@@ -54,19 +54,20 @@ const activeId = ref(props.tables[0]?.id)
   background: var(--surface);
   color: var(--text-muted);
   padding: 0.4rem 0.75rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-md);
   font-size: 0.8rem;
   font-weight: 500;
 }
 
 .table-tabs__tab:hover {
   color: var(--text);
+  background: var(--surface-muted);
 }
 
 .table-tabs__tab--active {
-  background: var(--accent-soft);
-  color: var(--accent-strong);
-  border-color: var(--accent-soft);
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: var(--primary-soft);
   font-weight: 600;
 }
 </style>

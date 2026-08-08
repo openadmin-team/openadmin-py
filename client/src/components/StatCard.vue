@@ -71,7 +71,7 @@ onMounted(load)
 }
 
 .stat-error {
-  color: #dc2626;
+  color: var(--danger);
   font-size: 0.8rem;
   margin: 0;
 }

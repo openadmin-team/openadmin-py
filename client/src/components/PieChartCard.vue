@@ -105,7 +105,7 @@ onBeforeUnmount(() => chart?.destroy())
 }
 
 .chart-status--error {
-  color: #dc2626;
+  color: var(--danger);
 }
 
 .chart-canvas-wrap {

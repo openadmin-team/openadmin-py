@@ -175,9 +175,9 @@ const modalTitle = computed(() => `Select ${located.value ? located.value.compon
 .reference-picker__trigger {
   flex: 1;
   text-align: left;
-  border: 1px solid var(--border);
+  border: 1px solid var(--input-border);
   background: var(--surface);
-  border-radius: 0.4rem;
+  border-radius: var(--radius-xs);
   padding: 0.4rem 0.55rem;
   font-size: 0.83rem;
   color: var(--text);

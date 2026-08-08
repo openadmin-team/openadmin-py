@@ -202,12 +202,14 @@ const modalTitle = computed(() => `Select ${located.value ? located.value.compon
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  background: var(--accent-soft);
-  color: var(--accent-strong);
-  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--primary);
+  border-radius: var(--radius-full);
   padding: 0.25rem 0.5rem 0.25rem 0.7rem;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .chip button {
@@ -221,9 +223,9 @@ const modalTitle = computed(() => `Select ${located.value ? located.value.compon
 }
 
 .reference-picker__trigger {
-  border: 1px dashed var(--border);
+  border: 1px dashed var(--input-border);
   background: var(--surface);
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   padding: 0.3rem 0.7rem;
   font-size: 0.78rem;
   color: var(--text-muted);

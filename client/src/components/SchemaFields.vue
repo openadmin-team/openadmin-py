@@ -51,7 +51,7 @@ label {
 }
 
 .required {
-  color: #dc2626;
+  color: var(--danger);
 }
 
 .field-hint {

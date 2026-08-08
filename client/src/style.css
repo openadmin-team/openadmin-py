@@ -1,15 +1,73 @@
+/*
+  Tokens sourced from DESIGN.md (Notion-style system). Sizes/weights are
+  adapted for a dense admin dashboard rather than a spacious marketing site —
+  the palette, radius scale, elevation restraint and type-weight contrast are
+  taken directly; literal marketing-scale px values (64px display headlines,
+  24px card padding) are scaled down where a dashboard needs more density.
+*/
 :root {
-  --bg: #f4f5f7;
-  --surface: #ffffff;
-  --surface-muted: #f1f2f5;
-  --border: #e2e4e9;
-  --text: #14161a;
-  --text-muted: #6b7280;
-  --accent-strong: #4338ca;
-  --accent-soft: rgba(99, 102, 241, 0.12);
+  /* Surface */
+  --bg: #f6f5f4; /* colors.canvas-soft */
+  --surface: #ffffff; /* colors.surface / colors.canvas */
+  --surface-muted: #efeeeb; /* hover/sunken tone between canvas-soft and hairline */
+  --border: #e6e6e6; /* colors.hairline */
+  --input-border: #dddddd;
+
+  /* Text */
+  --text: rgba(0, 0, 0, 0.92); /* colors.ink */
+  --text-secondary: #31302e; /* colors.ink-secondary */
+  --text-muted: #615d59; /* colors.ink-muted */
+  --text-faint: #a39e98; /* colors.ink-faint */
+
+  /* Brand accent — the single structural colour, reserved for CTAs, links,
+     active state and focus. Never used decoratively. */
+  --primary: #0075de;
+  --primary-active: #005bab;
+  --primary-soft: rgba(0, 117, 222, 0.08);
+  --on-primary: #ffffff;
+
+  /* Back-compat aliases used across components */
+  --accent-strong: var(--primary);
+  --accent-soft: var(--primary-soft);
+
+  /* Decorative sticker palette — charts, icon tints, category dots only.
+     Never used for structural fills or CTAs. */
+  --sticker-sky: #62aef0;
+  --sticker-purple: #d6b6f6;
+  --sticker-purple-deep: #391c57;
+  --sticker-pink: #ff64c8;
+  --sticker-orange: #dd5b00;
+  --sticker-orange-deep: #793400;
+  --sticker-teal: #2a9d99;
+  --sticker-green: #1aae39;
+  --sticker-brown: #523410;
+
+  /* Danger — not part of the Notion system (it has no semantic ramp); kept
+     separate so it never gets mistaken for a decorative sticker colour. */
+  --danger: #dc2626;
+  --danger-soft: rgba(220, 38, 38, 0.08);
+
+  /* Radius scale */
+  --radius-xs: 4px; /* form fields, chips */
+  --radius-sm: 5px; /* menu items, list rows */
+  --radius-md: 8px; /* utility buttons, smaller cards */
+  --radius-lg: 12px; /* feature cards, modals */
+  --radius-xl: 16px; /* large containers */
+  --radius-full: 9999px; /* pill CTAs, badges */
+
+  /* Elevation — many near-transparent layers, never a hard cast */
+  --shadow-1:
+    rgba(0, 0, 0, 0.01) 0 0.175px 1.041px, rgba(0, 0, 0, 0.02) 0 0.8px 2.925px,
+    rgba(0, 0, 0, 0.027) 0 2.025px 7.847px, rgba(0, 0, 0, 0.04) 0 4px 18px;
+  --shadow-2:
+    rgba(0, 0, 0, 0.02) 0 1px 2px, rgba(0, 0, 0, 0.03) 0 4px 8px,
+    rgba(0, 0, 0, 0.035) 0 10px 20px, rgba(0, 0, 0, 0.04) 0 18px 36px,
+    rgba(0, 0, 0, 0.05) 0 23px 52px;
+
+  --font-sans: Inter, -apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
 
   color-scheme: light dark;
-  font: 14px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
+  font: 14px/1.5 var(--font-sans);
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
@@ -20,14 +78,19 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #101114;
-    --surface: #17181c;
-    --surface-muted: #1f2126;
-    --border: #2a2c32;
-    --text: #e5e7eb;
-    --text-muted: #9199a6;
-    --accent-strong: #a5b4fc;
-    --accent-soft: rgba(129, 140, 248, 0.16);
+    --bg: #17181c;
+    --surface: #1e1f23;
+    --surface-muted: #26272c;
+    --border: #303136;
+    --input-border: #35363b;
+    --text: rgba(255, 255, 255, 0.92);
+    --text-secondary: #cfcdc9;
+    --text-muted: #9c9893;
+    --text-faint: #6f6b66;
+    --primary: #4b9cf0;
+    --primary-active: #79b7f5;
+    --primary-soft: rgba(75, 156, 240, 0.14);
+    --on-primary: #0b1220;
   }
 }
 
@@ -48,10 +111,16 @@ h2,
 h3,
 h4 {
   color: var(--text);
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 a {
   color: inherit;
+}
+
+a[href] {
+  color: var(--primary);
 }
 
 input,
@@ -66,17 +135,19 @@ input,
 select,
 textarea {
   padding: 0.4rem 0.55rem;
-  border-radius: 0.4rem;
-  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--input-border);
   background: var(--surface);
   font-size: 0.83rem;
+  transition: box-shadow 0.15s ease;
 }
 
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--accent-strong);
-  outline-offset: 1px;
+  outline: none;
+  box-shadow: 0 0 0 3px var(--primary-soft), var(--shadow-1);
+  border-color: var(--primary);
 }
 
 textarea {
@@ -86,20 +157,23 @@ textarea {
 
 button {
   cursor: pointer;
+  font-family: inherit;
 }
 
+/* button-utility — nav / icon / pagination controls */
 .icon-button {
   border: 1px solid var(--border);
   background: var(--surface);
-  border-radius: 0.4rem;
-  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-md);
+  padding: 0.3rem 0.65rem;
   font-size: 0.78rem;
-  color: var(--text-muted);
+  font-weight: 500;
+  color: var(--text);
 }
 
 .icon-button:hover:not(:disabled) {
   background: var(--surface-muted);
-  color: var(--text);
+  border-color: var(--input-border);
 }
 
 .icon-button:disabled {
@@ -107,27 +181,39 @@ button {
   cursor: not-allowed;
 }
 
+/* button-primary — the single blue action, pill-shaped */
 .primary-button {
   border: none;
-  border-radius: 0.45rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.83rem;
+  border-radius: var(--radius-full);
+  padding: 0.55rem 1.15rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: white;
-  background: var(--accent-strong);
+  color: var(--on-primary);
+  background: var(--primary);
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease;
 }
 
 .primary-button:hover:not(:disabled) {
-  filter: brightness(1.08);
+  background: var(--primary-active);
+}
+
+.primary-button:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .primary-button:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
 .primary-button--danger {
-  background: #dc2626;
+  background: var(--danger);
+}
+
+.primary-button--danger:hover:not(:disabled) {
+  background: #b91c1c;
 }
 
 .search-input {
@@ -135,13 +221,13 @@ button {
 }
 
 .table-status {
-  color: var(--text-muted);
+  color: var(--text-faint);
   font-size: 0.85rem;
   padding: 0.5rem 0;
 }
 
 .table-status--error {
-  color: #dc2626;
+  color: var(--danger);
 }
 
 .table-scroll {
@@ -151,13 +237,13 @@ button {
 .table-scroll table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.82rem;
+  font-size: 0.83rem;
 }
 
 .table-scroll th,
 .table-scroll td {
   text-align: left;
-  padding: 0.45rem 0.6rem;
+  padding: 0.5rem 0.65rem;
   border-bottom: 1px solid var(--border);
   white-space: nowrap;
 }
@@ -165,9 +251,9 @@ button {
 .table-scroll th {
   color: var(--text-muted);
   font-weight: 600;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
 }
 
 .row-detail td {

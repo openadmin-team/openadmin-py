@@ -136,7 +136,7 @@ async function submit() {
 
 <style scoped>
 .form-error {
-  color: #dc2626;
+  color: var(--danger);
   font-size: 0.8rem;
   margin: 0 0 0.6rem;
 }

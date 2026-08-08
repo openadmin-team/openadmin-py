@@ -91,7 +91,7 @@ const layout = computed(() => {
 
 .page__header h1 {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 1.45rem;
   color: var(--text);
 }
 

@@ -142,7 +142,7 @@ async function run() {
 
 <style scoped>
 .form-error {
-  color: #dc2626;
+  color: var(--danger);
   font-size: 0.8rem;
   margin: 0 0 0.6rem;
 }
@@ -154,11 +154,11 @@ async function run() {
 }
 
 .danger-notice {
-  color: #dc2626;
+  color: var(--danger);
   font-size: 0.8rem;
   margin: 0 0 0.8rem;
   padding: 0.5rem 0.65rem;
-  background: rgba(220, 38, 38, 0.1);
-  border-radius: 0.4rem;
+  background: var(--danger-soft);
+  border-radius: var(--radius-md);
 }
 </style>

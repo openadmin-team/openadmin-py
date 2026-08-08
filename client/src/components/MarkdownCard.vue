@@ -58,7 +58,7 @@ onMounted(load)
 }
 
 .markdown-status--error {
-  color: #dc2626;
+  color: var(--danger);
 }
 
 .markdown-body {

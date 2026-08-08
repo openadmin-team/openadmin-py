@@ -39,9 +39,8 @@ const accent = computed(() => colorToHex(props.color))
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  padding: 1rem 1.1rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem 1.25rem;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -73,8 +72,9 @@ const accent = computed(() => colorToHex(props.color))
 
 .card h3 {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -82,8 +82,8 @@ const accent = computed(() => colorToHex(props.color))
 }
 
 .card__description {
-  margin: 0.2rem 0 0;
-  font-size: 0.78rem;
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
   color: var(--text-muted);
 }
 

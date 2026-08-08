@@ -11,7 +11,7 @@ defineProps<{ data: unknown }>()
   margin: 0.6rem 0 0;
   padding: 0.6rem 0.75rem;
   background: var(--surface-muted);
-  border-radius: 0.5rem;
+  border-radius: var(--radius-md);
   font-size: 0.75rem;
   font-family: ui-monospace, monospace;
   max-height: 12rem;

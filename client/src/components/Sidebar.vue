@@ -61,6 +61,7 @@ function isActive(sectionId: string, pageId: string): boolean {
 .sidebar__brand-name {
   display: block;
   font-weight: 700;
+  letter-spacing: -0.01em;
   font-size: 0.95rem;
   color: var(--text);
 }
@@ -98,7 +99,9 @@ function isActive(sectionId: string, pageId: string): boolean {
   align-items: center;
   gap: 0.55rem;
   padding: 0.45rem 0.6rem;
-  border-radius: 0.4rem;
+  margin: 1px 0;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid transparent;
   font-size: 0.83rem;
   color: var(--text);
   text-decoration: none;
@@ -109,8 +112,9 @@ function isActive(sectionId: string, pageId: string): boolean {
 }
 
 .sidebar__link--active {
-  background: var(--accent-soft);
-  color: var(--accent-strong);
+  background: var(--primary-soft);
+  border-left-color: var(--primary);
+  color: var(--primary);
   font-weight: 600;
 }
 </style>

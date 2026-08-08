@@ -1,4 +1,8 @@
-// Tailwind CSS palette (500 shade) for each Color name in openadmin/spec/colors.py
+// Tailwind CSS palette (500 shade) for each Color name in openadmin/spec/colors.py.
+// "blue" is pulled to the brand's structural primary (DESIGN.md) for cohesion
+// when a spec explicitly requests it; the rest stay close to Tailwind so
+// arbitrary backend-declared names (violet, amber, emerald, ...) stay
+// recognizable by name.
 const COLOR_HEX: Record<string, string> = {
   slate: '#64748b',
   gray: '#6b7280',
@@ -15,7 +19,7 @@ const COLOR_HEX: Record<string, string> = {
   teal: '#14b8a6',
   cyan: '#06b6d4',
   sky: '#0ea5e9',
-  blue: '#3b82f6',
+  blue: '#0075de',
   indigo: '#6366f1',
   violet: '#8b5cf6',
   purple: '#a855f7',
@@ -26,27 +30,27 @@ const COLOR_HEX: Record<string, string> = {
   white: '#ffffff',
 }
 
-const DEFAULT_COLOR = '#6366f1' // indigo, used when no color is set
+const DEFAULT_COLOR = '#0075de' // DESIGN.md primary, used when no color is set
 
 export function colorToHex(name?: string | null): string {
   if (!name) return DEFAULT_COLOR
   return COLOR_HEX[name] ?? DEFAULT_COLOR
 }
 
-/** A palette of hex colors cycled through for multi-series charts, in COLORS order. */
+/**
+ * Decorative-only palette for multi-series charts (DESIGN.md's "sticker"
+ * colors) — used only when a component doesn't declare its own series
+ * colors, never for structural UI.
+ */
 export const CHART_PALETTE = [
-  '#3b82f6',
-  '#f97316',
-  '#22c55e',
-  '#a855f7',
-  '#ef4444',
-  '#06b6d4',
-  '#eab308',
-  '#ec4899',
-  '#14b8a6',
-  '#6366f1',
-  '#84cc16',
-  '#f43f5e',
+  '#62aef0', // sticker-sky
+  '#dd5b00', // sticker-orange
+  '#1aae39', // sticker-green
+  '#d6b6f6', // sticker-purple
+  '#ff64c8', // sticker-pink
+  '#2a9d99', // sticker-teal
+  '#523410', // sticker-brown
+  '#391c57', // sticker-purple-deep
 ]
 
 export function paletteColor(index: number): string {
