@@ -6,6 +6,7 @@ import type { ActionComponent } from '../types/spec'
 import { getObjectFields } from '../utils/jsonSchema'
 import { extractResult } from '../utils/response'
 import CardShell from './CardShell.vue'
+import Modal from './Modal.vue'
 import ResultBlock from './ResultBlock.vue'
 import SchemaFields from './SchemaFields.vue'
 
@@ -16,6 +17,8 @@ const props = defineProps<{
 }>()
 
 const { success, error: toastError } = useToast()
+
+const isOpen = ref(false)
 
 const queryValues = reactive<Record<string, unknown>>({})
 const bodyValues = reactive<Record<string, unknown>>({})
@@ -65,9 +68,6 @@ async function run() {
     inlineError.value = missing
     return
   }
-  if (isDestructive.value && !window.confirm(`Run "${props.component.name}"? This action may not be reversible.`)) {
-    return
-  }
 
   running.value = true
   try {
@@ -94,6 +94,20 @@ async function run() {
 
 <template>
   <CardShell :icon="component.icon" :color="component.color" :title="component.name" :description="component.description">
+    <button
+      type="button"
+      class="primary-button"
+      :class="{ 'primary-button--danger': isDestructive }"
+      @click="isOpen = true"
+    >
+      {{ hasFields ? 'Configure & run' : 'Open' }}
+    </button>
+    <p v-if="resultMessage" class="form-message">Last: {{ resultMessage }}</p>
+  </CardShell>
+
+  <Modal v-model="isOpen" :title="component.name">
+    <p v-if="isDestructive" class="danger-notice">This action may not be reversible.</p>
+
     <form @submit.prevent="run">
       <SchemaFields
         v-if="queryFields.length"
@@ -117,13 +131,13 @@ async function run() {
       <p v-if="inlineError" class="form-error">{{ inlineError }}</p>
 
       <button type="submit" class="primary-button" :class="{ 'primary-button--danger': isDestructive }" :disabled="running">
-        {{ running ? 'Running…' : hasFields ? 'Run' : component.name }}
+        {{ running ? 'Running…' : 'Run' }}
       </button>
     </form>
 
     <p v-if="resultMessage" class="form-message">{{ resultMessage }}</p>
     <ResultBlock v-if="result !== null && result !== undefined" :data="result" />
-  </CardShell>
+  </Modal>
 </template>
 
 <style scoped>
@@ -137,5 +151,14 @@ async function run() {
   color: var(--text-muted);
   font-size: 0.8rem;
   margin: 0.6rem 0 0;
+}
+
+.danger-notice {
+  color: #dc2626;
+  font-size: 0.8rem;
+  margin: 0 0 0.8rem;
+  padding: 0.5rem 0.65rem;
+  background: rgba(220, 38, 38, 0.1);
+  border-radius: 0.4rem;
 }
 </style>

@@ -99,6 +99,7 @@ onMounted(load)
       <input
         v-if="hasSearch"
         type="search"
+        class="search-input"
         placeholder="Search…"
         :value="search"
         @input="onSearchInput(($event.target as HTMLInputElement).value)"
@@ -166,7 +167,7 @@ onMounted(load)
   margin-bottom: 0.75rem;
 }
 
-.table-filters input[type='search'] {
+.table-filters .search-input {
   flex: 1;
   min-width: 10rem;
 }
@@ -176,57 +177,6 @@ onMounted(load)
   align-items: center;
   gap: 0.35rem;
   font-size: 0.78rem;
-  color: var(--text-muted);
-}
-
-.table-status {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  padding: 0.5rem 0;
-}
-
-.table-status--error {
-  color: #dc2626;
-}
-
-.table-scroll {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.82rem;
-}
-
-th,
-td {
-  text-align: left;
-  padding: 0.45rem 0.6rem;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-
-th {
-  color: var(--text-muted);
-  font-weight: 600;
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.row-detail td {
-  white-space: pre-wrap;
-  background: var(--surface-muted);
-  font-family: ui-monospace, monospace;
-}
-
-.table-pager {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
-  font-size: 0.8rem;
   color: var(--text-muted);
 }
 </style>

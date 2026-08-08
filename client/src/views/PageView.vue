@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import ActionCard from '../components/ActionCard.vue'
-import BarChartCard from '../components/BarChartCard.vue'
-import FormCard from '../components/FormCard.vue'
-import MarkdownCard from '../components/MarkdownCard.vue'
-import PieChartCard from '../components/PieChartCard.vue'
-import StatCard from '../components/StatCard.vue'
+import ComponentRenderer from '../components/ComponentRenderer.vue'
+import TableTabs from '../components/TableTabs.vue'
 import TableView from '../components/TableView.vue'
-import UnsupportedCard from '../components/UnsupportedCard.vue'
 import { findPage, findSection, useSpec } from '../composables/spec'
-import type { Component } from '../types/spec'
+import type { Component, TableComponent } from '../types/spec'
 
 const route = useRoute()
 const { state } = useSpec()
@@ -26,6 +21,26 @@ function isHidden(component: Component): boolean {
 }
 
 const visibleComponents = computed(() => (page.value?.components ?? []).filter((c) => !isHidden(c)))
+
+// Group every table on the page into one tabbed block, positioned where the
+// first table appeared; everything else keeps its original relative order.
+const layout = computed(() => {
+  const before: Component[] = []
+  const tables: TableComponent[] = []
+  const after: Component[] = []
+  let seenTable = false
+  for (const component of visibleComponents.value) {
+    if (component.type === 'table') {
+      tables.push(component)
+      seenTable = true
+    } else if (!seenTable) {
+      before.push(component)
+    } else {
+      after.push(component)
+    }
+  }
+  return { before, tables, after }
+})
 </script>
 
 <template>
@@ -37,46 +52,29 @@ const visibleComponents = computed(() => (page.value?.components ?? []).filter((
     </header>
 
     <div class="page__grid">
-      <template v-for="component in visibleComponents" :key="component.id">
-        <StatCard v-if="component.type === 'stat'" :section-id="sectionId" :page-id="pageId" :component="component" />
-        <TableView
-          v-else-if="component.type === 'table'"
-          :section-id="sectionId"
-          :page-id="pageId"
-          :component="component"
-        />
-        <FormCard
-          v-else-if="component.type === 'form'"
-          :section-id="sectionId"
-          :page-id="pageId"
-          :component="component"
-        />
-        <ActionCard
-          v-else-if="component.type === 'action'"
-          :section-id="sectionId"
-          :page-id="pageId"
-          :component="component"
-        />
-        <MarkdownCard
-          v-else-if="component.type === 'markdown'"
-          :section-id="sectionId"
-          :page-id="pageId"
-          :component="component"
-        />
-        <BarChartCard
-          v-else-if="component.type === 'bar-chart'"
-          :section-id="sectionId"
-          :page-id="pageId"
-          :component="component"
-        />
-        <PieChartCard
-          v-else-if="component.type === 'pie-chart'"
-          :section-id="sectionId"
-          :page-id="pageId"
-          :component="component"
-        />
-        <UnsupportedCard v-else :component="component" />
-      </template>
+      <ComponentRenderer
+        v-for="component in layout.before"
+        :key="component.id"
+        :section-id="sectionId"
+        :page-id="pageId"
+        :component="component"
+      />
+
+      <TableTabs v-if="layout.tables.length > 1" :section-id="sectionId" :page-id="pageId" :tables="layout.tables" />
+      <TableView
+        v-else-if="layout.tables.length === 1"
+        :section-id="sectionId"
+        :page-id="pageId"
+        :component="layout.tables[0]"
+      />
+
+      <ComponentRenderer
+        v-for="component in layout.after"
+        :key="component.id"
+        :section-id="sectionId"
+        :page-id="pageId"
+        :component="component"
+      />
     </div>
   </div>
 </template>

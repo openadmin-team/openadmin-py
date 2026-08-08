@@ -111,6 +111,7 @@ class AddAuthorBody(BaseModel):
     last_name: str
     bio: str | None = None
     friend: int
+    subscribers: list[int]
 
 
 @page.form(
@@ -122,7 +123,13 @@ class AddAuthorBody(BaseModel):
             "icon": "user",
             "color": "blue",
             "reference_field": "id",
-        }
+        },
+        'subscribers': {
+            "reference": get_all_authors,
+            "icon": "users",
+            "color": "green",
+            "reference_field": "id",
+        },
     },
 )
 async def add_author(body: AddAuthorBody, session: AsyncSessionDep) -> spec.Form:

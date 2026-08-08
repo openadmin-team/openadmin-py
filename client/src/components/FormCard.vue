@@ -6,6 +6,7 @@ import type { FormComponent } from '../types/spec'
 import { getObjectFields } from '../utils/jsonSchema'
 import { extractResult } from '../utils/response'
 import CardShell from './CardShell.vue'
+import Modal from './Modal.vue'
 import ResultBlock from './ResultBlock.vue'
 import SchemaFields from './SchemaFields.vue'
 
@@ -16,6 +17,8 @@ const props = defineProps<{
 }>()
 
 const { success, error: toastError } = useToast()
+
+const isOpen = ref(false)
 
 const queryValues = reactive<Record<string, unknown>>({})
 const bodyValues = reactive<Record<string, unknown>>({})
@@ -92,6 +95,11 @@ async function submit() {
 
 <template>
   <CardShell :icon="component.icon" :color="component.color" :title="component.name" :description="component.description">
+    <button type="button" class="primary-button" @click="isOpen = true">Open form</button>
+    <p v-if="resultMessage" class="form-message">Last: {{ resultMessage }}</p>
+  </CardShell>
+
+  <Modal v-model="isOpen" :title="component.name">
     <form @submit.prevent="submit">
       <SchemaFields
         v-if="queryFields.length"
@@ -123,7 +131,7 @@ async function submit() {
 
     <p v-if="resultMessage" class="form-message">{{ resultMessage }}</p>
     <ResultBlock v-if="result !== null && result !== undefined" :data="result" />
-  </CardShell>
+  </Modal>
 </template>
 
 <style scoped>

@@ -1,9 +1,20 @@
 import type { Component, Spec } from '../types/spec'
 
-// The example app mounts the AdminPanel sub-app at this prefix
-// (see examples/main.py: app.mount("/admin", admin_panel.app)).
-// The vite dev server proxies this same prefix to the FastAPI backend.
-export const API_BASE = '/admin'
+// AdminPanel always serves its API and this built SPA from the same mount
+// prefix (whatever an integrator chooses in production), so in a production
+// build we self-detect that prefix from the URL the page was loaded from
+// instead of hardcoding one. In dev, the app is served by the Vite dev
+// server itself (not by AdminPanel), so there's nothing to detect — fall
+// back to an env var (see .env.development) pointing at the local backend.
+function computeApiBase(): string {
+  if (import.meta.env.DEV) {
+    return (import.meta.env.VITE_API_BASE as string | undefined) || '/admin'
+  }
+  const dir = new URL('.', window.location.href).pathname
+  return dir.endsWith('/') ? dir.slice(0, -1) : dir
+}
+
+export const API_BASE = computeApiBase()
 
 export class ApiError extends Error {
   status: number
