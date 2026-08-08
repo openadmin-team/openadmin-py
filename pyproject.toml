@@ -1,6 +1,6 @@
 [project]
 name = "openadmin"
-version = "0.7.9"
+version = "0.7.10"
 description = "Add your description here"
 authors = [
   { name="Mykyta Kasianenko", email="mykytakasianenko@gmail.com" },
