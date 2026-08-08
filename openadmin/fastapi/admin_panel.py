@@ -69,3 +69,5 @@ class AdminPanel:
             summary="Get the OpenAdmin specification",
             description="Returns the OpenAdmin specification for this admin panel.",
         )(lambda: self.spec)
+
+        app.frontend('/', directory='client/dist', fallback='index.html')
