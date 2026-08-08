@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 from openadmin import spec
 
 
-def http_exception_handler(_: Request, exc: HTTPException):
+async def http_exception_handler(_: Request, exc: HTTPException) -> JSONResponse:
     admin_exc: spec.Error = {
         "message": exc.detail,
     }
@@ -18,7 +18,7 @@ def http_exception_handler(_: Request, exc: HTTPException):
     )
 
 
-def app_exception_handler(_: Request, exc: Exception):
+async def app_exception_handler(_: Request, exc: Exception) -> JSONResponse:
     admin_exc: spec.Error = {
         "message": str(exc),
     }

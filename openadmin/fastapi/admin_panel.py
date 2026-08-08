@@ -3,10 +3,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from openadmin import spec
 
-from . import utils
+from . import exc_handler, utils
 from .admin_page import AdminPage
 
 
@@ -17,7 +17,12 @@ class AdminPanel:
         self.description = description
         self.sections: list[spec.Section] = []
 
-        self.app = FastAPI()
+        self.app = FastAPI(
+            exception_handlers={
+                HTTPException: exc_handler.http_exception_handler,
+                Exception: exc_handler.app_exception_handler,
+            }
+        )
         self.__mount_spec_route(self.app)
 
     @property
