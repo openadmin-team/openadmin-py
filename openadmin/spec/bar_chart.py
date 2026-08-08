@@ -5,7 +5,6 @@
 from typing import Literal, NotRequired, TypedDict
 
 from .colors import Color
-from .error import Error
 from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
@@ -49,4 +48,4 @@ class BarChartResponce(TypedDict):
     data: BarChartData
 
 
-type BarChart = BarChartData | BarChartResponce | Error
+type BarChart = BarChartData | BarChartResponce

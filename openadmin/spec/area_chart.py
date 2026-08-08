@@ -4,7 +4,6 @@
 
 from typing import Literal, TypedDict
 
-from .error import Error
 from .http_methods import HttpMethod
 from .json_schema import JsonSchema
 
@@ -20,4 +19,4 @@ class AreaChartComponent(TypedDict):
     query: JsonSchema | None
 
 
-type AreaChart = AreaChartComponent | Error
+type AreaChart = AreaChartComponent

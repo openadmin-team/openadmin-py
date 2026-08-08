@@ -5,7 +5,6 @@
 from typing import Literal, NotRequired, TypedDict
 
 from .colors import Color
-from .error import Error
 from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
@@ -33,4 +32,4 @@ class MarkdownResponse(TypedDict):
     content: MarkdownContent
 
 
-type Markdown = MarkdownContent | MarkdownResponse | Error
+type Markdown = MarkdownContent | MarkdownResponse

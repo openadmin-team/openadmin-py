@@ -5,7 +5,6 @@
 from typing import Literal, NotRequired, TypedDict
 
 from .colors import Color
-from .error import Error
 from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
@@ -36,4 +35,4 @@ class TableResponse(TypedDict):
     color: NotRequired[Color]
 
 
-type Table = TableData | TableResponse | Error
+type Table = TableData | TableResponse

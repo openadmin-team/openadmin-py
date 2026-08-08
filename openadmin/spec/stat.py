@@ -5,7 +5,6 @@
 from typing import Literal, NotRequired, TypedDict
 
 from .colors import Color
-from .error import Error
 from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
@@ -33,4 +32,4 @@ class StatResponse(TypedDict):
     color: NotRequired[Color]
 
 
-type Stat = StatValue | StatResponse | Error
+type Stat = StatValue | StatResponse
