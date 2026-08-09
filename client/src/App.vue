@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useOpenAdminSpec } from '@/composables/openadmin-spec';
+import { useOpenAdminSpec } from "@/composables/openadmin-spec"
 
 const { data, isLoading } = useOpenAdminSpec()
 </script>
