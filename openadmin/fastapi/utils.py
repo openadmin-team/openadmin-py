@@ -4,13 +4,14 @@
 
 import re
 from collections.abc import Callable
+from dataclasses import dataclass
 from typing import Annotated, Any, cast
 
 from pydantic import BaseModel, TypeAdapter, create_model
 
 from fastapi import params
 from fastapi.dependencies.models import Dependant
-from fastapi.dependencies.utils import get_dependant, get_flat_dependant
+from fastapi.dependencies.utils import get_dependant
 from openadmin import spec
 
 from . import counter
@@ -42,11 +43,46 @@ def get_body_params(func: Callable) -> spec.JsonSchema | None:
     return _unwrappable_schema(fields)
 
 
-def _get_flat_dependant(func: Callable) -> Dependant:
+@dataclass
+class _FlatParams:
+    """Params pulled from a `Dependant` and all of its sub-dependencies.
+
+    FastAPI's own flattening helper (`get_flat_dependant`) has been renamed
+    or removed across versions, so it isn't relied on here -- this walks the
+    dependency tree the same way it used to, using only `Dependant.call`,
+    `.dependencies`, `.query_params` and `.body_params`, which have stayed
+    stable across FastAPI versions.
+    """
+
+    query_params: list[Any]
+    body_params: list[Any]
+
+
+def _get_flat_dependant(func: Callable) -> _FlatParams:
     """Resolve `func`'s params the same way FastAPI does, including params
     pulled in through `Depends(...)` (e.g. `PageDep`, `SearchQueryDep`)."""
     dependant = get_dependant(path="", call=func)
-    return get_flat_dependant(dependant, skip_repeats=True)
+    return _flatten_params(dependant)
+
+
+def _flatten_params(
+    dependant: Dependant, visited: set[Callable | None] | None = None
+) -> _FlatParams:
+    if visited is None:
+        visited = set()
+    visited.add(dependant.call)
+
+    flat = _FlatParams(
+        query_params=list(dependant.query_params),
+        body_params=list(dependant.body_params),
+    )
+    for sub_dependant in dependant.dependencies:
+        if sub_dependant.call in visited:
+            continue
+        flat_sub = _flatten_params(sub_dependant, visited)
+        flat.query_params.extend(flat_sub.query_params)
+        flat.body_params.extend(flat_sub.body_params)
+    return flat
 
 
 def _is_form_field(field: Any) -> bool:
