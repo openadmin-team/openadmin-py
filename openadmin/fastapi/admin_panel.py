@@ -64,7 +64,7 @@ class AdminPanel:
 
     def __mount_spec_route(self, app: FastAPI) -> None:
         app.get(
-            "/spec.json",
+            "/openadmin.json",
             response_model=spec.Spec,
             summary="Get the OpenAdmin specification",
             description="Returns the OpenAdmin specification for this admin panel.",
