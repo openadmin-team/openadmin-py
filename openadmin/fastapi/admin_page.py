@@ -35,6 +35,7 @@ class AdminPage:
         *,
         description: str | None = None,
         is_hidden: bool = False,
+        columns: dict[str, spec.ColumnConfigValue] | None = None,
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
@@ -44,6 +45,7 @@ class AdminPage:
             "type": "table",
             "id": table_id,
             "name": name,
+            "columns": columns,
             "description": description,
             "is_hidden": is_hidden,
             "icon": icon,

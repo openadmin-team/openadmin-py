@@ -12,12 +12,22 @@ from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
 
+type ColumnStyle = Literal["avatar", "image", "badge", "link"]
+
+
+class ColumnConfigValue(TypedDict):
+    style: NotRequired[ColumnStyle]
+    label: NotRequired[str]
+    icon: NotRequired[Icon]
+    color: NotRequired[Color]
+
 
 class TableComponent(TypedDict):
     type: Literal["table"]
     id: str
     name: str
     description: str | None
+    columns: dict[str, ColumnConfigValue] | None
     icon: Icon | None
     color: Color | None
     method: HttpMethod
