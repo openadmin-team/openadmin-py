@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/vue-query"
-import type { Error } from "@/schemas/error"
+import type { Error as ApiError } from "@/schemas/error"
 import { errorSchema } from "@/schemas/error"
 import type { Spec } from "@/schemas/spec"
 import { specSchema } from "@/schemas/spec"
 
 export const useOpenAdminSpec = () => {
-	return useQuery<Spec, Error>({
+	return useQuery<Spec, ApiError>({
 		queryKey: ["openadmin-spec"],
 		queryFn: async () => {
 			const response = await fetch("openadmin.json")
