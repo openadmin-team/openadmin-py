@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Literal, NotRequired, TypedDict
+from typing import Literal, NotRequired, TypedDict, Iterable
 
 from .colors import Color
 from .http_methods import HttpMethod
@@ -24,9 +24,15 @@ class TableComponent(TypedDict):
     query: JsonSchema | None
 
 
-type TableData = (
-    list[dict[str | Literal["__view__"], str | int | float | bool | None]] | object
-)
+TableData = Iterable[
+    TypedDict(
+        "TableRow",
+        {
+            '__view__': str | int | float | bool | None,
+        },
+        extra_items=str | int | float | bool | None
+    ) | object
+]
 
 
 class TableResponse(TypedDict):

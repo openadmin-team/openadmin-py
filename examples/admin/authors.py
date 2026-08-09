@@ -62,7 +62,7 @@ async def get_avg_books_per_author(session: AsyncSessionDep) -> float:
 )
 async def get_all_authors(
     session: AsyncSessionDep, pagination: PageDep, search: SearchQueryDep
-):
+) -> spec.Table:
     stmt = (
         select(models.Author, func.count(models.Book.id).label("book_count"))
         .outerjoin(models.Book, models.Book.author_id == models.Author.id)
@@ -82,6 +82,8 @@ async def get_all_authors(
             if author.bio and len(author.bio) > 80
             else author.bio,
             "book_count": count,
+
+            '__view__': f"{author.first_name} {author.last_name}"
         }
         for author, count in result.all()
     ]
