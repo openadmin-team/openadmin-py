@@ -5,17 +5,21 @@ fix/license:
 	@ uv run reuse annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised examples/
 
 fix/format:
+	@ cd client && bun run fix:format
 	@ uv run ruff format .
 
 fix/lint:
+	@ cd client && bun run fix:lint
 	@ uv run ruff check --fix .
 
 fix: fix/license fix/format fix/lint
 
 check/format:
+	@ cd client && bun run check:format
 	@ uv run ruff format --check .
 
 check/lint:
+	@ cd client && bun run check:lint
 	@ uv run ruff check .
 
 check/typing:
