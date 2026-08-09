@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/vue-query"
+import { computed } from "vue"
 import type { Error as ApiError } from "@/schemas/error"
 import { errorSchema } from "@/schemas/error"
 import type { Spec } from "@/schemas/spec"
@@ -18,4 +19,21 @@ export const useOpenAdminSpec = () => {
 			return specSchema.parse(data)
 		},
 	})
+}
+
+export const useOpenAdminPageSpec = ({ id }: { id: string }) => {
+	const { data: specData, ...rest } = useOpenAdminSpec()
+
+	const data = computed(() => {
+		if (!specData.value) return null
+		return (
+			specData.value.sections.flatMap((section) => section.pages).find((page) => page.id === id) ??
+			null
+		)
+	})
+
+	return {
+		data,
+		...rest,
+	}
 }
