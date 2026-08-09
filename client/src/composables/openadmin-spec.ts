@@ -12,8 +12,7 @@ export const useOpenAdminSpec = () => {
 			const data = await response.json()
 
 			if (!response.ok) {
-				const error = errorSchema.parse(data)
-				throw error
+				throw errorSchema.parse(data)
 			}
 
 			return specSchema.parse(data)
