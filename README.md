@@ -45,16 +45,21 @@ admin = AdminPanel()
 # Define a page
 page = AdminPage("Dashboard")
 
+
 @page.stat("Total Users")
 async def total_users() -> Stat:
     return Stat(value=1_024)
 
+
 @page.table("Recent Users")
 async def recent_users() -> Table:
-    return Table(data=[
-        {"id": 1, "name": "Alice", "role": "admin"},
-        {"id": 2, "name": "Bob",   "role": "viewer"},
-    ])
+    return Table(
+        data=[
+            {"id": 1, "name": "Alice", "role": "admin"},
+            {"id": 2, "name": "Bob", "role": "viewer"},
+        ]
+    )
+
 
 # Register the page and mount the panel
 admin.include_page(page)
@@ -72,6 +77,7 @@ Display a single numeric or boolean value.
 ```python
 from openadmin.types import Stat
 
+
 @page.stat("Active Sessions")
 async def active_sessions() -> Stat:
     return Stat(value=42)
@@ -84,6 +90,7 @@ Paginated tables with optional search. Use the built-in dependency types to rece
 ```python
 from openadmin.fastapi import PaginationParamsDep, SearchQueryDep
 from openadmin.types import Table
+
 
 @page.table("Users")
 async def users_table(
@@ -102,18 +109,23 @@ Attach per-row action buttons by including `__actions__` in each row:
 ```python
 from openadmin.types import Action, Table, TableRow
 
+
 @page.table("Users")
 async def users_table() -> Table:
-    return Table(data=[
-        TableRow(
-            id=1,
-            name="Alice",
-            __actions__=[
-                Action(color="danger", method="DELETE", url="/users/1", body=None),
-                Action(color="info",   method="POST",   url="/users/1/reset", body=None),
-            ],
-        )
-    ])
+    return Table(
+        data=[
+            TableRow(
+                id=1,
+                name="Alice",
+                __actions__=[
+                    Action(color="danger", method="DELETE", url="/users/1", body=None),
+                    Action(
+                        color="info", method="POST", url="/users/1/reset", body=None
+                    ),
+                ],
+            )
+        ]
+    )
 ```
 
 ### Charts
@@ -122,6 +134,7 @@ All chart types share the same structure: a `data` list of dicts and a `config` 
 
 ```python
 from openadmin.types import BarChart, PieChart
+
 
 @page.bar_chart("Sales by Region", "Total sales per region this quarter")
 async def sales_chart() -> BarChart:
@@ -133,11 +146,12 @@ async def sales_chart() -> BarChart:
         config={"sales": {"label": "Sales", "color": "#6366f1"}},
     )
 
+
 @page.pie_chart("User Roles", "Breakdown of user roles")
 async def roles_chart() -> PieChart:
     return PieChart(
         data=[
-            {"segment": "Admin",  "count": 5},
+            {"segment": "Admin", "count": 5},
             {"segment": "Editor", "count": 20},
             {"segment": "Viewer", "count": 75},
         ],
@@ -163,9 +177,11 @@ Forms collect user input and submit it to your endpoint. Mark a form hidden if i
 ```python
 from pydantic import BaseModel
 
+
 class InvitePayload(BaseModel):
     email: str
     role: str
+
 
 @page.form_post("Invite User", "Send an invitation email to a new user")
 async def invite_user(payload: InvitePayload):
@@ -194,10 +210,12 @@ from openadmin.types import Stat, Table, BarChart
 
 page = AdminPage("Library")
 
+
 @page.stat("Total Books")
 async def total_books(session: AsyncSessionDep) -> Stat:
     result = await session.execute(select(func.count()).select_from(Book))
     return Stat(value=result.scalar_one())
+
 
 @page.table("Books")
 async def books_table(
@@ -205,16 +223,24 @@ async def books_table(
     pagination: PaginationParamsDep,
     search: SearchQueryDep,
 ) -> Table:
-    stmt = select(Book).offset(pagination.page * pagination.per_page).limit(pagination.per_page)
+    stmt = (
+        select(Book)
+        .offset(pagination.page * pagination.per_page)
+        .limit(pagination.per_page)
+    )
     books = (await session.execute(stmt)).scalars().all()
     return Table(data=[{"title": b.title, "year": b.published_year} for b in books])
 
+
 @page.bar_chart("Books per Genre", "Number of books in each genre")
 async def books_per_genre(session: AsyncSessionDep) -> BarChart:
-    rows = (await session.execute(
-        select(Genre.name, func.count().label("books"))
-        .join(BookToGenre).group_by(Genre.id)
-    )).all()
+    rows = (
+        await session.execute(
+            select(Genre.name, func.count().label("books"))
+            .join(BookToGenre)
+            .group_by(Genre.id)
+        )
+    ).all()
     return BarChart(
         data=[{"genre": name, "books": count} for name, count in rows],
         config={"books": {"label": "Books", "color": "#6366f1"}},

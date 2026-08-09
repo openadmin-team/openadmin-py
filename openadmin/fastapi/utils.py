@@ -2,166 +2,101 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-import inspect
-from typing import Annotated, get_args, get_origin, get_type_hints
+import re
+from collections.abc import Callable
+from typing import Annotated, Any, cast
 
-import pydantic
+from pydantic import BaseModel, TypeAdapter, create_model
 
-from fastapi.params import Body as BodyParam
-from fastapi.params import Form as FormParam
-from fastapi.params import Query as QueryParam
+from fastapi import params
+from fastapi.dependencies.models import Dependant
+from fastapi.dependencies.utils import get_dependant, get_flat_dependant
 from openadmin import spec
 
-_SCALAR_LIST_TYPES: dict[type, spec.PropertyType] = {
-    str: "list[string]",
-    int: "list[integer]",
-    float: "list[float]",
-    bool: "list[bool]",
-}
+from . import counter
+
+_SPECIAL_CHARS_RE = re.compile(r"[^a-zA-Z0-9\s]")
 
 
-def _type_to_property_type(tp) -> spec.PropertyType:
-    origin = get_origin(tp)
-    if origin is list:
-        inner = get_args(tp)
-        if inner:
-            scalar = _SCALAR_LIST_TYPES.get(inner[0])
-            if scalar:
-                return scalar
-        return "list"
-    if tp is str:
-        return "string"
-    if tp is int:
-        return "integer"
-    if tp is float:
-        return "float"
-    if tp is bool:
-        return "bool"
-    if isinstance(tp, type) and issubclass(tp, pydantic.BaseModel):
-        return "object"
-    return "string"
+def get_id(seed: str) -> str:
+    """Generate a unique ID based on a seed string."""
+    kebab_name = _SPECIAL_CHARS_RE.sub("", seed).lower().replace(" ", "-")
+    count = counter.inc(kebab_name)
+    return kebab_name + (f"-{count}" if count != 0 else "")
 
 
-def _model_to_properties(model: type) -> list[spec.Property]:
-    props = []
-    for field_name, field_info in model.model_fields.items():
-        tp = field_info.annotation
-        prop_type = _type_to_property_type(tp)
-        nested = None
-        if (
-            prop_type == "object"
-            and isinstance(tp, type)
-            and issubclass(tp, pydantic.BaseModel)
-        ):
-            nested = _model_to_properties(tp)
-        elif prop_type == "list":
-            inner = get_args(tp)
-            if (
-                inner
-                and isinstance(inner[0], type)
-                and issubclass(inner[0], pydantic.BaseModel)
-            ):
-                nested = _model_to_properties(inner[0])
-        display = field_info.title or field_name.replace("_", " ").title()
-        alias = field_info.alias or field_name
-        props.append(
-            spec.Property(
-                name=display,
-                alias=alias,
-                type=prop_type,
-                is_required=field_info.is_required(),
-                properties=nested,
-            )
-        )
-    return props
+def get_query_params(func: Callable) -> spec.JsonSchema | None:
+    dependant = _get_flat_dependant(func)
+    return _object_schema(dependant.query_params)
 
 
-def _make_property(param_name: str, tp, marker) -> spec.Property:
-    prop_type = _type_to_property_type(tp)
-    nested = None
-    if (
-        prop_type == "object"
-        and isinstance(tp, type)
-        and issubclass(tp, pydantic.BaseModel)
-    ):
-        nested = _model_to_properties(tp)
+def get_form_params(func: Callable) -> spec.JsonSchema | None:
+    dependant = _get_flat_dependant(func)
+    fields = [field for field in dependant.body_params if _is_form_field(field)]
+    return _unwrappable_schema(fields)
 
-    display = param_name.replace("_", " ").title()
-    alias = param_name
-    required = True
 
-    if marker is not None:
-        if marker.alias:
-            alias = marker.alias
-        if marker.title:
-            display = marker.title
-        required = marker.is_required()
+def get_body_params(func: Callable) -> spec.JsonSchema | None:
+    dependant = _get_flat_dependant(func)
+    fields = [field for field in dependant.body_params if _is_body_field(field)]
+    return _unwrappable_schema(fields)
 
-    return spec.Property(
-        name=display,
-        alias=alias,
-        type=prop_type,
-        is_required=required,
-        properties=nested,
+
+def _get_flat_dependant(func: Callable) -> Dependant:
+    """Resolve `func`'s params the same way FastAPI does, including params
+    pulled in through `Depends(...)` (e.g. `PageDep`, `SearchQueryDep`)."""
+    dependant = get_dependant(path="", call=func)
+    return get_flat_dependant(dependant, skip_repeats=True)
+
+
+def _is_form_field(field: Any) -> bool:
+    return isinstance(field.field_info, params.Form)
+
+
+def _is_body_field(field: Any) -> bool:
+    return isinstance(field.field_info, params.Body) and not isinstance(
+        field.field_info, params.Form
     )
 
 
-def extract_params(
-    func,
-) -> tuple[
-    list[spec.Property] | None, list[spec.Property] | None, list[spec.Property] | None
-]:
-    """Return (query, body, form) properties extracted from a function's signature."""
-    try:
-        hints = get_type_hints(func, include_extras=True)
-    except Exception:
-        return None, None, None
+def _should_embed(fields: list[Any]) -> bool:
+    """Mirror FastAPI's own rule for when a body/form is wrapped under its
+    param name vs. used as-is (e.g. a lone `Body(...)` pydantic model is the
+    whole body; two body params, or an explicit `embed=True`, are nested)."""
+    if not fields:
+        return False
 
-    sig = inspect.signature(func)
-    query: list[spec.Property] = []
-    body: list[spec.Property] = []
-    form: list[spec.Property] = []
+    if len(fields) > 1:
+        return True
 
-    for param_name, param in sig.parameters.items():
-        if param_name in ("self", "cls"):
-            continue
+    field_info = fields[0].field_info
+    if getattr(field_info, "embed", None):
+        return True
 
-        annotation = hints.get(param_name, inspect.Parameter.empty)
-        default = param.default
-        marker = None
-        actual_type = annotation
+    annotation = field_info.annotation
+    return isinstance(field_info, params.Form) and not (
+        isinstance(annotation, type) and issubclass(annotation, BaseModel)
+    )
 
-        if get_origin(annotation) is Annotated:
-            args = get_args(annotation)
-            actual_type = args[0]
-            for arg in args[1:]:
-                if isinstance(arg, (QueryParam, BodyParam, FormParam)):
-                    marker = arg
-                    break
 
-        if marker is None and isinstance(default, (QueryParam, BodyParam, FormParam)):
-            marker = default
+def _object_schema(fields: list[Any]) -> spec.JsonSchema | None:
+    if not fields:
+        return None
 
-        # FormParam must be checked before BodyParam — Form is a subclass of Body
-        if isinstance(marker, QueryParam):
-            query.append(_make_property(param_name, actual_type, marker))
-        elif isinstance(marker, FormParam):
-            form.append(_make_property(param_name, actual_type, marker))
-        elif isinstance(marker, BodyParam):
-            if isinstance(actual_type, type) and issubclass(
-                actual_type, pydantic.BaseModel
-            ):
-                body.extend(_model_to_properties(actual_type))
-            else:
-                body.append(_make_property(param_name, actual_type, marker))
-        elif (
-            annotation is not inspect.Parameter.empty
-            and default is inspect.Parameter.empty
-        ):
-            # Unannotated Pydantic model with no default → implicit JSON body
-            if isinstance(actual_type, type) and issubclass(
-                actual_type, pydantic.BaseModel
-            ):
-                body.extend(_model_to_properties(actual_type))
+    field_definitions: dict[str, Any] = {
+        field.alias: (field.field_info.annotation, field.field_info) for field in fields
+    }
+    model = create_model("Schema", **field_definitions)  # type: ignore[call-overload]
+    return cast(spec.JsonSchema, model.model_json_schema())
 
-    return query or None, body or None, form or None
+
+def _unwrappable_schema(fields: list[Any]) -> spec.JsonSchema | None:
+    if not fields:
+        return None
+
+    if not _should_embed(fields):
+        field = fields[0]
+        annotation = Annotated[field.field_info.annotation, field.field_info]
+        return cast(spec.JsonSchema, TypeAdapter(annotation).json_schema())
+
+    return _object_schema(fields)

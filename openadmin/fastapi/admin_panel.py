@@ -2,12 +2,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Dict, List
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException
 from openadmin import spec
 
-from . import types
+from . import exc_handler, utils
 from .admin_page import AdminPage
 
 
@@ -16,74 +15,59 @@ class AdminPanel:
         self.version = "1.0.0"
         self.name = name
         self.description = description
-        self.state: List[types.Section] = []
-        self.app = FastAPI()
-        self.key_repeat_count: Dict[str, int] = {}
-        self.__init_spec_route(self.app)
-        self.root: FastAPI | None = None
+        self.sections: list[spec.Section] = []
 
-    def get_panel_spec(self, app: FastAPI) -> spec.Spec:
-        sections: List[spec.Section] = []
-
-        for section in self.state:
-            sections.append(
-                spec.Section(
-                    name=section.name,
-                    description=section.description,
-                    pages=[p.get_page_spec(app) for p in section.pages],
-                )
-            )
-
-        return spec.Spec(
-            version=self.version,
-            name=self.name,
-            description=self.description,
-            sections=sections,
+        self.app = FastAPI(
+            exception_handlers={
+                HTTPException: exc_handler.http_exception_handler,
+                Exception: exc_handler.app_exception_handler,
+            }
         )
+        self.__mount_spec_route(self.app)
+
+    @property
+    def spec(self) -> spec.Spec:
+        return {
+            "id": f"{utils.get_id(self.name)}",
+            "name": self.name,
+            "version": self.version,
+            "description": self.description,
+            "sections": self.sections,
+        }
 
     def section(
         self,
         name: str,
         *,
         description: str | None = None,
-        pages: List[AdminPage],
+        icon: spec.Icon | None = None,
+        pages: list[AdminPage],
     ) -> None:
-        kebab_name = name.lower().replace(" ", "-")
+        section_id = utils.get_id(name)
 
-        if kebab_name in self.key_repeat_count:
-            number = self.key_repeat_count[kebab_name]
-            kebab_name = f"{kebab_name}-{number}"
-            self.key_repeat_count[kebab_name] += 1
-        else:
-            self.key_repeat_count[kebab_name] = 1
-
-        self.state.append(
-            types.Section(
-                name=name,
-                description=description,
-                pages=pages,
-            )
+        self.sections.append(
+            {
+                "id": section_id,
+                "name": name,
+                "description": description,
+                "icon": icon,
+                "pages": [page.spec for page in pages],
+            }
         )
 
         for page in pages:
             self.app.include_router(
-                prefix=f"/{kebab_name}", router=page.router, tags=[name]
+                prefix=f"/{section_id}",
+                router=page.router,
+                tags=[name],
             )
 
-    def mount_to(self, root: FastAPI) -> None:
-        self.root = root
-        root.mount("/openadmin", self.app)
-
-    def __init_spec_route(self, app: FastAPI) -> None:
-        @app.get(
-            "/spec.json",
+    def __mount_spec_route(self, app: FastAPI) -> None:
+        app.get(
+            "/openadmin.json",
             response_model=spec.Spec,
-        )
-        async def _():
-            if not self.root:
-                raise HTTPException(
-                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    detail="Admin panel should be mounted to root, user admin_panel.mount_to(app)",
-                )
+            summary="Get the OpenAdmin specification",
+            description="Returns the OpenAdmin specification for this admin panel.",
+        )(lambda: self.spec)
 
-            return self.get_panel_spec(self.root)
+        app.frontend("/", directory="client/dist", fallback="index.html")

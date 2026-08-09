@@ -2,17 +2,13 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-import re
-import uuid
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 
-from fastapi import APIRouter, FastAPI
+from fastapi import APIRouter
 from openadmin import spec
 
-from . import types
-from .utils import extract_params
-
-_SPECIAL_CHARS_RE = re.compile(r"[^a-zA-Z0-9\s]")
+from . import utils
+from .field_config import FieldConfig
 
 
 class AdminPage:
@@ -20,172 +16,51 @@ class AdminPage:
         self,
         name: str,
         *,
+        icon: spec.Icon | None = None,
         description: str | None = None,
     ) -> None:
+        self.id = utils.get_id(name)
         self.name = name
         self.description = description
-        self.state: list[types.Component] = []
-        self.router = APIRouter(prefix=f"/{name.lower().replace(' ', '-')}")
-        self.key_repeat_count: dict[str, int] = {}
+        self.icon: spec.Icon | None = icon
+        self.components: list[spec.Component] = []
 
-    def get_page_spec(self, app: FastAPI) -> spec.Page:
-        components: list[spec.Component] = []
-
-        for item in self.state:
-            url = app.url_path_for(item.function_name)
-            query, body, form = (
-                extract_params(item.func) if item.func else (None, None, None)
-            )
-
-            if isinstance(item, types.Stat):
-                components.append(
-                    spec.Stat(
-                        type="stat",
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                    )
-                )
-            elif isinstance(item, types.Table):
-                components.append(
-                    spec.Table(
-                        type="table",
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                        body=body,
-                        form=form,
-                    )
-                )
-            elif isinstance(item, types.AreaChart):
-                components.append(
-                    spec.AreaChart(
-                        type="area-chart",
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                    )
-                )
-            elif isinstance(item, types.BarChart):
-                components.append(
-                    spec.BarChart(
-                        type="bar-chart",
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                    )
-                )
-            elif isinstance(item, types.LineChart):
-                components.append(
-                    spec.LineChart(
-                        type="line-chart",
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                    )
-                )
-            elif isinstance(item, types.PieChart):
-                components.append(
-                    spec.PieChart(
-                        type="pie-chart",
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                    )
-                )
-            elif isinstance(item, types.Action):
-                components.append(
-                    spec.Action(
-                        type="action",
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        is_hidden=item.is_hidden,
-                        query=query,
-                        body=body,
-                        form=form,
-                    )
-                )
-            elif isinstance(item, types.Form):
-                components.append(
-                    spec.Form(
-                        type="form",
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        is_hiden=item.is_hiden,
-                        query=query,
-                        body=body,
-                        form=form,
-                    )
-                )
-            elif isinstance(item, types.Markdown):
-                components.append(
-                    spec.Markdown(
-                        type="markdown",
-                        name=item.name,
-                        description=item.description,
-                        method=item.method,
-                        url=url,
-                        query=query,
-                    )
-                )
-
-        return spec.Page(
-            name=self.name,
-            description=self.description,
-            components=components,
+        self.router = APIRouter(
+            prefix=f"/{self.id}",
         )
-
-    def _wrap_user_handler(self, item: types.Component, fastapi_decorator) -> Callable:
-        def decorator(func: Callable) -> Callable:
-            item.func = func
-            return fastapi_decorator(func)
-
-        return decorator
-
-    def __get_kebab_and_unique_name(self, name: str) -> tuple[str, str]:
-        kebab_name = _SPECIAL_CHARS_RE.sub("", name).lower().replace(" ", "-")
-
-        if kebab_name in self.key_repeat_count:
-            number = self.key_repeat_count[kebab_name]
-            self.key_repeat_count[kebab_name] += 1
-            kebab_name = f"{kebab_name}-{number}"
-        else:
-            self.key_repeat_count[kebab_name] = 1
-
-        return kebab_name, f"{kebab_name}-{uuid.uuid4()}"
 
     def table(
         self,
         name: str,
         *,
         description: str | None = None,
+        is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        table_id = utils.get_id(name)
 
-        item = types.Table(
-            function_name=unique_name, method="get", name=name, description=description
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
+        item: spec.TableComponent = {
+            "type": "table",
+            "id": table_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+
+        self.components.append(item)
+
+        return self.__create_table_admin_decorator(
             item,
             self.router.get(
-                f"/table/{kebab_name}", name=unique_name, description=description
+                f"/table/{table_id}",
+                description=description,
             ),
         )
 
@@ -193,18 +68,32 @@ class AdminPage:
         self,
         name: str,
         *,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
         description: str | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        stat_id = utils.get_id(name)
 
-        item = types.Stat(
-            function_name=unique_name, method="get", name=name, description=description
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
+        item: spec.StatComponent = {
+            "type": "stat",
+            "id": stat_id,
+            "name": name,
+            "description": description,
+            "icon": icon,
+            "color": color,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+
+        self.components.append(item)
+
+        return self.__create_stat_admin_decorator(
             item,
             self.router.get(
-                f"/stat/{kebab_name}", name=unique_name, description=description
+                f"/stat/{stat_id}",
+                description=description,
             ),
         )
 
@@ -213,314 +102,471 @@ class AdminPage:
         name: str,
         *,
         description: str | None = None,
+        color: spec.Color | None = None,
+        icon: spec.Icon | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        markdown_id = utils.get_id(name)
 
-        item = types.Markdown(
-            function_name=unique_name,
-            method="get",
-            name=name,
-            description=description,
-        )
-        self.state.append(item)
+        item: spec.MarkdownComponent = {
+            "type": "markdown",
+            "id": markdown_id,
+            "name": name,
+            "description": description,
+            "color": color,
+            "icon": icon,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
 
-        return self._wrap_user_handler(
+        self.components.append(item)
+
+        return self.__create_markdown_admin_decorator(
             item,
             self.router.get(
-                f"/markdown/{kebab_name}",
-                name=unique_name,
+                f"/markdown/{markdown_id}",
                 description=description,
             ),
         )
 
-    def action_post(
+    def action(
         self,
         name: str,
         *,
+        method: spec.HttpMethod = "post",
         description: str | None = None,
-        is_hiden: bool = False,
+        is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        action_id = utils.get_id(name)
 
-        item = types.Action(
-            function_name=unique_name,
-            method="post",
-            name=name,
-            description=description,
-            is_hidden=is_hiden,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
+        item: spec.ActionComponent = {
+            "type": "action",
+            "id": action_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": method,
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+
+        self.components.append(item)
+
+        match method:
+            case "get":
+                fastapi_decorator = self.router.get(
+                    f"/action/{action_id}",
+                    description=description,
+                )
+            case "post":
+                fastapi_decorator = self.router.post(
+                    f"/action/{action_id}",
+                    description=description,
+                )
+            case "put":
+                fastapi_decorator = self.router.put(
+                    f"/action/{action_id}",
+                    description=description,
+                )
+            case "delete":
+                fastapi_decorator = self.router.delete(
+                    f"/action/{action_id}",
+                    description=description,
+                )
+            case "patch":
+                fastapi_decorator = self.router.patch(
+                    f"/action/{action_id}",
+                    description=description,
+                )
+            case "head":
+                fastapi_decorator = self.router.head(
+                    f"/action/{action_id}",
+                    description=description,
+                )
+
+        return self.__create_action_admin_decorator(
             item,
-            self.router.post(
-                f"/action/{kebab_name}", name=unique_name, description=description
-            ),
+            fastapi_decorator,
         )
 
-    def action_get(
+    def form(
         self,
         name: str,
         *,
+        method: spec.HttpMethod = "post",
+        fields: dict[str, FieldConfig] | None = None,
         description: str | None = None,
-        is_hiden: bool = False,
+        is_hidden: bool = False,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        form_id = utils.get_id(name)
 
-        item = types.Action(
-            function_name=unique_name,
-            method="get",
-            name=name,
-            description=description,
-            is_hidden=is_hiden,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
+        filed_config: dict[str, spec.FieldConfig] = {}
+
+        for filed, config in (fields or {}).items():
+            filed_config[filed] = {  # type: ignore
+                "color": config.get("color"),
+                "icon": config.get("icon"),
+                "reference": getattr(
+                    config.get("reference"),
+                    "__openadmin_table_id__",
+                    config.get("reference"),
+                )
+                if isinstance(config.get("reference"), Callable)
+                else config.get("reference"),
+                "reference_field": config.get("reference_field"),
+            }
+
+        item: spec.FormComponent = {
+            "type": "form",
+            "id": form_id,
+            "name": name,
+            "description": description,
+            "is_hidden": is_hidden,
+            "icon": icon,
+            "color": color,
+            "method": method,
+            "query": None,
+            "body": None,
+            "form": None,
+            "fields": filed_config,
+        }
+
+        self.components.append(item)
+
+        match method:
+            case "get":
+                fastapi_decorator = self.router.get(
+                    f"/form/{form_id}",
+                    description=description,
+                )
+            case "post":
+                fastapi_decorator = self.router.post(
+                    f"/form/{form_id}",
+                    description=description,
+                )
+            case "put":
+                fastapi_decorator = self.router.put(
+                    f"/form/{form_id}",
+                    description=description,
+                )
+            case "delete":
+                fastapi_decorator = self.router.delete(
+                    f"/form/{form_id}",
+                    description=description,
+                )
+            case "patch":
+                fastapi_decorator = self.router.patch(
+                    f"/form/{form_id}",
+                    description=description,
+                )
+            case "head":
+                fastapi_decorator = self.router.head(
+                    f"/form/{form_id}",
+                    description=description,
+                )
+
+        return self.__create_form_admin_decorator(
             item,
-            self.router.get(
-                f"/action/{kebab_name}", name=unique_name, description=description
-            ),
+            fastapi_decorator,
         )
 
-    def action_put(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hiden: bool = False,
-    ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+    # def area_chart(
+    #     self,
+    #     name: str,
+    #     *,
+    #     description: str | None = None,
+    # ):
+    #     area_chart_id = utils.get_id(name)
 
-        item = types.Action(
-            function_name=unique_name,
-            method="put",
-            name=name,
-            description=description,
-            is_hidden=is_hiden,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.put(
-                f"/action/{kebab_name}", name=unique_name, description=description
-            ),
-        )
+    #     item: spec.AreaChart = {
+    #         "type": "area-chart",
+    #         "id": area_chart_id,
+    #         "name": name,
+    #         "description": description,
+    #         "method": "get",
+    #         "query": None,
+    #         "body": None,
+    #         "form": None,
+    #     }
+    #     self.components.append(item)
 
-    def action_patch(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hiden: bool = False,
-    ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
-
-        item = types.Action(
-            function_name=unique_name,
-            method="patch",
-            name=name,
-            description=description,
-            is_hidden=is_hiden,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.patch(
-                f"/action/{kebab_name}", name=unique_name, description=description
-            ),
-        )
-
-    def action_delete(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hiden: bool = False,
-    ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
-
-        item = types.Action(
-            function_name=unique_name,
-            method="delete",
-            name=name,
-            description=description,
-            is_hidden=is_hiden,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.delete(
-                f"/action/{kebab_name}", name=unique_name, description=description
-            ),
-        )
-
-    def form_post(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hiden: bool = False,
-    ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
-
-        item = types.Form(
-            function_name=unique_name,
-            method="post",
-            name=name,
-            description=description,
-            is_hiden=is_hiden,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.post(
-                f"/form/{kebab_name}", name=unique_name, description=description
-            ),
-        )
-
-    def form_put(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hiden: bool = False,
-    ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
-
-        item = types.Form(
-            function_name=unique_name,
-            method="put",
-            name=name,
-            description=description,
-            is_hiden=is_hiden,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.put(
-                f"/form/{kebab_name}", name=unique_name, description=description
-            ),
-        )
-
-    def form_patch(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hiden: bool = False,
-    ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
-
-        item = types.Form(
-            function_name=unique_name,
-            method="patch",
-            name=name,
-            description=description,
-            is_hiden=is_hiden,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.patch(
-                f"/form/{kebab_name}", name=unique_name, description=description
-            ),
-        )
-
-    def form_delete(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-        is_hiden: bool = False,
-    ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
-
-        item = types.Form(
-            function_name=unique_name,
-            method="delete",
-            name=name,
-            description=description,
-            is_hiden=is_hiden,
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.delete(
-                f"/form/{kebab_name}", name=unique_name, description=description
-            ),
-        )
-
-    def area_chart(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-    ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
-
-        item = types.AreaChart(
-            function_name=unique_name, method="get", name=name, description=description
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.get(
-                f"/area-chart/{kebab_name}", name=unique_name, description=description
-            ),
-        )
+    #     return self.__create_area_chart_admin_decorator(
+    #         item,
+    #         self.router.get(
+    #             f"/area-chart/{area_chart_id}",
+    #             description=description,
+    #         ),
+    #     )
 
     def bar_chart(
         self,
         name: str,
         *,
         description: str | None = None,
+        icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
+        caption: str | None = None,
+        caption_description: str | None = None,
+        caption_icon: spec.Icon | None = None,
+        config: dict[str, spec.BarChartConfigValue] | None = None,
+        data_key: str | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        bar_chart_id = utils.get_id(name)
 
-        item = types.BarChart(
-            function_name=unique_name, method="get", name=name, description=description
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
+        item: spec.BarChartComponent = {
+            "type": "bar-chart",
+            "id": bar_chart_id,
+            "name": name,
+            "description": description,
+            "config": config,
+            "data_key": data_key,
+            "icon": icon,
+            "color": color,
+            "caption": caption,
+            "caption_description": caption_description,
+            "caption_icon": caption_icon,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+
+        self.components.append(item)
+
+        return self.__create_bar_chart_admin_decorator(
             item,
             self.router.get(
-                f"/bar-chart/{kebab_name}", name=unique_name, description=description
+                f"/bar-chart/{bar_chart_id}",
+                description=description,
             ),
         )
 
-    def line_chart(
-        self,
-        name: str,
-        *,
-        description: str | None = None,
-    ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+    # def line_chart(
+    #     self,
+    #     name: str,
+    #     *,
+    #     description: str | None = None,
+    # ):
+    #     line_chart_id = utils.get_id(name)
 
-        item = types.LineChart(
-            function_name=unique_name, method="get", name=name, description=description
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
-            item,
-            self.router.get(
-                f"/line-chart/{kebab_name}", name=unique_name, description=description
-            ),
-        )
+    #     item: spec.LineChart = {
+    #         "type": "line-chart",
+    #         "id": line_chart_id,
+    #         "name": name,
+    #         "description": description,
+    #         "method": "get",
+    #         "query": None,
+    #         "body": None,
+    #         "form": None,
+    #     }
+
+    #     self.components.append(item)
+
+    #     return self.__create_line_chart_admin_decorator(
+    #         item,
+    #         self.router.get(
+    #             f"/line-chart/{line_chart_id}",
+    #             description=description,
+    #         ),
+    #     )
 
     def pie_chart(
         self,
         name: str,
         *,
         description: str | None = None,
+        config: dict[str, spec.PieChartConfigValue] | None = None,
+        icon: spec.Icon | None = None,
+        name_key: str | None = None,
+        value_key: str | None = None,
+        color: spec.Color | None = None,
+        caption: str | None = None,
+        caption_description: str | None = None,
+        caption_icon: spec.Icon | None = None,
     ):
-        kebab_name, unique_name = self.__get_kebab_and_unique_name(name)
+        pie_chart_id = utils.get_id(name)
 
-        item = types.PieChart(
-            function_name=unique_name, method="get", name=name, description=description
-        )
-        self.state.append(item)
-        return self._wrap_user_handler(
+        item: spec.PieChartComponent = {
+            "type": "pie-chart",
+            "id": pie_chart_id,
+            "name": name,
+            "description": description,
+            "config": config,
+            "icon": icon,
+            "name_key": name_key,
+            "value_key": value_key,
+            "color": color,
+            "caption": caption,
+            "caption_description": caption_description,
+            "caption_icon": caption_icon,
+            "method": "get",
+            "query": None,
+            "body": None,
+            "form": None,
+        }
+
+        self.components.append(item)
+
+        return self.__create_pie_chart_admin_decorator(
             item,
             self.router.get(
-                f"/pie-chart/{kebab_name}", name=unique_name, description=description
+                f"/pie-chart/{pie_chart_id}",
+                description=description,
             ),
         )
+
+    @property
+    def spec(self) -> spec.Page:
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "icon": self.icon,
+            "components": self.components,
+        }
+
+    def __create_stat_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[..., spec.Stat | Awaitable[spec.Stat]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
+    def __create_table_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[..., spec.Table | Awaitable[spec.Table]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            func.__openadmin_table_id__ = item["id"]  # type: ignore
+
+            return fastapi_decorator(func)
+
+        return _
+
+    def __create_action_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[..., spec.Action | Awaitable[spec.Action]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
+    def __create_form_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(func: Callable[..., spec.Form | Awaitable[spec.Form]]) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
+    def __create_pie_chart_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(
+            func: Callable[..., spec.PieChart | Awaitable[spec.PieChart]],
+        ) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
+    def __create_bar_chart_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(
+            func: Callable[..., spec.BarChart | Awaitable[spec.BarChart]],
+        ) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _
+
+    # def __create_line_chart_admin_decorator(
+    #     self,
+    #     item: spec.Component,
+    #     fastapi_decorator: Callable,
+    # ):
+    #     def _(
+    #         func: Callable[..., spec.LineChart | Awaitable[spec.LineChart]],
+    #     ) -> Callable:
+    #         item["query"] = utils.get_query_params(func)
+    #         item["body"] = utils.get_body_params(func)
+    #         item["form"] = utils.get_form_params(func)
+
+    #         return fastapi_decorator(func)
+
+    #     return _
+
+    # def __create_area_chart_admin_decorator(
+    #     self,
+    #     item: spec.Component,
+    #     fastapi_decorator: Callable,
+    # ):
+    #     def _(
+    #         func: Callable[..., spec.AreaChart | Awaitable[spec.AreaChart]],
+    #     ) -> Callable:
+    #         item["query"] = utils.get_query_params(func)
+    #         item["body"] = utils.get_body_params(func)
+    #         item["form"] = utils.get_form_params(func)
+
+    #         return fastapi_decorator(func)
+
+    #     return _
+
+    def __create_markdown_admin_decorator(
+        self,
+        item: spec.Component,
+        fastapi_decorator: Callable,
+    ):
+        def _(
+            func: Callable[..., spec.Markdown | Awaitable[spec.Markdown]],
+        ) -> Callable:
+            item["query"] = utils.get_query_params(func)
+            item["body"] = utils.get_body_params(func)
+            item["form"] = utils.get_form_params(func)
+
+            return fastapi_decorator(func)
+
+        return _

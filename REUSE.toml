@@ -12,6 +12,7 @@ path = [
     "LICENSE",
     "**/__pycache__",
     "docs/**",
+    "client/**",
 ]
 SPDX-FileCopyrightText = "OpenAdmin"
 SPDX-License-Identifier = "AGPL-3.0-or-later"

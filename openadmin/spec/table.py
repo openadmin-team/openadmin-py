@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: 2026 OpenAdmin
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+from collections.abc import Iterable
+from typing import Literal, NotRequired
+
+from typing_extensions import TypedDict
+
+from .colors import Color
+from .http_methods import HttpMethod
+from .icons import Icon
+from .json_schema import JsonSchema
+
+
+class TableComponent(TypedDict):
+    type: Literal["table"]
+    id: str
+    name: str
+    description: str | None
+    icon: Icon | None
+    color: Color | None
+    method: HttpMethod
+    is_hidden: bool
+    form: JsonSchema | None
+    body: JsonSchema | None
+    query: JsonSchema | None
+
+
+TableData = Iterable[
+    TypedDict(
+        "TableRow",
+        {
+            "__view__": str | int | float | bool | None,
+        },
+        extra_items=str | int | float | bool | None,
+    )
+    | object
+]
+
+
+class TableResponse(TypedDict):
+    data: TableData
+    icon: NotRequired[Icon]
+    color: NotRequired[Color]
+
+
+type Table = TableData | TableResponse
