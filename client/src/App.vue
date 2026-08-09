@@ -7,6 +7,6 @@ const { data, isLoading, error } = useOpenAdminSpec()
 <template>
 	<h1>Hello</h1>
 	{{ isLoading }}
-	{{ data }}
+	{{ JSON.stringify(data) }}
 	{{ error?.message }}
 </template>
