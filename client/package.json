@@ -15,7 +15,7 @@
 		"check:typing": "nuxt typecheck",
 		"check:unused": "knip",
 		"check:spell": "cspell --no-progress \"**/*.{ts,vue,md}\"",
-		"check": "bun run check:format && bun run check:lint && bun run check:typing && bun run check:unused && bun run check:spell",
+		"check": "bun run check:format && bun run check:lint && bun run check:typing && bun run check:unused && bun run check:spell"
   },
   "dependencies": {
     "@lucide/vue": "^1.30.0",
