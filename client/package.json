@@ -6,16 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview",
-    "fix:format": "biome format --write .",
-		"fix:lint": "biome lint --write --unsafe . && eslint --fix \"app/**/*.vue\"",
-		"fix": "bun run fix:format && bun run fix:lint",
-		"check:format": "biome format .",
-		"check:lint": "biome lint . && eslint \"app/**/*.vue\"",
-		"check:typing": "nuxt typecheck",
-		"check:unused": "knip",
-		"check:spell": "cspell --no-progress \"**/*.{ts,vue,md}\"",
-		"check": "bun run check:format && bun run check:lint && bun run check:typing && bun run check:unused && bun run check:spell"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@lucide/vue": "^1.30.0",
