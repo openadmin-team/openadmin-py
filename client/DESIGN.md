@@ -28,67 +28,67 @@ colors:
 
 typography:
   display-1:
-    fontFamily: NotionInter
+    fontFamily: Geist
     fontSize: 64px
     fontWeight: 700
     lineHeight: 1.0
     letterSpacing: -2.125px
   display-2:
-    fontFamily: NotionInter
+    fontFamily: Geist
     fontSize: 54px
     fontWeight: 700
     lineHeight: 1.04
     letterSpacing: -1.875px
   heading-1:
-    fontFamily: NotionInter
+    fontFamily: Geist
     fontSize: 40px
     fontWeight: 700
     lineHeight: 1.1
     letterSpacing: -1px
   heading-2:
-    fontFamily: NotionInter
+    fontFamily: Geist
     fontSize: 26px
     fontWeight: 700
     lineHeight: 1.23
     letterSpacing: -0.625px
   heading-3:
-    fontFamily: NotionInter
+    fontFamily: Geist
     fontSize: 22px
     fontWeight: 700
     lineHeight: 1.27
     letterSpacing: -0.25px
   title:
-    fontFamily: NotionInter
+    fontFamily: Geist
     fontSize: 20px
     fontWeight: 600
     lineHeight: 1.4
     letterSpacing: -0.125px
   body-md:
-    fontFamily: NotionInter
+    fontFamily: Geist
     fontSize: 16px
     fontWeight: 400
     lineHeight: 1.5
     letterSpacing: 0
   body-sm:
-    fontFamily: NotionInter
+    fontFamily: Geist
     fontSize: 15px
     fontWeight: 400
     lineHeight: 1.33
     letterSpacing: 0
   button:
-    fontFamily: NotionInter
+    fontFamily: Geist
     fontSize: 16px
     fontWeight: 500
     lineHeight: 1.5
     letterSpacing: 0
   caption:
-    fontFamily: NotionInter
+    fontFamily: Geist
     fontSize: 14px
     fontWeight: 400
     lineHeight: 1.43
     letterSpacing: 0
   eyebrow:
-    fontFamily: NotionInter
+    fontFamily: Geist
     fontSize: 12px
     fontWeight: 600
     lineHeight: 1.33
@@ -251,7 +251,7 @@ components:
 
 ## Overview
 
-Notion looks like a well-organized desk in good daylight. The dominant surface is not pure white but a warm, paper-soft off-white — `{colors.canvas-soft}` (#f6f5f4) — that takes the clinical edge off the screen and makes long pages feel like a document rather than an app. Type is set in `NotionInter` (a tuned Inter) in near-black `{colors.ink}` at large, tightly-tracked weights, so headlines read as confident statements with very little letter-spacing slack at display sizes (`{typography.display-1}` pulls −2.125px of tracking at 64px). The whole system whispers in greys and blacks, then says exactly one thing in colour: a single, dependable blue, `{colors.primary}` (#0075de), reserved almost entirely for the primary call-to-action and inline links.
+Notion looks like a well-organized desk in good daylight. The dominant surface is not pure white but a warm, paper-soft off-white — `{colors.canvas-soft}` (#f6f5f4) — that takes the clinical edge off the screen and makes long pages feel like a document rather than an app. Type is set in `Geist` (a tuned Inter) in near-black `{colors.ink}` at large, tightly-tracked weights, so headlines read as confident statements with very little letter-spacing slack at display sizes (`{typography.display-1}` pulls −2.125px of tracking at 64px). The whole system whispers in greys and blacks, then says exactly one thing in colour: a single, dependable blue, `{colors.primary}` (#0075de), reserved almost entirely for the primary call-to-action and inline links.
 
 Against that quiet chrome, Notion lets a **playful multi-colour sticker palette** carry all of the brand's personality — purple, pink, orange, teal, green and sky-blue appear as small illustrated blocks, app-icon stickers, and category dots scattered through the marketing pages. These colours never structure the layout or paint a CTA; they decorate. The discipline is deliberate: the interface stays monochrome-plus-blue so the content (and the cheerful illustrations) can breathe. The one exception to the bright daylight is the homepage hero, which inverts into a deep indigo "night" band (`{colors.secondary}`) with white type and glowing sticker constellations — a single dark island in an otherwise light document.
 
@@ -259,7 +259,7 @@ Surfaces are defined by hairlines and the faintest layered shadows rather than h
 
 **Key Characteristics:**
 - Warm paper-soft canvas `{colors.canvas-soft}` over pure white, never clinical
-- Near-black `{colors.ink}` `NotionInter` type with tight negative tracking at display sizes (`{typography.display-1}`)
+- Near-black `{colors.ink}` `Geist` type with tight negative tracking at display sizes (`{typography.display-1}`)
 - Exactly one structural accent — Notion blue `{colors.primary}` — reserved for CTAs and links
 - A decorative-only multi-colour sticker palette (`{colors.accent-purple}`, `{colors.accent-pink}`, `{colors.accent-orange}`, `{colors.accent-teal}`, `{colors.accent-green}`, `{colors.accent-sky}`) that adds personality without ever painting structure
 - Pill-shaped marketing CTAs (`{rounded.full}`) contrasted with 8px utility buttons (`{rounded.md}`)
@@ -301,7 +301,7 @@ Notion's marketing surfaces do not expose a dedicated error/success palette in t
 ## Typography
 
 ### Font Family
-The entire system is set in **`NotionInter`** — Notion's tuned cut of Inter — with a fallback stack of `Inter, -apple-system, system-ui, "Segoe UI", Helvetica, Arial`. A single family carries everything from 64px display headlines to 12px eyebrows; there is no serif, no monospace display face. OpenType `lnum` (lining numerals) and `locl` features are enabled on body and heading roles.
+The entire system is set in **`Geist`** — Notion's tuned cut of Inter — with a fallback stack of `Inter, -apple-system, system-ui, "Segoe UI", Helvetica, Arial`. A single family carries everything from 64px display headlines to 12px eyebrows; there is no serif, no monospace display face. OpenType `lnum` (lining numerals) and `locl` features are enabled on body and heading roles.
 
 ### Hierarchy
 
@@ -323,7 +323,7 @@ The entire system is set in **`NotionInter`** — Notion's tuned cut of Inter �
 Notion's type voice is **tight, heavy, and quiet-confident**. Headlines lean on weight 700 and aggressive negative tracking (more negative the larger the size) so display copy feels set, not stretched. Body copy stays at a comfortable 1.5 line-height for document readability. The contrast between a heavy 700 headline and a calm 400 body is the primary expressive lever — there is no decorative typography, only a clear hierarchy.
 
 ### Note on Font Substitutes
-`NotionInter` is a proprietary tuning of the open-source **Inter** family — substitute Inter directly. To approximate Notion's display tightness, apply the negative letter-spacing values in the table above explicitly (Inter at default tracking will read looser than `NotionInter`).
+`Geist` is a proprietary tuning of the open-source **Inter** family — substitute Inter directly. To approximate Notion's display tightness, apply the negative letter-spacing values in the table above explicitly (Inter at default tracking will read looser than `Geist`).
 
 ## Layout
 
