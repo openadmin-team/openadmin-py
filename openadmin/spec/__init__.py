@@ -31,7 +31,7 @@ from .pie_chart import (
 from .section import Section
 from .spec import Spec
 from .stat import Stat, StatComponent, StatResponse, StatValue
-from .table import Table, TableComponent, TableData, TableResponse
+from .table import ColumnConfigValue, Table, TableComponent, TableData, TableResponse
 
 __all__ = [
     "COLORS",
@@ -46,6 +46,7 @@ __all__ = [
     "BarChartData",
     "BarChartResponce",
     "Color",
+    "ColumnConfigValue",
     "Component",
     "Error",
     "FieldConfig",

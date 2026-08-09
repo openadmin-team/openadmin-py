@@ -11,4 +11,8 @@ export default defineConfig({
 			"@": path.resolve(import.meta.dirname, "./src"),
 		},
 	},
+	build: {
+		outDir: path.resolve(import.meta.dirname, "../openadmin/__client__"),
+		emptyOutDir: true,
+	},
 })
