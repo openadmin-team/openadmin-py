@@ -7,11 +7,9 @@
 		"dev": "vite",
 		"build": "vue-tsc -b && vite build",
 		"preview": "vite preview",
-
 		"fix:format": "biome format --write .",
 		"fix:lint": "biome lint --write --unsafe .",
 		"fix": "bun run fix:format && bun run fix:lint",
-
 		"check:format": "biome format .",
 		"check:lint": "biome lint .",
 		"check": "bun run check:format && bun run check:lint"
@@ -20,12 +18,14 @@
 		"@lucide/vue": "^1.30.0",
 		"@tailwindcss/vite": "^4.3.3",
 		"@tanstack/vue-query": "^5.101.4",
+		"@vueuse/core": "^14.4.0",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"reka-ui": "^2.10.1",
 		"tailwind-merge": "^3.6.0",
 		"tailwindcss": "^4.3.3",
-		"vue": "^3.5.40"
+		"vue": "^3.5.40",
+		"vue-sonner": "^2.0.9"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.7",
