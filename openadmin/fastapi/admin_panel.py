@@ -3,11 +3,15 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException
 from openadmin import spec
 
 from . import exc_handler, utils
 from .admin_page import AdminPage
+
+_FRONTEND_DIR = Path(__file__).parent.parent / "__client__"
 
 
 class AdminPanel:
@@ -70,4 +74,4 @@ class AdminPanel:
             description="Returns the OpenAdmin specification for this admin panel.",
         )(lambda: self.spec)
 
-        app.frontend("/", directory="client/dist", fallback="index.html")
+        app.frontend("/", directory=str(_FRONTEND_DIR), fallback="index.html")

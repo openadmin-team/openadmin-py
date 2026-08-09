@@ -25,6 +25,9 @@ jobs:
       - uses: astral-sh/setup-uv@v4
         with:
           enable-cache: true
+      - uses: oven-sh/setup-bun@v2
+      - name: Build frontend
+        run: cd client && bun install --frozen-lockfile && bun run build
       - name: Override package name for dev
         if: github.ref_name == 'dev'
         run: sed -i 's/^name = "openadmin"$/name = "openadmin-dev"/' pyproject.toml
