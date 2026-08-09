@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 OpenAdmin
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 import type { VariantProps } from "class-variance-authority"
 import type { HTMLAttributes } from "vue"
 import { cva } from "class-variance-authority"

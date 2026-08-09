@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 OpenAdmin
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export { default as Table } from "./Table.vue"
 export { default as TableBody } from "./TableBody.vue"
 export { default as TableCaption } from "./TableCaption.vue"

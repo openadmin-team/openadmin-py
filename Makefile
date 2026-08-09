@@ -3,6 +3,7 @@ fix/license:
 	@ uv run reuse annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised openadmin/
 	@ uv run reuse annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised tests/
 	@ uv run reuse annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised examples/
+	@ uv run reuse annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised $$(find client/src -mindepth 1 -maxdepth 1 ! -name assets)
 
 fix/format:
 	@ cd client && bun run fix:format

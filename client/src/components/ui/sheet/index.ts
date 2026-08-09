@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 OpenAdmin
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export { default as Sheet } from "./Sheet.vue"
 export { default as SheetClose } from "./SheetClose.vue"
 export { default as SheetContent } from "./SheetContent.vue"
