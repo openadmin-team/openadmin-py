@@ -82,8 +82,7 @@ async def get_all_authors(
             if author.bio and len(author.bio) > 80
             else author.bio,
             "book_count": count,
-
-            '__view__': f"{author.first_name} {author.last_name}"
+            "__view__": f"{author.first_name} {author.last_name}",
         }
         for author, count in result.all()
     ]

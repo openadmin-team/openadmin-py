@@ -2,7 +2,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from typing import Literal, NotRequired, TypedDict, Iterable
+from collections.abc import Iterable
+from typing import Literal, NotRequired
+
+from typing_extensions import TypedDict
 
 from .colors import Color
 from .http_methods import HttpMethod
@@ -28,10 +31,11 @@ TableData = Iterable[
     TypedDict(
         "TableRow",
         {
-            '__view__': str | int | float | bool | None,
+            "__view__": str | int | float | bool | None,
         },
-        extra_items=str | int | float | bool | None
-    ) | object
+        extra_items=str | int | float | bool | None,
+    )
+    | object
 ]
 
 

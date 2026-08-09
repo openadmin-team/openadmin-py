@@ -70,4 +70,4 @@ class AdminPanel:
             description="Returns the OpenAdmin specification for this admin panel.",
         )(lambda: self.spec)
 
-        app.frontend('/', directory='client/dist', fallback='index.html')
+        app.frontend("/", directory="client/dist", fallback="index.html")
