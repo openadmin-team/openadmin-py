@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from collections.abc import Iterable
-from typing import Literal, NotRequired
+from typing import Any, Literal, NotRequired
 
 from typing_extensions import TypedDict
 
@@ -20,6 +20,17 @@ class ColumnConfigValue(TypedDict):
     label: NotRequired[str]
     icon: NotRequired[Icon]
     color: NotRequired[Color]
+
+
+class ActionConfig(TypedDict):
+    action: str
+    label: NotRequired[str]
+    icon: NotRequired[Icon]
+    color: NotRequired[Color]
+
+    query: dict[str, Any]
+    body: dict[str, Any]
+    form: dict[str, Any]
 
 
 class TableComponent(TypedDict):
@@ -42,6 +53,7 @@ TableData = Iterable[
         "TableRow",
         {
             "__view__": str | int | float | bool | None,
+            "__actions__": list[ActionConfig],
         },
         extra_items=str | int | float | bool | None,
     )

@@ -38,6 +38,14 @@ async def get_authors_with_bio(session: AsyncSessionDep):
     return result.scalar_one()
 
 
+@page.action(
+    "Delete Author",
+    is_hidden=True,
+)
+async def delete_author(id: str) -> spec.Action:
+    return {"toast": f"User with id {id} deleted"}
+
+
 @page.stat(
     "Avg Books per Author",
     icon="library",
@@ -83,6 +91,15 @@ async def get_all_authors(
             else author.bio,
             "book_count": count,
             "__view__": f"{author.first_name} {author.last_name}",
+            "__actions__": [
+                {
+                    "label": "Delete this user",
+                    "action": delete_author,
+                    "query": {
+                        "id": author.id,
+                    },
+                }
+            ],
         }
         for author, count in result.all()
     ]
