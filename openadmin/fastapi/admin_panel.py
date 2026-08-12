@@ -82,11 +82,12 @@ class AdminPanel:
             description="Returns the OpenAdmin specification for this admin panel.",
         )(lambda: self.spec)
 
-        app.post(
-            "/auth/login",
-            status_code=status.HTTP_204_NO_CONTENT,
-            summary="Log in",
-            description="Log in user route",
-        )(self.auth.login_func)
+        if self.auth:
+            app.post(
+                "/auth/login",
+                status_code=status.HTTP_204_NO_CONTENT,
+                summary="Log in",
+                description="Log in user route",
+            )(self.auth.login_func)
 
         app.frontend("/", directory=str(_FRONTEND_DIR), fallback="index.html")

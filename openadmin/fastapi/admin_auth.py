@@ -15,9 +15,9 @@ class AdminAuth:
         self.authenticate_func: Callable[[Request], None | Awaitable[None]] = (
             self.__create_default_authenticate()
         )
-        self.login_func: (
-            Callable[[Request, LoginReq], None | Awaitable[None]]
-        ) = self.__create_default_login()
+        self.login_func: Callable[[Request, LoginReq], None | Awaitable[None]] = (
+            self.__create_default_login()
+        )
 
     def login(self):
         return self.__create_login_decorator()
