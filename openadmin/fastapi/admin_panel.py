@@ -35,7 +35,7 @@ class AdminPanel:
                 Exception: exc_handler.app_exception_handler,
             }
         )
-        self.__mount_spec_route(self.app)
+        self.__mount_internal_routes(self.app)
 
     @property
     def spec(self) -> spec.Spec:
@@ -74,7 +74,7 @@ class AdminPanel:
                 tags=[name],
             )
 
-    def __mount_spec_route(self, app: FastAPI) -> None:
+    def __mount_internal_routes(self, app: FastAPI) -> None:
         app.get(
             "/openadmin.json",
             response_model=spec.Spec,
