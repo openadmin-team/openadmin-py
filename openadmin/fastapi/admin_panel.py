@@ -9,17 +9,25 @@ from fastapi import FastAPI, HTTPException
 from openadmin import spec
 
 from . import exc_handler, utils
+from .admin_auth import AdminAuth
 from .admin_page import AdminPage
 
 _FRONTEND_DIR = Path(__file__).parent.parent / "__client__"
 
 
 class AdminPanel:
-    def __init__(self, name: str, *, description: str | None = None) -> None:
+    def __init__(
+        self,
+        name: str,
+        *,
+        description: str | None = None,
+        auth: AdminAuth | None = None,
+    ) -> None:
         self.version = "1.0.0"
         self.name = name
         self.description = description
         self.sections: list[spec.Section] = []
+        self.auth = auth
 
         self.app = FastAPI(
             exception_handlers={
