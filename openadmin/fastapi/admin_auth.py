@@ -12,12 +12,12 @@ from .req import LoginReq
 class AdminAuth:
     def __init__(self) -> None:
         self.router = APIRouter()
-        self.authenticate_func: Callable[[Request], None | Awaitable[None]] | None = (
-            None
+        self.authenticate_func: Callable[[Request], None | Awaitable[None]] = (
+            self.__create_default_authenticate()
         )
         self.login_func: (
-            Callable[[Request, LoginReq], None | Awaitable[None]] | None
-        ) = None
+            Callable[[Request, LoginReq], None | Awaitable[None]]
+        ) = self.__create_default_login()
 
     def login(self):
         return self.__create_login_decorator()
@@ -50,3 +50,11 @@ class AdminAuth:
             return func
 
         return _
+
+    def __create_default_login(
+        self,
+    ) -> Callable[[Request, LoginReq], None | Awaitable[None]]: ...
+
+    def __create_default_authenticate(
+        self,
+    ) -> Callable[[Request], None | Awaitable[None]]: ...

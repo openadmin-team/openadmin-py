@@ -83,10 +83,10 @@ class AdminPanel:
         )(lambda: self.spec)
 
         app.post(
-            '/auth/login',
+            "/auth/login",
             status_code=status.HTTP_204_NO_CONTENT,
             summary="Log in",
-            description="Log in user route"
+            description="Log in user route",
         )(self.auth.login_func)
 
         app.frontend("/", directory=str(_FRONTEND_DIR), fallback="index.html")
