@@ -5,7 +5,7 @@
 
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, status
 from openadmin import spec
 
 from . import exc_handler, utils
@@ -81,5 +81,12 @@ class AdminPanel:
             summary="Get the OpenAdmin specification",
             description="Returns the OpenAdmin specification for this admin panel.",
         )(lambda: self.spec)
+
+        app.post(
+            '/auth/login',
+            status_code=status.HTTP_204_NO_CONTENT,
+            summary="Log in",
+            description="Log in user route"
+        )(self.auth.login_func)
 
         app.frontend("/", directory=str(_FRONTEND_DIR), fallback="index.html")

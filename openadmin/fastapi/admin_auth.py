@@ -15,26 +15,26 @@ class AdminAuth:
         self.authenticate_func: Callable[[Request], None | Awaitable[None]] | None = (
             None
         )
+        self.login_func: (
+            Callable[[Request, LoginReq], None | Awaitable[None]] | None
+        ) = None
 
     def login(self):
-        return self.__create_login_decorator(
-            self.router.post(
-                "/login",
-            )
-        )
+        return self.__create_login_decorator()
 
     def authenticate(self):
         return self.__create_authenticate_decorator()
 
     def __create_login_decorator(
         self,
-        fastapi_decorator: Callable,
     ):
         def _(
             func: Callable[[Request, LoginReq], None],
         ) -> Callable:
 
-            return fastapi_decorator(func)
+            self.login_func = func
+
+            return func
 
         return _
 
