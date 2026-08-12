@@ -9,6 +9,7 @@ from openadmin.fastapi import AdminPanel
 
 from .admin import (
     analytics,
+    auth,
     authors,
     books,
     control_panel,
@@ -34,7 +35,9 @@ app.add_middleware(
 )
 
 admin_panel = AdminPanel(
-    "Book Library Admin", description="Manage and explore the book catalog"
+    "Book Library Admin",
+    description="Manage and explore the book catalog",
+    auth=auth.auth,
 )
 
 admin_panel.section(
