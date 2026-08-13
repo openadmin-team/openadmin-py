@@ -17,6 +17,7 @@
 	"dependencies": {
 		"@lucide/vue": "^1.30.0",
 		"@tailwindcss/vite": "^4.3.3",
+		"@tanstack/vue-form": "^1.33.5",
 		"@tanstack/vue-query": "^5.101.4",
 		"@unovis/vue": "^1.6.7",
 		"@vueuse/core": "^14.4.0",

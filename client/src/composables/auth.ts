@@ -3,14 +3,33 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { errorSchema } from "@/schemas/error"
+import { type Login, loginSchema } from "@/schemas/login"
 import { useMutation, useQueryClient } from "@tanstack/vue-query"
 import { toast } from "vue-sonner"
+import { useForm } from "@tanstack/vue-form"
 
-export const useLogin = () => {
+export const useLoginForm = () => {
+	const { mutate } = useLogin()
+
+	return useForm({
+		defaultValues: {
+			username: "",
+			password: "",
+		} satisfies Login,
+		validators: {
+			onChange: loginSchema,
+		},
+		onSubmit: async ({ value }) => {
+			mutate(value)
+		},
+	})
+}
+
+const useLogin = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async (body) => {
+		mutationFn: async (body: Login) => {
 			const response = await fetch("auth/login", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
