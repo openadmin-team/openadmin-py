@@ -5,7 +5,7 @@
 
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import APIRouter, FastAPI, HTTPException, status
 from openadmin import spec
 
 from . import deps, exc_handler, utils
@@ -28,14 +28,7 @@ class AdminPanel:
         self.description = description
         self.sections: list[spec.Section] = []
         self.auth = auth
-
-        self.app = FastAPI(
-            exception_handlers={
-                HTTPException: exc_handler.http_exception_handler,
-                Exception: exc_handler.app_exception_handler,
-            },
-        )
-        self.__mount_internal_routes(self.app)
+        self.app = self.__create_app()
 
     @property
     def spec(self) -> spec.Spec:
@@ -91,3 +84,43 @@ class AdminPanel:
             )(self.auth.login_func)
 
         app.frontend("/", directory=str(_FRONTEND_DIR), fallback="index.html")
+
+    def __create_app(self) -> FastAPI:
+        app = FastAPI(
+            exception_handlers={
+                HTTPException: exc_handler.http_exception_handler,
+                Exception: exc_handler.app_exception_handler,
+            },
+        )
+
+        frontend_router = APIRouter()
+        frontend_router.frontend(
+            "/", directory=str(_FRONTEND_DIR), fallback="index.html"
+        )
+
+        api_router = APIRouter(
+            dependencies=[deps.create_authenticate_dep(self.auth.authenticate_func)]
+            if self.auth
+            else None
+        )
+
+        auth_router = APIRouter()
+        if self.auth:
+            auth_router.post(
+                "/login",
+                status_code=status.HTTP_204_NO_CONTENT,
+                summary="Log in",
+                description="Log in user route",
+            )(self.auth.login_func)
+
+        app.include_router(
+            prefix="/auth",
+            router=auth_router,
+        )
+        app.include_router(
+            prefix="/api",
+            router=api_router,
+        )
+        app.include_router(frontend_router)
+
+        return app
