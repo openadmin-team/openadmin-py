@@ -10,13 +10,14 @@ auth = AdminAuth()
 
 
 @auth.login()
-def login(req: Request, login: LoginReq) -> None:
-    req.session.update({"token": "a"})
+def login(req: Request, login_req: LoginReq) -> None:
+    if login_req.username == 'admin' and login_req.password == 'admin':
+        req.session.update({"token": "admin-token"})
 
 
 @auth.authenticate()
 def authenticate(req: Request) -> None:
     token = req.session.get("token")
 
-    if not token == "a":
+    if not token == "admin-token":
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Unauthorized")
