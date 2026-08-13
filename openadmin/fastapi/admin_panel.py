@@ -28,7 +28,22 @@ class AdminPanel:
         self.description = description
         self.sections: list[spec.Section] = []
         self.auth = auth
-        self.app = self.__create_app()
+
+        self.app = FastAPI(
+            exception_handlers={
+                HTTPException: exc_handler.http_exception_handler,
+                Exception: exc_handler.app_exception_handler,
+            },
+        )
+        self.frontend_router = APIRouter()
+        self.api_router = APIRouter(
+            dependencies=[deps.create_authenticate_dep(self.auth.authenticate_func)]
+            if self.auth
+            else None
+        )
+        self.auth_router = APIRouter()
+
+        self.__mount_initial_routes()
 
     @property
     def spec(self) -> spec.Spec:
@@ -67,60 +82,27 @@ class AdminPanel:
                 tags=[name],
             )
 
-    def __mount_internal_routes(self, app: FastAPI) -> None:
-        app.get(
-            "/openadmin.json",
-            response_model=spec.Spec,
-            summary="Get the OpenAdmin specification",
-            description="Returns the OpenAdmin specification for this admin panel.",
-        )(lambda: self.spec)
-
-        if self.auth:
-            app.post(
-                "/auth/login",
-                status_code=status.HTTP_204_NO_CONTENT,
-                summary="Log in",
-                description="Log in user route",
-            )(self.auth.login_func)
-
-        app.frontend("/", directory=str(_FRONTEND_DIR), fallback="index.html")
-
-    def __create_app(self) -> FastAPI:
-        app = FastAPI(
-            exception_handlers={
-                HTTPException: exc_handler.http_exception_handler,
-                Exception: exc_handler.app_exception_handler,
-            },
-        )
-
-        frontend_router = APIRouter()
-        frontend_router.frontend(
+    def __mount_initial_routes(self):
+        self.frontend_router.frontend(
             "/", directory=str(_FRONTEND_DIR), fallback="index.html"
         )
 
-        api_router = APIRouter(
-            dependencies=[deps.create_authenticate_dep(self.auth.authenticate_func)]
-            if self.auth
-            else None
-        )
-
-        auth_router = APIRouter()
         if self.auth:
-            auth_router.post(
+            self.auth_router.post(
                 "/login",
                 status_code=status.HTTP_204_NO_CONTENT,
                 summary="Log in",
                 description="Log in user route",
             )(self.auth.login_func)
 
-        app.include_router(
+        self.app.include_router(
             prefix="/auth",
-            router=auth_router,
+            router=self.auth_router,
         )
-        app.include_router(
+        self.app.include_router(
             prefix="/api",
-            router=api_router,
+            router=self.api_router,
         )
-        app.include_router(frontend_router)
-
-        return app
+        self.app.include_router(
+            self.frontend_router,
+        )
