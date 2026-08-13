@@ -25,13 +25,8 @@ def get_search_query(
 
 def create_authenticate_dep(
     auth_func: Callable[[Request], None | Awaitable[None]],
-    skip: list[str] | None = None,
 ):
     def _(req: Request):
-
-        if req.url.path in (skip or []):
-            return
-
         auth_func(req)
 
     return Depends(_)
