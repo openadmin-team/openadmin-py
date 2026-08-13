@@ -4,7 +4,7 @@
 
 import { queryOptions, useQuery } from "@tanstack/vue-query"
 import { computed } from "vue"
-import type { Error as ApiError } from "@/schemas/error"
+import type { ApiError } from "@/schemas/error"
 import { errorSchema } from "@/schemas/error"
 import type { Spec } from "@/schemas/spec"
 import { specSchema } from "@/schemas/spec"
