@@ -13,7 +13,7 @@ export const useOpenAdminSpec = () => {
 	return useQuery<Spec, ApiError>({
 		queryKey: ["openadmin-spec"],
 		queryFn: async () => {
-			const response = await fetch("openadmin.json")
+			const response = await fetch("api/openadmin.json")
 			const data = await response.json()
 
 			if (!response.ok) {
