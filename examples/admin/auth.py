@@ -13,6 +13,8 @@ auth = AdminAuth()
 def login(req: Request, login_req: LoginReq) -> None:
     if login_req.username == "admin" and login_req.password == "admin":
         req.session.update({"token": "admin-token"})
+    else:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid username or password")
 
 
 @auth.authenticate()
