@@ -83,6 +83,13 @@ class AdminPanel:
             )
 
     def __mount_initial_routes(self):
+        self.api_router.get(
+            "/openadmin.json",
+            response_model=spec.Spec,
+            summary="Get the OpenAdmin specification",
+            description="Returns the OpenAdmin specification for this admin panel.",
+        )(lambda: self.spec)
+
         self.frontend_router.frontend(
             "/", directory=str(_FRONTEND_DIR), fallback="index.html"
         )
