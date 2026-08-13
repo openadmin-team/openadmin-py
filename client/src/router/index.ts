@@ -4,7 +4,6 @@
 
 import { createRouter, createWebHashHistory } from "vue-router"
 import { useOpenAdminSpecOptions } from "@/composables/openadmin-spec"
-import { type ApiError } from "@/schemas/error"
 import { useQueryClient } from "@tanstack/vue-query"
 
 export const router = createRouter({
@@ -27,7 +26,7 @@ export const router = createRouter({
 router.beforeEach(async (to) => {
 	if (to.meta.public) return true
 
-    const queryClient = useQueryClient()
+	const queryClient = useQueryClient()
 
 	try {
 		await queryClient.ensureQueryData(useOpenAdminSpecOptions)

@@ -101,6 +101,15 @@ class AdminPanel:
                 summary="Log in",
                 description="Log in user route",
             )(self.auth.login_func)
+            self.auth_router.post(
+                "/logout",
+                status_code=status.HTTP_204_NO_CONTENT,
+                summary="Log out",
+                description="Log out user route",
+                dependencies=[
+                    deps.create_authenticate_dep(self.auth.authenticate_func)
+                ],
+            )(self.auth.logout_func)
 
         self.app.include_router(
             prefix="/auth",

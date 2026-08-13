@@ -26,6 +26,7 @@ def authenticate(req: Request) -> None:
     if not token == "admin-token":
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Unauthorized")
 
+
 @auth.logout()
 def logout(req: Request) -> None:
     req.session.clear()
