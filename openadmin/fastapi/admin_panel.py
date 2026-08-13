@@ -34,13 +34,6 @@ class AdminPanel:
                 HTTPException: exc_handler.http_exception_handler,
                 Exception: exc_handler.app_exception_handler,
             },
-            dependencies=[
-                deps.create_authenticate_dep(
-                    self.auth.authenticate_func,
-                ),
-            ]
-            if self.auth
-            else None,
         )
         self.__mount_internal_routes(self.app)
 
