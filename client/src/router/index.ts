@@ -3,9 +3,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { createRouter, createWebHashHistory } from "vue-router"
-import { openAdminSpecQueryOptions } from "@/composables/openadmin-spec"
-import { queryClient } from "@/lib/query-client"
-import { ApiError } from "@/schemas/error"
+import { useOpenAdminSpecOptions } from "@/composables/openadmin-spec"
+import { type ApiError } from "@/schemas/error"
+import { useQueryClient } from "@tanstack/vue-query"
 
 export const router = createRouter({
 	history: createWebHashHistory(),
@@ -27,8 +27,10 @@ export const router = createRouter({
 router.beforeEach(async (to) => {
 	if (to.meta.public) return true
 
+    const queryClient = useQueryClient()
+
 	try {
-		await queryClient.ensureQueryData(openAdminSpecQueryOptions)
+		await queryClient.ensureQueryData(useOpenAdminSpecOptions)
 		return true
 	} catch (error) {
 		if (error instanceof ApiError && error.status === 401) {
