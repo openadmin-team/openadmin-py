@@ -8,4 +8,12 @@ export const errorSchema = z.object({
 	message: z.string(),
 })
 
-export type Error = z.infer<typeof errorSchema>
+export class ApiError extends Error {
+	status: number
+
+	constructor(status: number, message: string) {
+		super(message)
+		this.name = "ApiError"
+		this.status = status
+	}
+}

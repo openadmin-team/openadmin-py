@@ -6,5 +6,7 @@ import { createApp } from "vue"
 import { VueQueryPlugin } from "@tanstack/vue-query"
 import "./style.css"
 import App from "./App.vue"
+import { queryClient } from "./lib/query-client"
+import { router } from "./router"
 
-createApp(App).use(VueQueryPlugin).mount("#app")
+createApp(App).use(router).use(VueQueryPlugin, { queryClient }).mount("#app")
