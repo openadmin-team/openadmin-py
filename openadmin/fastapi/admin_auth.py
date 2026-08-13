@@ -18,12 +18,18 @@ class AdminAuth:
         self.login_func: Callable[[Request, LoginReq], None | Awaitable[None]] = (
             self.__create_default_login()
         )
+        self.logout_func: Callable[[Request], None | Awaitable[None]] = (
+            self.__create_default_logout()
+        )
 
     def login(self):
         return self.__create_login_decorator()
 
     def authenticate(self):
         return self.__create_authenticate_decorator()
+
+    def logout(self):
+        return self.__create_logout_decorator()
 
     def __create_login_decorator(
         self,
@@ -51,10 +57,27 @@ class AdminAuth:
 
         return _
 
+    def __create_logout_decorator(
+        self,
+    ):
+        def _(
+            func: Callable[[Request], None | Awaitable[None]],
+        ) -> Callable:
+
+            self.logout_func = func
+
+            return func
+
+        return _
+
     def __create_default_login(
         self,
     ) -> Callable[[Request, LoginReq], None | Awaitable[None]]: ...
 
     def __create_default_authenticate(
+        self,
+    ) -> Callable[[Request], None | Awaitable[None]]: ...
+
+    def __create_default_logout(
         self,
     ) -> Callable[[Request], None | Awaitable[None]]: ...
