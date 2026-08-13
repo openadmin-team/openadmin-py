@@ -2,27 +2,29 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { useQuery } from "@tanstack/vue-query"
+import { queryOptions, useQuery } from "@tanstack/vue-query"
 import { computed } from "vue"
 import type { Error as ApiError } from "@/schemas/error"
 import { errorSchema } from "@/schemas/error"
 import type { Spec } from "@/schemas/spec"
 import { specSchema } from "@/schemas/spec"
 
+export const useOpenAdminSpecOptions = queryOptions<Spec, ApiError>({
+	queryKey: ["openadmin-spec"],
+	queryFn: async () => {
+		const response = await fetch("api/openadmin.json")
+		const data = await response.json()
+
+		if (!response.ok) {
+			throw errorSchema.parse(data)
+		}
+
+		return specSchema.parse(data)
+	},
+})
+
 export const useOpenAdminSpec = () => {
-	return useQuery<Spec, ApiError>({
-		queryKey: ["openadmin-spec"],
-		queryFn: async () => {
-			const response = await fetch("api/openadmin.json")
-			const data = await response.json()
-
-			if (!response.ok) {
-				throw errorSchema.parse(data)
-			}
-
-			return specSchema.parse(data)
-		},
-	})
+	return useQuery<Spec, ApiError>(useOpenAdminSpecOptions)
 }
 
 export const useOpenAdminPageSpec = ({ id }: { id: string }) => {
