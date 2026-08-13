@@ -8,7 +8,7 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException, status
 from openadmin import spec
 
-from . import exc_handler, utils
+from . import deps, exc_handler, utils
 from .admin_auth import AdminAuth
 from .admin_page import AdminPage
 
@@ -33,7 +33,14 @@ class AdminPanel:
             exception_handlers={
                 HTTPException: exc_handler.http_exception_handler,
                 Exception: exc_handler.app_exception_handler,
-            }
+            },
+            dependencies=[
+                deps.create_authenticate_dep(
+                    self.auth.authenticate_func,
+                ),
+            ]
+            if self.auth
+            else None,
         )
         self.__mount_internal_routes(self.app)
 
