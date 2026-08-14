@@ -8,8 +8,8 @@ import { useMutation, useQueryClient } from "@tanstack/vue-query"
 import { toast } from "vue-sonner"
 import { useForm } from "@tanstack/vue-form"
 
-export const useLoginForm = () => {
-	const { mutate } = useLogin()
+export const useLoginForm = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
+	const { mutate } = useLogin({ onSuccess })
 
 	return useForm({
 		defaultValues: {
@@ -25,7 +25,7 @@ export const useLoginForm = () => {
 	})
 }
 
-const useLogin = () => {
+const useLogin = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
@@ -43,6 +43,9 @@ const useLogin = () => {
 				throw error
 			}
 		},
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ["openadmin-spec"] }),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["openadmin-spec"] })
+			onSuccess?.()
+		},
 	})
 }
