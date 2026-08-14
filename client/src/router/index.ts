@@ -5,6 +5,7 @@
 import { createRouter, createWebHashHistory } from "vue-router"
 import { useOpenAdminSpecOptions } from "@/composables/openadmin-spec"
 import { useQueryClient } from "@tanstack/vue-query"
+import { statusCodes } from "@/lib/status-codes"
 
 export const router = createRouter({
 	history: createWebHashHistory(),
@@ -31,8 +32,8 @@ router.beforeEach(async (to) => {
 	try {
 		await queryClient.ensureQueryData(useOpenAdminSpecOptions)
 		return true
-	} catch (error) {
-		if (error instanceof ApiError && error.status === 401) {
+	} catch (error: any) {
+		if (error.status === statusCodes.UNAUTHORIZED) {
 			return { name: "login", query: { redirect: to.fullPath } }
 		}
 		throw error
