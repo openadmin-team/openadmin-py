@@ -4,19 +4,20 @@
 
 import { queryOptions, useQuery } from "@tanstack/vue-query"
 import { computed } from "vue"
-import type { ApiError } from "@/schemas/error"
+import type { AppError } from "@/types/errors"
 import { errorSchema } from "@/schemas/error"
 import type { Spec } from "@/schemas/spec"
 import { specSchema } from "@/schemas/spec"
 
-export const useOpenAdminSpecOptions = queryOptions<Spec, ApiError>({
+export const useOpenAdminSpecOptions = queryOptions<Spec, AppError>({
 	queryKey: ["openadmin-spec"],
 	queryFn: async () => {
 		const response = await fetch("api/openadmin.json")
 		const data = await response.json()
 
 		if (!response.ok) {
-			throw errorSchema.parse(data)
+			const error = errorSchema.parse(data)
+			throw { ...error, status: response.status } satisfies AppError
 		}
 
 		return specSchema.parse(data)
@@ -24,7 +25,7 @@ export const useOpenAdminSpecOptions = queryOptions<Spec, ApiError>({
 })
 
 export const useOpenAdminSpec = () => {
-	return useQuery<Spec, ApiError>(useOpenAdminSpecOptions)
+	return useQuery<Spec, AppError>(useOpenAdminSpecOptions)
 }
 
 export const useOpenAdminPageSpec = ({ id }: { id: string }) => {
