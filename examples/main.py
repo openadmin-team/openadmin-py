@@ -35,7 +35,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(SessionMiddleware, secret_key="test")
+app.add_middleware(SessionMiddleware, secret_key="testa")
 
 admin_panel = AdminPanel(
     "Book Library Admin",
