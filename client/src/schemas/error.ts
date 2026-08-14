@@ -8,4 +8,4 @@ export const errorSchema = z.object({
 	message: z.string(),
 })
 
-export type ApiError = z.infer<typeof errorSchema> & { status: string }
+export type ApiError = z.infer<typeof errorSchema>
