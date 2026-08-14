@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { errorSchema } from "@/schemas/error"
-import { type Login, loginSchema } from "@/schemas/login"
+import { useForm } from "@tanstack/vue-form"
 import { useMutation, useQueryClient } from "@tanstack/vue-query"
 import { toast } from "vue-sonner"
-import { useForm } from "@tanstack/vue-form"
+import { errorSchema } from "@/schemas/error"
+import { type Login, loginSchema } from "@/schemas/login"
 
 export const useLoginForm = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
 	const { mutate } = useLogin({ onSuccess })
