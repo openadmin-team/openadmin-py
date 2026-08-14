@@ -6,13 +6,21 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script setup lang="ts">
 import type { AnyFieldApi } from "@tanstack/vue-form"
+import { useRoute, useRouter } from "vue-router"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { useLoginForm } from "@/composables/auth"
 
-const form = useLoginForm()
+const router = useRouter()
+const route = useRoute()
+const form = useLoginForm({
+	onSuccess: () => {
+		const { redirect } = route.query
+		router.push(typeof redirect === "string" ? redirect : { name: "home" })
+	},
+})
 
 function isInvalid(field: AnyFieldApi) {
 	return field.state.meta.isTouched && !field.state.meta.isValid
