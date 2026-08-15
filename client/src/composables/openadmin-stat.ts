@@ -44,6 +44,7 @@ export const useStat = ({
 
 			return statSchema.parse(data)
 		},
+		refetchInterval: computed(() => stat.value?.refresh ?? false),
 	})
 	const value = computed(() => {
 		if (data.value === null || data.value === undefined) return null
