@@ -19,11 +19,13 @@ export const usePageSpec = (params: {
 	})
 	const actions = computed(() => page.value?.components.filter((c) => c.type === "action") ?? [])
 	const forms = computed(() => page.value?.components.filter((c) => c.type === "form") ?? [])
+	const stats = computed(() => page.value?.components.filter((c) => c.type === "stat") ?? [])
 
 	return {
 		forms,
 		page,
 		actions,
+		stats,
 		...rest,
 	}
 }

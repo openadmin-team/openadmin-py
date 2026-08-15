@@ -8,12 +8,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 import Action from "@/components/page/Action.vue"
 import { usePageSpec } from "@/composables/openadmin-page"
 import Form from "@/components/page/Form.vue"
+import Stat from "./Stat.vue";
 
 const props = defineProps<{
 	sectionId: string
 	pageId: string
 }>()
-const { actions, forms } = usePageSpec({ sectionId: props.sectionId, pageId: props.pageId })
+const { actions, forms, stats } = usePageSpec({ sectionId: props.sectionId, pageId: props.pageId })
 </script>
 
 <template>
@@ -25,5 +26,13 @@ const { actions, forms } = usePageSpec({ sectionId: props.sectionId, pageId: pro
 			:action-id="action.id"
 		/>
 		<Form v-for="form in forms" :section-id="sectionId" :page-id="pageId" :form-id="form.id" />
+	</section>
+	<section class="flex flex-wrap justify-center gap-2">
+		<Stat
+			v-for="stat in stats"
+			:section-id="sectionId"
+			:page-id="pageId"
+			:stat-id="stat.id"
+		/>
 	</section>
 </template>
