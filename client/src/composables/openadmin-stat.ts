@@ -5,6 +5,10 @@
 import { computed, toValue, type MaybeRefOrGetter } from "vue"
 import { usePageSpec } from "./openadmin-page"
 import type { StatComponent } from "@/schemas/stat"
+import { useQuery } from "@tanstack/vue-query"
+import { errorSchema } from "@/schemas/error"
+import type { AppError } from "@/types/errors"
+import { specSchema } from "@/schemas/spec"
 
 export const useStat = ({
 	sectionId,
@@ -21,8 +25,24 @@ export const useStat = ({
 			(c): c is StatComponent => c.type === "stat" && c.id === toValue(statId),
 		),
 	)
+	const { data } = useQuery({
+		queryKey: [`data-${toValue(sectionId)}-${toValue(pageId)}-${toValue(statId)}`],
+		queryFn: async () => {
+			if (!stat.value) return null
+			const response = await fetch(`${sectionId}/${pageId}/stat/${statId}`)
+			const data = await response.json()
+
+			if (!response.ok) {
+				const error = errorSchema.parse(data)
+				throw { ...error, status: response.status } satisfies AppError
+			}
+
+			return specSchema.parse(data)
+		}
+	})
 
 	return {
 		stat,
+		data,
 	}
 }
