@@ -18,21 +18,23 @@ const { actions, forms, stats } = usePageSpec({ sectionId: props.sectionId, page
 </script>
 
 <template>
-	<section class="flex flex-wrap justify-end gap-2">
-		<Action
-			v-for="action in actions"
-			:section-id="sectionId"
-			:page-id="pageId"
-			:action-id="action.id"
-		/>
-		<Form v-for="form in forms" :section-id="sectionId" :page-id="pageId" :form-id="form.id" />
-	</section>
-	<section class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-		<Stat
-			v-for="stat in stats"
-			:section-id="sectionId"
-			:page-id="pageId"
-			:stat-id="stat.id"
-		/>
-	</section>
+	<div class="flex flex-col gap-4">
+		<section class="flex flex-wrap justify-end gap-2">
+			<Action
+				v-for="action in actions"
+				:section-id="sectionId"
+				:page-id="pageId"
+				:action-id="action.id"
+			/>
+			<Form v-for="form in forms" :section-id="sectionId" :page-id="pageId" :form-id="form.id" />
+		</section>
+		<section class="flex flex-wrap justify-center gap-4">
+			<Stat
+				v-for="stat in stats"
+				:section-id="sectionId"
+				:page-id="pageId"
+				:stat-id="stat.id"
+			/>
+		</section>
+	</div>
 </template>

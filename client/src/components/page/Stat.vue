@@ -24,7 +24,7 @@ const { style } = useIconColor(() => stat.value?.color || "slate")
 </script>
 
 <template>
-	<Card v-if="stat" class="w-full">
+	<Card v-if="stat" class="w-full sm:w-[calc(50%-0.25rem)] lg:w-[calc(25%-0.375rem)]">
 		<CardHeader>
 			<CardDescription class="flex items-center gap-1.5">
 				<Icon v-if="stat.icon" :icon="`lucide:${stat.icon}`" :class="style.text" class="size-4" />
