@@ -55,7 +55,7 @@ TableData = Iterable[
         {
             "__view__": str | int | float | bool | None,
             "__actions__": list[ActionConfig],
-            "__style__": ColumnStyle | None
+            "__style__": ColumnStyle | None,
         },
         extra_items=str | int | float | bool | None,
     )
