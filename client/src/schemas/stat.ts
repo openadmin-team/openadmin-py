@@ -14,6 +14,7 @@ export const statComponentSchema = z.object({
 	icon: iconSchema.nullable(),
 	color: colorSchema.nullable(),
 	name: z.string(),
+	refresh: z.number().nullable(),
 	description: z.string().nullable(),
 	method: httpMethodSchema,
 	form: jsonSchemaSchema.nullable(),
@@ -29,6 +30,7 @@ export type StatValue = z.infer<typeof statValueSchema>
 
 export const statResponseSchema = z.object({
 	value: statValueSchema,
+	refresh: z.number().nullable().optional(),
 	icon: iconSchema.optional(),
 	color: colorSchema.optional(),
 })

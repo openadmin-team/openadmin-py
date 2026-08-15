@@ -28,6 +28,7 @@ export const barChartComponentSchema = z.object({
 	caption: z.string().nullable(),
 	caption_description: z.string().nullable(),
 	caption_icon: iconSchema.nullable(),
+	refresh: z.number().nullable(),
 	method: httpMethodSchema,
 	form: jsonSchemaSchema.nullable(),
 	body: jsonSchemaSchema.nullable(),
@@ -48,6 +49,7 @@ export const barChartResponseSchema = z.object({
 	config: z.record(z.string(), barChartConfigValueSchema).optional(),
 	icon: iconSchema.optional(),
 	color: colorSchema.optional(),
+	refresh: z.number().nullable().optional(),
 	data: barChartDataSchema,
 })
 
