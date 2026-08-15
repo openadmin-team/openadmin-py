@@ -15,7 +15,7 @@ const props = defineProps<{
 	pageId: string
 	statId: string
 }>()
-const { stat } = useStat({
+const { stat, value } = useStat({
 	sectionId: props.sectionId,
 	pageId: props.pageId,
 	statId: props.statId,
@@ -30,7 +30,7 @@ const { style } = useIconColor(() => stat.value?.color || "slate")
 				<Icon v-if="stat.icon" :icon="`lucide:${stat.icon}`" :class="style.text" class="size-4" />
 				{{ stat.name }}
 			</CardDescription>
-			<CardTitle class="text-2xl font-semibold tabular-nums">—</CardTitle>
+			<CardTitle class="text-2xl font-semibold tabular-nums">{{ value }}</CardTitle>
 		</CardHeader>
 		<CardFooter v-if="stat.description">
 			<p class="text-muted-foreground text-sm">{{ stat.description }}</p>
