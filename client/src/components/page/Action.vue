@@ -15,7 +15,6 @@ const { style } = useIconColor(() => props.action.color ?? 'slate')
     <Button
         size="sm"
         :variant="action.color === 'red' ? 'destructive' : 'outline'"
-        as-child
 	>
         <Icon v-if="action.icon" :icon="`lucide:${action.icon}`" :class="style.text" />
         {{ action.name }}
