@@ -7,11 +7,11 @@ import { computed, toValue, type MaybeRefOrGetter } from "vue"
 
 export const useIconColor = (color: MaybeRefOrGetter<Color>) => {
     const style = computed(() => COLOR_STYLES[toValue(color)])
-    const default = computed(() => COLOR_STYLES['slate'])
-    
+    const fallback = computed(() => COLOR_STYLES['slate'])
+
     return {
         style,
-        default,
+        fallback,
     }
 }
 
@@ -20,7 +20,7 @@ const COLOR_STYLES = {
 		dot: "bg-slate-500",
 		badge: "bg-slate-100 text-slate-700 dark:bg-slate-500/15 dark:text-slate-300",
 		text: "text-slate-600 dark:text-slate-400",
-	} as const,
+	},
 	gray: {
 		dot: "bg-gray-500",
 		badge: "bg-gray-100 text-gray-700 dark:bg-gray-500/15 dark:text-gray-300",
@@ -137,4 +137,4 @@ const COLOR_STYLES = {
 			"bg-white text-neutral-700 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-700",
 		text: "text-neutral-500 dark:text-neutral-400",
 	},
-}
+} as const satisfies Record<Color, { dot: string; badge: string; text: string }>
