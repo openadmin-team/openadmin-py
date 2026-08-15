@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 import Action from "@/components/page/Action.vue"
 import { usePageSpec } from "@/composables/openadmin-page"
 import Form from "@/components/page/Form.vue"
-import Stat from "./Stat.vue";
+import Stat from "@/components/page/Stat.vue";
 
 const props = defineProps<{
 	sectionId: string
