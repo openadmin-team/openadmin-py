@@ -29,7 +29,7 @@ const route = useRoute()
 <template>
 	<Sidebar collapsible="icon">
 		<SidebarHeader>
-			<div class="flex items-center gap-2 px-2 py-1.5">
+			<div class="flex items-center gap-2 px-2 py-1.5 group-data-[collapsible=icon]:p-0!">
 				<div
 					class="bg-primary text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-md"
 				>
