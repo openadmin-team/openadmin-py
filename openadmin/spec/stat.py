@@ -29,7 +29,7 @@ type StatValue = str | int | float | bool | None
 
 class StatResponse(TypedDict):
     value: StatValue
-    refresh: int | None
+    refresh: NotRequired[int | None]
     icon: NotRequired[Icon]
     color: NotRequired[Color]
 

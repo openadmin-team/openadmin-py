@@ -46,7 +46,7 @@ class BarChartResponce(TypedDict):
     config: NotRequired[dict[str, BarChartConfigValue]]
     icon: NotRequired[Icon]
     color: NotRequired[Color]
-    refresh: int | None
+    refresh: NotRequired[int | None]
     data: BarChartData
 
 

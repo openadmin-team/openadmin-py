@@ -48,7 +48,7 @@ class PieChartResponce(TypedDict):
     icon: NotRequired[Icon]
     color: NotRequired[Color]
     data: PieChartData
-    refresh: int | None
+    refresh: NotRequired[int | None]
 
 
 type PieChart = PieChartData | PieChartResponce

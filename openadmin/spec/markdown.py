@@ -30,7 +30,7 @@ type MarkdownContent = str
 class MarkdownResponse(TypedDict):
     icon: NotRequired[Icon]
     color: NotRequired[Color]
-    refresh: int | None
+    refresh: NotRequired[int | None]
     content: MarkdownContent
 
 
