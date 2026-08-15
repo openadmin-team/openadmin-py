@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from random import randint
 from openadmin import spec
 from openadmin.fastapi import AdminPage
+from datetime import timedelta
 
 page = AdminPage(
     "Control Panel",
@@ -212,7 +213,7 @@ async def schedule_config_reset(
 ) -> spec.Form:
     return None
 
-@page.stat('Random number 1', icon='sun', color='yellow')
+@page.stat('Random number 1', icon='sun', color='yellow', refresh=timedelta(seconds=1))
 def random_number_1():
     return randint(100, 1000)
 
