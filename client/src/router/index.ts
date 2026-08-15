@@ -25,6 +25,11 @@ export const router = createRouter({
 					name: "home",
 					component: () => import("@/views/HomeView.vue"),
 				},
+				{
+					path: ":sectionId/:pageId",
+					name: "page",
+					component: () => import("@/views/PageView.vue"),
+				},
 			],
 		},
 	],
