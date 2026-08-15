@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts">
 import { computed } from "vue"
 import { useRoute } from "vue-router"
-import { usePageSpec } from "@/composables/openadmin-spec"
+import { usePageSpec } from "@/composables/openadmin-page"
 import ButtonsSection from "@/components/page/ButtonsSection.vue"
 
 const route = useRoute()

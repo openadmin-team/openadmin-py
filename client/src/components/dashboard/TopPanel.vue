@@ -18,12 +18,13 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { usePageSpec, useSectionSpec } from "@/composables/openadmin-spec"
+import { usePageSpec } from "@/composables/openadmin-page"
+import { useSectionSpec } from "@/composables/openadmin-section"
 
 const route = useRoute()
 
-const sectionId = computed(() => route.params.sectionId as string | undefined)
-const pageId = computed(() => route.params.pageId as string | undefined)
+const sectionId = computed(() => route.params.sectionId as string)
+const pageId = computed(() => route.params.pageId as string)
 
 const { data: section } = useSectionSpec({ sectionId })
 const { page } = usePageSpec({ sectionId, pageId })
