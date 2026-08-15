@@ -30,7 +30,7 @@ const route = useRoute()
 	<Sidebar collapsible="icon">
 		<SidebarHeader>
 			<div class="flex items-center gap-2 px-2 py-1.5 group-data-[collapsible=icon]:p-0!">
-				<img :src="logo" alt="Logo" class="shrink-0 rounded-md object-contain size-7" />
+				<img :src="logo" alt="Logo" class="shrink-0 rounded-md object-contain size-7">
 				<div class="flex flex-col overflow-hidden group-data-[collapsible=icon]:hidden">
 					<span class="truncate text-sm font-semibold">{{ spec?.name ?? "Admin" }}</span>
 					<span v-if="spec?.description" class="text-muted-foreground truncate text-xs">
