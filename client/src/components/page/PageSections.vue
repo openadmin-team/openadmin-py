@@ -27,7 +27,7 @@ const { actions, forms, stats } = usePageSpec({ sectionId: props.sectionId, page
 		/>
 		<Form v-for="form in forms" :section-id="sectionId" :page-id="pageId" :form-id="form.id" />
 	</section>
-	<section class="flex flex-wrap justify-center gap-2">
+	<section class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
 		<Stat
 			v-for="stat in stats"
 			:section-id="sectionId"
