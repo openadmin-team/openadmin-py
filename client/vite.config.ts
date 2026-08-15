@@ -15,4 +15,16 @@ export default defineConfig({
 		outDir: path.resolve(import.meta.dirname, "../openadmin/__client__"),
 		emptyOutDir: true,
 	},
+	server: {
+		proxy: {
+			"/api": {
+				target: "http://localhost:8000/admin",
+				changeOrigin: true,
+			},
+			"/auth": {
+				target: "http://localhost:8000/admin",
+				changeOrigin: true,
+			},
+		},
+	},
 })

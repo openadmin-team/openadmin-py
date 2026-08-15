@@ -58,6 +58,9 @@ check: check/format check/lint check/typing check/cves check/security check/unus
 # Dev
 #
 
-dev:
+dev/client:
+	@ cd client && bun run dev
+
+dev/example:
 	@ cd client && bun run build
 	@ PYTHONPATH=. uv run fastapi dev examples/main.py --host 0.0.0.0 --port $${PORT:-8000} --reload
