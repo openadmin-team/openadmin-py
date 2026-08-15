@@ -28,6 +28,7 @@ class BarChartComponent(TypedDict):
     caption: str | None
     caption_description: str | None
     caption_icon: Icon | None
+    refresh: int | None
     method: HttpMethod
     form: JsonSchema | None
     body: JsonSchema | None
@@ -45,6 +46,7 @@ class BarChartResponce(TypedDict):
     config: NotRequired[dict[str, BarChartConfigValue]]
     icon: NotRequired[Icon]
     color: NotRequired[Color]
+    refresh: int | None
     data: BarChartData
 
 

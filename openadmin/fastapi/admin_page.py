@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from collections.abc import Awaitable, Callable
+from datetime import timedelta
 
 from fastapi import APIRouter
 from openadmin import spec
@@ -38,6 +39,7 @@ class AdminPage:
         columns: dict[str, spec.ColumnConfigValue] | None = None,
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
+        refresh: timedelta | None = None
     ):
         table_id = utils.get_id(name)
 
@@ -54,6 +56,7 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
+            'refresh': refresh // timedelta(milliseconds=1) if refresh is not None else None,
         }
 
         self.components.append(item)

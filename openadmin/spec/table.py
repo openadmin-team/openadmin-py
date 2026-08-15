@@ -43,6 +43,7 @@ class TableComponent(TypedDict):
     color: Color | None
     method: HttpMethod
     is_hidden: bool
+    refresh: int | None
     form: JsonSchema | None
     body: JsonSchema | None
     query: JsonSchema | None
@@ -65,6 +66,7 @@ class TableResponse(TypedDict):
     data: TableData
     icon: NotRequired[Icon]
     color: NotRequired[Color]
+    refresh: int | None
 
 
 type Table = TableData | TableResponse
