@@ -68,6 +68,7 @@ class TableResponse(TypedDict):
     icon: NotRequired[Icon]
     color: NotRequired[Color]
     refresh: NotRequired[int | None]
+    total: NotRequired[int]
 
 
 type Table = TableData | TableResponse
