@@ -7,15 +7,13 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts">
 import { computed } from "vue"
 import { useRoute } from "vue-router"
-import { usePageSpec } from "@/composables/openadmin-page"
 import ButtonsSection from "@/components/page/ButtonsSection.vue"
 
 const route = useRoute()
 const pageId = computed(() => route.params.pageId as string)
 const sectionId = computed(() => route.params.sectionId as string)
-const { actions, forms } = usePageSpec({ sectionId, pageId })
 </script>
 
 <template>
-	<ButtonsSection :actions="actions" :forms="forms" />
+	<ButtonsSection :section-id="sectionId" :page-id="pageId" />
 </template>
