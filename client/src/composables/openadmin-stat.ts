@@ -24,7 +24,7 @@ export const useStat = ({
 			(c): c is StatComponent => c.type === "stat" && c.id === toValue(statId),
 		),
 	)
-	const { data, isLoading } = useQuery<Stat, AppError>({
+	const { data, isLoading, isFetching } = useQuery<Stat, AppError>({
 		queryKey: computed(() => [
 			"openadmin-stat",
 			toValue(sectionId),
@@ -56,5 +56,6 @@ export const useStat = ({
 		data,
 		value,
 		isLoading,
+		isFetching,
 	}
 }
