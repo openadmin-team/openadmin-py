@@ -216,7 +216,7 @@ async def schedule_config_reset(
 
 @page.stat('Random number 1', icon='sun', color='yellow', refresh=timedelta(seconds=1))
 def random_number_1():
-    sleep(500000)
+    sleep(5)
     return randint(100, 1000)
 
 @page.stat('Random number 2', icon='moon', color='blue')
