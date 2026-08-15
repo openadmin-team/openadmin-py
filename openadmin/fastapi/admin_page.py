@@ -39,7 +39,7 @@ class AdminPage:
         columns: dict[str, spec.ColumnConfigValue] | None = None,
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
-        refresh: timedelta | None = None
+        refresh: timedelta | None = None,
     ):
         table_id = utils.get_id(name)
 
@@ -56,7 +56,9 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
-            'refresh': refresh // timedelta(milliseconds=1) if refresh is not None else None,
+            "refresh": refresh // timedelta(milliseconds=1)
+            if refresh is not None
+            else None,
         }
 
         self.components.append(item)
@@ -91,7 +93,9 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
-            "refresh": refresh // timedelta(milliseconds=1) if refresh is not None else None,
+            "refresh": refresh // timedelta(milliseconds=1)
+            if refresh is not None
+            else None,
         }
 
         self.components.append(item)
@@ -126,7 +130,9 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
-            "refresh": refresh // timedelta(milliseconds=1) if refresh is not None else None,
+            "refresh": refresh // timedelta(milliseconds=1)
+            if refresh is not None
+            else None,
         }
 
         self.components.append(item)
@@ -347,7 +353,9 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
-            "refresh": refresh // timedelta(milliseconds=1) if refresh is not None else None,
+            "refresh": refresh // timedelta(milliseconds=1)
+            if refresh is not None
+            else None,
         }
 
         self.components.append(item)
@@ -423,7 +431,9 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
-            "refresh": refresh // timedelta(milliseconds=1) if refresh is not None else None,
+            "refresh": refresh // timedelta(milliseconds=1)
+            if refresh is not None
+            else None,
         }
 
         self.components.append(item)
