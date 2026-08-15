@@ -25,6 +25,11 @@ export default defineConfig({
 				target: "http://localhost:8000/admin",
 				changeOrigin: true,
 			},
+			// component data endpoints, e.g. /{sectionId}/{pageId}/stat/{statId}
+			"^/[^/]+/[^/]+/(stat|table|action|form|markdown|bar-chart|pie-chart)/[^/]+$": {
+				target: "http://localhost:8000/admin",
+				changeOrigin: true,
+			},
 		},
 	},
 })

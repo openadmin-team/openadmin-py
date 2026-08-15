@@ -25,10 +25,16 @@ export const useStat = ({
 		),
 	)
 	const { data, isLoading } = useQuery<Stat, AppError>({
-		queryKey: [`data-${toValue(sectionId)}-${toValue(pageId)}-${toValue(statId)}`],
+		queryKey: computed(() => [
+			"openadmin-stat",
+			toValue(sectionId),
+			toValue(pageId),
+			toValue(statId),
+		]),
 		queryFn: async () => {
-			if (!stat.value) return null
-			const response = await fetch(`${sectionId}/${pageId}/stat/${statId}`)
+			const response = await fetch(
+				`${toValue(sectionId)}/${toValue(pageId)}/stat/${toValue(statId)}`,
+			)
 			const data = await response.json()
 
 			if (!response.ok) {
@@ -37,7 +43,7 @@ export const useStat = ({
 			}
 
 			return statSchema.parse(data)
-		}
+		},
 	})
 	const value = computed(() => {
 		if (data.value === null || data.value === undefined) return null
