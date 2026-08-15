@@ -5,7 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts">
-import { LayoutDashboardIcon } from "@lucide/vue"
 import { RouterLink, useRoute } from "vue-router"
 import {
 	Sidebar,
@@ -21,6 +20,7 @@ import {
 } from "@/components/ui/sidebar"
 import { useSpec } from "@/composables/openadmin-spec"
 import { Icon } from "@iconify/vue"
+import logo from "@/assets/images/logo.png"
 
 const { data: spec } = useSpec()
 const route = useRoute()
@@ -30,11 +30,7 @@ const route = useRoute()
 	<Sidebar collapsible="icon">
 		<SidebarHeader>
 			<div class="flex items-center gap-2 px-2 py-1.5 group-data-[collapsible=icon]:p-0!">
-				<div
-					class="bg-primary text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-md"
-				>
-					<LayoutDashboardIcon class="size-4" />
-				</div>
+				<img :src="logo" alt="Logo" class="size-8 shrink-0 rounded-md object-cover" />
 				<div class="flex flex-col overflow-hidden group-data-[collapsible=icon]:hidden">
 					<span class="truncate text-sm font-semibold">{{ spec?.name ?? "Admin" }}</span>
 					<span v-if="spec?.description" class="text-muted-foreground truncate text-xs">
