@@ -19,10 +19,10 @@ import {
 	SidebarMenuItem,
 	SidebarRail,
 } from "@/components/ui/sidebar"
-import { useOpenAdminSpec } from "@/composables/openadmin-spec"
+import { useSpec } from "@/composables/openadmin-spec"
 import { Icon } from "@iconify/vue"
 
-const { data: spec } = useOpenAdminSpec()
+const { data: spec } = useSpec()
 const route = useRoute()
 </script>
 
