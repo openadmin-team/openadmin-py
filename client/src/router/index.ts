@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import { createRouter, createWebHashHistory } from "vue-router"
-import { useOpenAdminSpecOptions } from "@/composables/openadmin-spec"
+import { useSpecOptions } from "@/composables/openadmin-spec"
 import { useQueryClient } from "@tanstack/vue-query"
 import { statusCodes } from "@/lib/status-codes"
 
@@ -41,7 +41,7 @@ router.beforeEach(async (to) => {
 	const queryClient = useQueryClient()
 
 	try {
-		await queryClient.ensureQueryData(useOpenAdminSpecOptions)
+		await queryClient.ensureQueryData(useSpecOptions)
 		return true
 	} catch (error: any) {
 		if (error.status === statusCodes.UNAUTHORIZED) {

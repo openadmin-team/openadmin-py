@@ -10,7 +10,7 @@ import type { Spec } from "@/schemas/spec"
 import { specSchema } from "@/schemas/spec"
 import type { AppError } from "@/types/errors"
 
-export const useOpenAdminSpecOptions = queryOptions<Spec, AppError>({
+export const useSpecOptions = queryOptions<Spec, AppError>({
 	queryKey: ["openadmin-spec"],
 	queryFn: async () => {
 		const response = await fetch("api/openadmin.json")
@@ -26,7 +26,7 @@ export const useOpenAdminSpecOptions = queryOptions<Spec, AppError>({
 })
 
 export const useSpec = () => {
-	return useQuery<Spec, AppError>(useOpenAdminSpecOptions)
+	return useQuery<Spec, AppError>(useSpecOptions)
 }
 
 export const useSectionSpec = (params: { sectionId: MaybeRefOrGetter<string | undefined> }) => {
