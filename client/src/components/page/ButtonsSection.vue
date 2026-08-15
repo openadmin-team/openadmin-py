@@ -16,7 +16,7 @@ defineProps<{
 </script>
 
 <template>
-	<section>
+	<section class="flex flex-wrap justify-end gap-2">
 		<Action
 			v-for="action in actions"
 			:action="action"
