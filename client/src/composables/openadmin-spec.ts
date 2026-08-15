@@ -50,14 +50,18 @@ export const usePageSpec = (params: {
 }) => {
 	const { data: specData, ...rest } = useSectionSpec({ sectionId: params.sectionId })
 
-	const data = computed(() => {
+	const page = computed(() => {
 		if (!specData.value) return null
 		const pageId = toValue(params.pageId)
 		return specData.value.pages.find((page) => page.id === pageId) ?? null
 	})
+	const actions = computed(() => page.value?.components.filter((c) => c.type === "action") ?? [])
+	const forms = computed(() => page.value?.components.filter((c) => c.type === "form") ?? [])
 
 	return {
-		data,
+		page,
+		actions,
+		forms,
 		...rest,
 	}
 }

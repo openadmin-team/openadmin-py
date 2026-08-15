@@ -13,10 +13,7 @@ import ButtonsSection from "@/components/page/ButtonsSection.vue"
 const route = useRoute()
 const pageId = computed(() => route.params.pageId as string)
 const sectionId = computed(() => route.params.sectionId as string)
-const { data: page } = usePageSpec({ sectionId, pageId })
-
-const actions = computed(() => page.value?.components.filter((c) => c.type === 'action') ?? [])
-const forms = computed(() => page.value?.components.filter((c) => c.type === 'form') ?? [])
+const { actions, forms } = usePageSpec({ sectionId, pageId })
 </script>
 
 <template>
