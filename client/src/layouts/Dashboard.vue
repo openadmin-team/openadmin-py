@@ -9,6 +9,7 @@ import { useRoute } from "vue-router"
 import AppSidebar from "@/components/dashboard/Sidebar.vue"
 
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import TopPanel from "@/components/dashboard/TopPanel.vue";
 
 const route = useRoute()
 </script>
@@ -17,6 +18,7 @@ const route = useRoute()
 	<SidebarProvider>
 		<AppSidebar />
 		<SidebarInset>
+			<TopPanel />
 			<main class="flex-1 overflow-auto p-4 md:p-6">
 				<router-view :key="route.fullPath" />
 			</main>
