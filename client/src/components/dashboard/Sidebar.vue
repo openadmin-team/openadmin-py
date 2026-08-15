@@ -20,7 +20,7 @@ import {
 	SidebarRail,
 } from "@/components/ui/sidebar"
 import { useOpenAdminSpec } from "@/composables/openadmin-spec"
-import { Icon } from "@iconify/vue";
+import { Icon } from "@iconify/vue"
 
 const { data: spec } = useOpenAdminSpec()
 const route = useRoute()
@@ -57,7 +57,7 @@ const route = useRoute()
 								<RouterLink
 									:to="{ name: 'page', params: { sectionId: section.id, pageId: page.id } }"
 								>
-									<Icon v-if="page.icon" :icon='`lucide:${page.icon}`'/>
+									<Icon v-if="page.icon" :icon="`lucide:${page.icon}`" />
 									<span>{{ page.name }}</span>
 								</RouterLink>
 							</SidebarMenuButton>
