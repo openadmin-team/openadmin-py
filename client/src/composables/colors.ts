@@ -7,11 +7,9 @@ import { computed, toValue, type MaybeRefOrGetter } from "vue"
 
 export const useIconColor = (color: MaybeRefOrGetter<Color>) => {
     const style = computed(() => COLOR_STYLES[toValue(color)])
-    const fallback = computed(() => COLOR_STYLES['slate'])
 
     return {
         style,
-        fallback,
     }
 }
 
