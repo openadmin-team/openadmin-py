@@ -29,7 +29,7 @@ export const useSpec = () => {
 	return useQuery<Spec, AppError>(useSpecOptions)
 }
 
-export const useSectionSpec = (params: { sectionId: MaybeRefOrGetter<string | undefined> }) => {
+export const useSectionSpec = (params: { sectionId: MaybeRefOrGetter<string> }) => {
 	const { data: specData, ...rest } = useSpec()
 
 	const data = computed(() => {
@@ -45,8 +45,8 @@ export const useSectionSpec = (params: { sectionId: MaybeRefOrGetter<string | un
 }
 
 export const usePageSpec = (params: {
-	sectionId: MaybeRefOrGetter<string | undefined>
-	pageId: MaybeRefOrGetter<string | undefined>
+	sectionId: MaybeRefOrGetter<string>
+	pageId: MaybeRefOrGetter<string>
 }) => {
 	const { data: specData, ...rest } = useSectionSpec({ sectionId: params.sectionId })
 
@@ -59,9 +59,9 @@ export const usePageSpec = (params: {
 	const forms = computed(() => page.value?.components.filter((c) => c.type === "form") ?? [])
 
 	return {
+		forms,
 		page,
 		actions,
-		forms,
 		...rest,
 	}
 }
