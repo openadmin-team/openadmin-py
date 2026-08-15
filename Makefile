@@ -32,6 +32,7 @@ check/lint:
 	@ uv run ruff check .
 
 check/typing:
+	@ cd client && bun run check:types
 	@ uv run pyright .
 
 check/cves:
