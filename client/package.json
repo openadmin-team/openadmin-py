@@ -33,6 +33,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.7",
+		"@iconify/vue": "^5.0.1",
 		"@types/node": "^26.2.0",
 		"@vitejs/plugin-vue": "^6.0.8",
 		"@vue/tsconfig": "^0.9.1",
