@@ -6,19 +6,25 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script setup lang="ts">
 import { useIconColor } from "@/composables/colors"
-import type { ActionComponent } from "@/schemas/action"
 import { Button } from "@/components/ui/button"
 import { Icon } from "@iconify/vue"
+import { useAction } from "@/composables/openadmin-action"
 
 const props = defineProps<{
-	action: ActionComponent
+	sectionId: string
+	pageId: string
+	actionId: string
 }>()
-
-const { style } = useIconColor(() => props.action.color ?? "slate")
+const { action } = useAction({
+	sectionId: props.sectionId,
+	pageId: props.pageId,
+	actionId: props.pageId,
+})
+const { style } = useIconColor(() => action.value?.color || "slate")
 </script>
 
 <template>
-	<Button size="sm" variant="outline">
+	<Button v-if="action" size="sm" variant="outline">
 		<Icon v-if="action.icon" :icon="`lucide:${action.icon}`" :class="style.text" />
 		{{ action.name }}
 	</Button>

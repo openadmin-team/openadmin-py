@@ -4,6 +4,7 @@
 
 import { computed, toValue, type MaybeRefOrGetter } from "vue"
 import { usePageSpec } from "./openadmin-page"
+import type { ActionComponent } from "@/schemas/action"
 
 export const useAction = ({
 	sectionId,
@@ -16,7 +17,9 @@ export const useAction = ({
 }) => {
 	const { page } = usePageSpec({ sectionId, pageId })
 	const action = computed(() =>
-		page.value?.components.filter((c) => c.type === "action" && c.id === toValue(actionId)),
+		page.value?.components.find(
+			(c): c is ActionComponent => c.type === "action" && c.id === toValue(actionId),
+		),
 	)
 
 	return {
