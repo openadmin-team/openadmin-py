@@ -12,7 +12,8 @@
 		"fix": "bun run fix:format && bun run fix:lint",
 		"check:format": "biome format .",
 		"check:lint": "biome lint .",
-		"check": "bun run check:format && bun run check:lint"
+		"check:types": "vue-tsc -b",
+		"check": "bun run check:format && bun run check:lint && bun run check:types"
 	},
 	"dependencies": {
 		"@lucide/vue": "^1.31.0",
