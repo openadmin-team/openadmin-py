@@ -4,6 +4,7 @@
 
 import { computed, toValue, type MaybeRefOrGetter } from "vue"
 import { usePageSpec } from "./openadmin-page"
+import type { StatComponent } from "@/schemas/stat"
 
 export const useStat = ({
 	sectionId,
@@ -16,7 +17,9 @@ export const useStat = ({
 }) => {
 	const { page } = usePageSpec({ sectionId, pageId })
 	const stat = computed(() =>
-		page.value?.components.filter((c) => c.type === "stat" && c.id === toValue(statId)),
+		page.value?.components.find(
+			(c): c is StatComponent => c.type === "stat" && c.id === toValue(statId),
+		),
 	)
 
 	return {

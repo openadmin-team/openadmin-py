@@ -4,6 +4,7 @@
 
 import { computed, toValue, type MaybeRefOrGetter } from "vue"
 import { usePageSpec } from "./openadmin-page"
+import type { FormComponent } from "@/schemas/form"
 
 export const useForm = ({
 	sectionId,
@@ -16,7 +17,9 @@ export const useForm = ({
 }) => {
 	const { page } = usePageSpec({ sectionId, pageId })
 	const form = computed(() =>
-		page.value?.components.filter((c) => c.type === "form" && c.id === toValue(formId)),
+		page.value?.components.find(
+			(c): c is FormComponent => c.type === "form" && c.id === toValue(formId),
+		),
 	)
 
 	return {
