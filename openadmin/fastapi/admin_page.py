@@ -76,6 +76,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
         description: str | None = None,
+        refresh: timedelta | None = None,
     ):
         stat_id = utils.get_id(name)
 
@@ -90,6 +91,7 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
+            "refresh": refresh // timedelta(milliseconds=1) if refresh is not None else None,
         }
 
         self.components.append(item)
@@ -109,6 +111,7 @@ class AdminPage:
         description: str | None = None,
         color: spec.Color | None = None,
         icon: spec.Icon | None = None,
+        refresh: timedelta | None = None,
     ):
         markdown_id = utils.get_id(name)
 
@@ -123,6 +126,7 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
+            "refresh": refresh // timedelta(milliseconds=1) if refresh is not None else None,
         }
 
         self.components.append(item)
@@ -323,6 +327,7 @@ class AdminPage:
         caption_icon: spec.Icon | None = None,
         config: dict[str, spec.BarChartConfigValue] | None = None,
         data_key: str | None = None,
+        refresh: timedelta | None = None,
     ):
         bar_chart_id = utils.get_id(name)
 
@@ -342,6 +347,7 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
+            "refresh": refresh // timedelta(milliseconds=1) if refresh is not None else None,
         }
 
         self.components.append(item)
@@ -396,6 +402,7 @@ class AdminPage:
         caption: str | None = None,
         caption_description: str | None = None,
         caption_icon: spec.Icon | None = None,
+        refresh: timedelta | None = None,
     ):
         pie_chart_id = utils.get_id(name)
 
@@ -416,6 +423,7 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
+            "refresh": refresh // timedelta(milliseconds=1) if refresh is not None else None,
         }
 
         self.components.append(item)
