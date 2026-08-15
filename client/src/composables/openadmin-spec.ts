@@ -28,15 +28,32 @@ export const useOpenAdminSpec = () => {
 	return useQuery<Spec, AppError>(useOpenAdminSpecOptions)
 }
 
-export const useOpenAdminPageSpec = ({ id }: { id: string }) => {
+export const useOpenAdminSectionSpec = ({ sectionId }: { sectionId: string }) => {
 	const { data: specData, ...rest } = useOpenAdminSpec()
 
 	const data = computed(() => {
 		if (!specData.value) return null
-		return (
-			specData.value.sections.flatMap((section) => section.pages).find((page) => page.id === id) ??
-			null
-		)
+		return specData.value.sections.find((section) => section.id === sectionId) ?? null
+	})
+
+	return {
+		data,
+		...rest,
+	}
+}
+
+export const useOpenAdminPageSpec = ({
+	sectionId,
+	pageId,
+}: {
+	sectionId: string
+	pageId: string
+}) => {
+	const { data: specData, ...rest } = useOpenAdminSectionSpec({ sectionId })
+
+	const data = computed(() => {
+		if (!specData.value) return null
+		return specData.value.pages.find((page) => page.id === pageId) ?? null
 	})
 
 	return {
