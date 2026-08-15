@@ -22,11 +22,14 @@ import { useOpenAdminPageSpec, useOpenAdminSectionSpec } from "@/composables/ope
 
 const route = useRoute()
 
-const sectionId = computed(() => route.params.sectionId as string)
-const pageId = computed(() => route.params.pageId as string)
+const sectionId = computed(() => route.params.sectionId as string | undefined)
+const pageId = computed(() => route.params.pageId as string | undefined)
 
-const { data: section } = useOpenAdminSectionSpec({ sectionId: sectionId.value })
-const { data: page } = useOpenAdminPageSpec({ sectionId: sectionId.value, pageId: pageId.value })
+const { data: section } = useOpenAdminSectionSpec({ sectionId: sectionId.value ?? "" })
+const { data: page } = useOpenAdminPageSpec({
+	sectionId: sectionId.value ?? "",
+	pageId: pageId.value ?? "",
+})
 </script>
 
 <template>
