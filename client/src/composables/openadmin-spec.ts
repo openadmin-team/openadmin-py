@@ -42,13 +42,7 @@ export const useSectionSpec = ({ sectionId }: { sectionId: string }) => {
 	}
 }
 
-export const usePageSpec = ({
-	sectionId,
-	pageId,
-}: {
-	sectionId: string
-	pageId: string
-}) => {
+export const usePageSpec = ({ sectionId, pageId }: { sectionId: string; pageId: string }) => {
 	const { data: specData, ...rest } = useSectionSpec({ sectionId })
 
 	const data = computed(() => {
