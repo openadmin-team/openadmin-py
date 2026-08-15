@@ -6,7 +6,7 @@ from typing import Annotated
 
 from fastapi import Body, Depends, Form, Query
 from pydantic import BaseModel
-
+from random import randint
 from openadmin import spec
 from openadmin.fastapi import AdminPage
 
@@ -211,3 +211,15 @@ async def schedule_config_reset(
     config_id: int = Query(..., description="Config entry to reset"),
 ) -> spec.Form:
     return None
+
+@page.stat('Random number 1', icon='sun', color='yellow')
+def random_number_1():
+    return randint(100, 1000)
+
+@page.stat('Random number 2', icon='moon', color='blue')
+def random_number_2():
+    return randint(100, 1000)
+
+@page.stat('Random number 3', icon='mars', color='red')
+def random_number_3():
+    return randint(100, 1000)
