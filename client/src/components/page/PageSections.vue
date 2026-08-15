@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 import Action from "@/components/page/Action.vue"
 import { usePageSpec } from "@/composables/openadmin-page"
 import Form from "@/components/page/Form.vue"
-import Stat from "@/components/page/Stat.vue";
+import Stat from "@/components/page/Stat.vue"
 
 const props = defineProps<{
 	sectionId: string
@@ -29,12 +29,7 @@ const { actions, forms, stats } = usePageSpec({ sectionId: props.sectionId, page
 			<Form v-for="form in forms" :section-id="sectionId" :page-id="pageId" :form-id="form.id" />
 		</section>
 		<section class="flex flex-wrap justify-center gap-4">
-			<Stat
-				v-for="stat in stats"
-				:section-id="sectionId"
-				:page-id="pageId"
-				:stat-id="stat.id"
-			/>
+			<Stat v-for="stat in stats" :section-id="sectionId" :page-id="pageId" :stat-id="stat.id" />
 		</section>
 	</div>
 </template>
