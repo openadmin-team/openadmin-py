@@ -18,8 +18,14 @@ export const router = createRouter({
 		},
 		{
 			path: "/",
-			name: "home",
-			component: () => import("@/views/HomeView.vue"),
+			component: () => import("@/layouts/Dashboard.vue"),
+			children: [
+				{
+					path: "",
+					name: "home",
+					component: () => import("@/views/HomeView.vue"),
+				},
+			],
 		},
 	],
 })

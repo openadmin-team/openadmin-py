@@ -15,7 +15,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 		<AppSidebar />
 		<SidebarInset>
 			<main class="flex-1 overflow-auto p-4 md:p-6">
-				<slot />
+				<router-view />
 			</main>
 		</SidebarInset>
 	</SidebarProvider>
