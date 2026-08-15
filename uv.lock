@@ -519,7 +519,7 @@ wheels = [
 
 [[package]]
 name = "openadmin"
-version = "0.7.15"
+version = "0.7.16"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
