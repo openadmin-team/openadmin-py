@@ -11,7 +11,8 @@ import { usePageSpec } from "@/composables/openadmin-spec"
 
 const route = useRoute()
 const pageId = computed(() => route.params.pageId as string)
-const { data: page } = usePageSpec({ id: pageId.value })
+const sectionId = computed(() => route.params.sectionId as string)
+const { data: page } = usePageSpec({ sectionId: sectionId.value, pageId: pageId.value })
 </script>
 
 <template>
