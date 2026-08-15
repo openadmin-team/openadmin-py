@@ -1,3 +1,7 @@
+#
+# Fix
+#
+
 fix/license:
 	@ uv run reuse download --all
 	@ uv run reuse annotate --license AGPL-3.0-or-later --copyright "OpenAdmin" --recursive --skip-unrecognised openadmin/
@@ -14,6 +18,10 @@ fix/lint:
 	@ uv run ruff check --fix .
 
 fix: fix/license fix/format fix/lint
+
+#
+# Check
+#
 
 check/format:
 	@ cd client && bun run check:format
@@ -45,6 +53,10 @@ check/test:
 	@ uv run pytest
 
 check: check/format check/lint check/typing check/cves check/security check/unused check/spell check/license check/test
+
+#
+# Dev
+#
 
 dev:
 	@ cd client && bun run build
