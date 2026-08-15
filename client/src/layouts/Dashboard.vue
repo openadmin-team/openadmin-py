@@ -7,9 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts">
 import { useRoute } from "vue-router"
 import AppSidebar from "@/components/dashboard/Sidebar.vue"
-
+import TopPanel from "@/components/dashboard/TopPanel.vue"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import TopPanel from "@/components/dashboard/TopPanel.vue";
 
 const route = useRoute()
 </script>

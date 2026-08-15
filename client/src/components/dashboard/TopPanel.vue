@@ -25,11 +25,8 @@ const route = useRoute()
 const sectionId = computed(() => route.params.sectionId as string | undefined)
 const pageId = computed(() => route.params.pageId as string | undefined)
 
-const { data: section } = useSectionSpec({ sectionId: sectionId.value ?? "" })
-const { data: page } = usePageSpec({
-	sectionId: sectionId.value ?? "",
-	pageId: pageId.value ?? "",
-})
+const { data: section } = useSectionSpec({ sectionId })
+const { data: page } = usePageSpec({ sectionId, pageId })
 </script>
 
 <template>

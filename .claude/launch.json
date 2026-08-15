@@ -5,7 +5,8 @@
 			"name": "client-dev",
 			"runtimeExecutable": "bun",
 			"runtimeArgs": ["run", "--cwd", "client", "dev"],
-			"port": 5173
+			"port": 5173,
+			"autoPort": true
 		}
 	]
 }
