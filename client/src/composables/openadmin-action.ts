@@ -5,21 +5,21 @@
 import { computed, toValue, type MaybeRefOrGetter } from "vue"
 import { usePageSpec } from "./openadmin-page"
 
-export const useStat = ({
+export const useAction = ({
 	sectionId,
 	pageId,
-	statId,
+	actionId,
 }: {
 	sectionId: MaybeRefOrGetter<string>
 	pageId: MaybeRefOrGetter<string>
-	statId: MaybeRefOrGetter<string>
+	actionId: MaybeRefOrGetter<string>
 }) => {
 	const { page } = usePageSpec({ sectionId, pageId })
-	const stat = computed(() =>
-		page.value?.components.filter((c) => c.type === "stat" && c.id === toValue(statId)),
+	const action = computed(() =>
+		page.value?.components.filter((c) => c.type === "action" && c.id === toValue(actionId)),
 	)
 
 	return {
-		stat,
+		action,
 	}
 }
