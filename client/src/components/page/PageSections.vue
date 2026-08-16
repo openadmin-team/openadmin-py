@@ -9,12 +9,13 @@ import Action from "@/components/page/Action.vue"
 import { usePageSpec } from "@/composables/openadmin-page"
 import Form from "@/components/page/Form.vue"
 import Stat from "@/components/page/Stat.vue"
+import Table from "./Table.vue";
 
 const props = defineProps<{
 	sectionId: string
 	pageId: string
 }>()
-const { actions, forms, stats } = usePageSpec({ sectionId: props.sectionId, pageId: props.pageId })
+const { actions, forms, stats, tables } = usePageSpec({ sectionId: props.sectionId, pageId: props.pageId })
 </script>
 
 <template>
@@ -30,6 +31,9 @@ const { actions, forms, stats } = usePageSpec({ sectionId: props.sectionId, page
 		</section>
 		<section class="flex flex-wrap justify-center gap-4">
 			<Stat v-for="stat in stats" :section-id="sectionId" :page-id="pageId" :stat-id="stat.id" />
+		</section>
+		<section>
+			<Table v-for="table in tables" :section-id="sectionId" :page-id="pageId" :table-id="table.id" />
 		</section>
 	</div>
 </template>
