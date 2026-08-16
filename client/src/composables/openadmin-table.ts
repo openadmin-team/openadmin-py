@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { computed, toValue, type MaybeRefOrGetter } from "vue"
+import { computed, h, toValue, type MaybeRefOrGetter } from "vue"
 import { usePageSpec } from "./openadmin-page"
 import { useQuery } from "@tanstack/vue-query"
 import { errorSchema } from "@/schemas/error"
@@ -14,8 +14,9 @@ import {
 	type TableData,
 	type TableRow,
 } from "@/schemas/table"
-import { createColumnHelper } from "@tanstack/vue-table"
+import { createColumnHelper, type ColumnDef } from "@tanstack/vue-table"
 import type { DataTableFeatures } from "@/lib/data-table"
+import DataTableDropDown from "@/components/page/DataTableDropDown.vue"
 
 export const useTable = ({
 	sectionId,
@@ -71,16 +72,30 @@ export const useTable = ({
 		return Object.keys(sample).filter((key) => !SPECIAL_ROW_KEYS.has(key))
 	})
 
-	const columns = computed(() =>
-		columnHelper.value.columns(
-			columnKeys.value.map((key) =>
+	const hasActions = computed(() =>
+		(rows.value ?? []).some((row) => isTableRow(row) && (row.__actions__?.length ?? 0) > 0),
+	)
+
+	const columns = computed(() => {
+		const dataColumns: ColumnDef<DataTableFeatures, TableRow, any>[] = columnKeys.value.map(
+			(key) =>
 				columnHelper.value.accessor((row) => row[key], {
 					id: key,
 					header: table.value?.columns?.[key]?.label ?? key,
 				}),
-			),
-		),
-	)
+		)
+
+		if (hasActions.value) {
+			dataColumns.push(
+				columnHelper.value.display({
+					id: "__actions__",
+					cell: ({ row }) => h(DataTableDropDown, { actions: row.original.__actions__ ?? [] }),
+				}),
+			)
+		}
+
+		return columnHelper.value.columns(dataColumns)
+	})
 
 	return {
 		table,
