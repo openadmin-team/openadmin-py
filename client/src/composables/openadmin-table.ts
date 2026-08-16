@@ -83,7 +83,7 @@ export const useTable = ({
 	)
 
 	const actions = computed(() => {
-		// implememnt
+		// implement
 	})
 
 	return {
