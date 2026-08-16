@@ -55,13 +55,15 @@ export type TableComponent = z.infer<typeof tableComponentSchema>
 
 const tableRowValueSchema = z.union([z.string(), z.number(), z.boolean(), z.null()])
 
-const tableRowSchema = z
+export const tableRowSchema = z
 	.object({
 		__view__: tableRowValueSchema.optional(),
 		__actions__: z.array(actionConfigSchema).optional(),
 		__style__: columnStyleSchema.nullable().optional(),
 	})
 	.catchall(tableRowValueSchema)
+
+export type TableRow = z.infer<typeof tableRowSchema>
 
 export const tableDataSchema = z.array(z.union([tableRowSchema, z.unknown()]))
 

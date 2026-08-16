@@ -7,7 +7,20 @@ import { usePageSpec } from "./openadmin-page"
 import { useQuery } from "@tanstack/vue-query"
 import { errorSchema } from "@/schemas/error"
 import type { AppError } from "@/types/errors"
-import { tableSchema, type Table, type TableComponent, type TableData } from "@/schemas/table"
+import {
+	tableSchema,
+	type Table,
+	type TableComponent,
+	type TableData,
+	type TableRow,
+} from "@/schemas/table"
+import { createColumnHelper } from "@tanstack/vue-table"
+import type { DataTableFeatures } from "@/lib/data-table"
+
+const SPECIAL_ROW_KEYS = new Set(["__view__", "__actions__", "__style__"])
+
+const isTableRow = (row: TableData[number]): row is TableRow =>
+	typeof row === "object" && row !== null && !Array.isArray(row)
 
 export const useTable = ({
 	sectionId,
@@ -55,10 +68,30 @@ export const useTable = ({
 		return data.value.data
 	})
 
+	const columnHelper = computed(() => createColumnHelper<DataTableFeatures, TableRow>())
+
+	const columnKeys = computed(() => {
+		const sample = rows.value?.find(isTableRow)
+		if (!sample) return []
+		return Object.keys(sample).filter((key) => !SPECIAL_ROW_KEYS.has(key))
+	})
+
+	const columns = computed(() =>
+		columnHelper.value.columns(
+			columnKeys.value.map((key) =>
+				columnHelper.value.accessor((row) => row[key], {
+					id: key,
+					header: table.value?.columns?.[key]?.label ?? key,
+				}),
+			),
+		),
+	)
+
 	return {
 		table,
 		data,
 		rows,
+		columns,
 		isLoading,
 		isFetching,
 	}
