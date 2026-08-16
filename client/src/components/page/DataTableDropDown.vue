@@ -15,11 +15,10 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import type { ActionConfig } from "@/schemas/table";
 
 defineProps<{
-	payment: {
-		id: string
-	}
+	actions: ActionConfig
 }>()
 
 function copy(id: string) {

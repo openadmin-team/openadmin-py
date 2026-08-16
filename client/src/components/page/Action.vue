@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts">
-import { useIconColor } from "@/composables/colors"
+import { useColor } from "@/composables/colors"
 import { Button } from "@/components/ui/button"
 import { Icon } from "@iconify/vue"
 import { useAction } from "@/composables/openadmin-action"
@@ -20,7 +20,7 @@ const { action } = useAction({
 	pageId: props.pageId,
 	actionId: props.actionId,
 })
-const { style } = useIconColor(() => action.value?.color || "slate")
+const { style } = useColor(() => action.value?.color || "slate")
 </script>
 
 <template>

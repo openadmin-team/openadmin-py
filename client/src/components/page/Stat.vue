@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts">
-import { useIconColor } from "@/composables/colors"
+import { useColor } from "@/composables/colors"
 import {
 	Card,
 	CardAction,
@@ -29,7 +29,7 @@ const { stat, value, isFetching } = useStat({
 	pageId: props.pageId,
 	statId: props.statId,
 })
-const { style } = useIconColor(() => stat.value?.color || "slate")
+const { style } = useColor(() => stat.value?.color || "slate")
 </script>
 
 <template>

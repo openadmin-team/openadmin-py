@@ -5,7 +5,7 @@
 import type { Color } from "@/schemas/color"
 import { computed, toValue, type MaybeRefOrGetter } from "vue"
 
-export const useIconColor = (color: MaybeRefOrGetter<Color>) => {
+export const useColor = (color: MaybeRefOrGetter<Color>) => {
 	const style = computed(() => COLOR_STYLES[toValue(color)])
 
 	return {
