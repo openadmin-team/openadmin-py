@@ -78,51 +78,57 @@ async def get_all_authors(
         .offset((pagination.page - 1) * pagination.per_page)
         .limit(pagination.per_page)
     )
+    count_stmt = select(func.count(models.Author.id))
     if search:
         full_name = models.Author.first_name + " " + models.Author.last_name
         stmt = stmt.where(full_name.ilike(f"%{search}%"))
+        count_stmt = count_stmt.where(full_name.ilike(f"%{search}%"))
     result = await session.execute(stmt)
-    return [
-        {
-            "id": author.id,
-            "name": f"{author.first_name} {author.last_name}",
-            "bio": (author.bio[:80] + "...")
-            if author.bio and len(author.bio) > 80
-            else author.bio,
-            "book_count": count,
-            "__view__": f"{author.first_name} {author.last_name}",
-            "__actions__": [
-                {
-                    "label": "Delete this user",
-                    "action": reference_action(delete_author),
-                    "query": {
-                        "id": author.id,
+    total = await session.execute(count_stmt)
+    return {
+        "data": [
+            {
+                "id": author.id,
+                "name": f"{author.first_name} {author.last_name}",
+                "bio": (author.bio[:80] + "...")
+                if author.bio and len(author.bio) > 80
+                else author.bio,
+                "book_count": count,
+                "__view__": f"{author.first_name} {author.last_name}",
+                "__actions__": [
+                    {
+                        "label": "Delete this user",
+                        "action": reference_action(delete_author),
+                        "query": {
+                            "id": author.id,
+                        },
+                        "color": "red",
+                        "icon": "trash",
                     },
-                    "color": "red",
-                    "icon": "trash",
-                },
-                {
-                    "label": "Bun this user",
-                    "action": reference_action(delete_author),
-                    "query": {
-                        "id": author.id,
+                    {
+                        "label": "Bun this user",
+                        "action": reference_action(delete_author),
+                        "query": {
+                            "id": author.id,
+                        },
+                        "color": "yellow",
+                        "icon": "alarm-clock-check",
                     },
-                    "color": "yellow",
-                    "icon": "alarm-clock-check",
-                },
-                {
-                    "label": "Unban this user",
-                    "action": reference_action(delete_author),
-                    "query": {
-                        "id": author.id,
+                    {
+                        "label": "Unban this user",
+                        "action": reference_action(delete_author),
+                        "query": {
+                            "id": author.id,
+                        },
+                        "color": "green",
+                        "icon": "leaf",
                     },
-                    "color": "green",
-                    "icon": "leaf",
-                },
-            ],
-        }
-        for author, count in result.all()
-    ]
+                ],
+            }
+            for author, count in result.all()
+        ],
+        "total": total.scalar_one(),
+    }
 
 
 @page.bar_chart(

@@ -20,6 +20,7 @@ import { features, type DataTableFeatures } from "@/lib/data-table"
 const props = defineProps<{
 	columns: ColumnDef<DataTableFeatures, TData>[]
 	data: TData[]
+	manualPagination?: boolean
 }>()
 
 const table = useTanStackTable({
@@ -29,6 +30,9 @@ const table = useTanStackTable({
 	},
 	get columns() {
 		return props.columns
+	},
+	get manualPagination() {
+		return props.manualPagination
 	},
 })
 </script>

@@ -124,10 +124,16 @@ export const useTable = ({
 		return columnHelper.value.columns(dataColumns)
 	})
 
-	const total = computed(() => {
-		if (!data.value) return 0
-		if (Array.isArray(data.value)) return data.value.length
-		return data.value.total ?? data.value.data.length
+	const total = computed<number | null>(() => {
+		if (!data.value || Array.isArray(data.value)) return null
+		return data.value.total ?? null
+	})
+
+	const hasPreviousPage = computed(() => pageIndex.value > 1)
+
+	const hasNextPage = computed(() => {
+		if (total.value !== null) return pageIndex.value * perPage.value < total.value
+		return (rows.value?.length ?? 0) >= perPage.value
 	})
 
 	return {
@@ -140,9 +146,11 @@ export const useTable = ({
 		hasSearch,
 		hasPagination,
 		searchQuery,
-		pageId,
+		pageIndex,
 		perPage,
 		total,
+		hasPreviousPage,
+		hasNextPage,
 	}
 }
 
