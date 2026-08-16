@@ -67,6 +67,12 @@ class AdminPage:
             self.router.get(
                 f"/table/{table_id}",
                 description=description,
+                # `spec.Table` unions a bare row iterable with a `TableResponse`
+                # dict. FastAPI's inferred response model validates a dict
+                # against the iterable arm first, collapsing it to its keys, so
+                # response validation is disabled and the return value is
+                # serialized as-is.
+                response_model=None,
             ),
         )
 
