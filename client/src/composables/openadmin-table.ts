@@ -46,16 +46,33 @@ export const useTable = ({
 		return !!properties && "page" in properties && "per_page" in properties
 	})
 
+	const queryParams = computed(() => {
+		const params = new URLSearchParams()
+
+		if (hasSearch.value && searchQuery.value) {
+			params.set("search", searchQuery.value)
+		}
+
+		if (hasPagination.value) {
+			params.set("page", String(pageIndex.value))
+			params.set("per_page", String(perPage.value))
+		}
+
+		return params
+	})
+
 	const { data, isLoading, isFetching } = useQuery<Table, AppError>({
 		queryKey: computed(() => [
 			"openadmin-stat",
 			toValue(sectionId),
 			toValue(pageId),
 			toValue(tableId),
+			queryParams.value.toString(),
 		]),
 		queryFn: async () => {
+			const query = queryParams.value.toString()
 			const response = await fetch(
-				`${toValue(sectionId)}/${toValue(pageId)}/table/${toValue(tableId)}`,
+				`${toValue(sectionId)}/${toValue(pageId)}/table/${toValue(tableId)}${query ? `?${query}` : ""}`,
 			)
 			const data = await response.json()
 
