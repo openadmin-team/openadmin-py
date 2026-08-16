@@ -17,11 +17,6 @@ import {
 import { createColumnHelper } from "@tanstack/vue-table"
 import type { DataTableFeatures } from "@/lib/data-table"
 
-const SPECIAL_ROW_KEYS = new Set(["__view__", "__actions__", "__style__"])
-
-export const isTableRow = (row: TableData[number]): row is TableRow =>
-	typeof row === "object" && row !== null && !Array.isArray(row)
-
 export const useTable = ({
 	sectionId,
 	pageId,
@@ -87,6 +82,10 @@ export const useTable = ({
 		),
 	)
 
+	const actions = computed(() => {
+		// implememnt
+	})
+
 	return {
 		table,
 		data,
@@ -96,3 +95,8 @@ export const useTable = ({
 		isFetching,
 	}
 }
+
+const SPECIAL_ROW_KEYS = new Set(["__view__", "__actions__", "__style__"])
+
+export const isTableRow = (row: TableData[number]): row is TableRow =>
+	typeof row === "object" && row !== null && !Array.isArray(row)
