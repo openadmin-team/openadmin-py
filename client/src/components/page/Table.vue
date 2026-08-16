@@ -50,11 +50,11 @@ const data = computed(() => (rows.value ?? []).filter(isTableRow))
 
 <template>
 	<div class="container py-10 mx-auto space-y-4">
-		<div v-if="hasSearch" class="flex items-center">
-			<Input v-model="searchQuery" class="max-w-sm" placeholder="Search..." />
-		</div>
-
-		<DataTable :columns="columns" :data="data" :manual-pagination="hasPagination" />
+		<DataTable :columns="columns" :data="data" :manual-pagination="hasPagination">
+			<template v-if="hasSearch" #toolbar-start>
+				<Input v-model="searchQuery" class="max-w-sm" placeholder="Search..." />
+			</template>
+		</DataTable>
 
 		<Pagination
 			v-if="hasPagination && total !== null"

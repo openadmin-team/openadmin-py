@@ -47,10 +47,12 @@ const table = useTanStackTable({
 
 <template>
 	<div class="flex flex-col gap-2">
-		<div class="flex justify-end">
+		<div class="flex items-center gap-2">
+			<slot name="toolbar-start" />
+
 			<DropdownMenu>
 				<DropdownMenuTrigger as-child>
-					<Button variant="outline">
+					<Button variant="outline" class="ml-auto">
 						Columns
 						<ChevronDownIcon data-icon="inline-end" />
 					</Button>
