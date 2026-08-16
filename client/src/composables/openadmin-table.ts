@@ -19,7 +19,7 @@ import type { DataTableFeatures } from "@/lib/data-table"
 
 const SPECIAL_ROW_KEYS = new Set(["__view__", "__actions__", "__style__"])
 
-const isTableRow = (row: TableData[number]): row is TableRow =>
+export const isTableRow = (row: TableData[number]): row is TableRow =>
 	typeof row === "object" && row !== null && !Array.isArray(row)
 
 export const useTable = ({
