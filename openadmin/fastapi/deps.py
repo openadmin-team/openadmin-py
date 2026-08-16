@@ -33,4 +33,4 @@ def create_authenticate_dep(
 
 
 PageDep = Annotated[PaginationParams, Depends(pagination_params)]
-SearchQueryDep = Annotated[str | None, Depends(get_search_query)]
+SearchDep = Annotated[str | None, Depends(get_search_query)]

@@ -7,7 +7,7 @@ from sqlalchemy import func, select
 
 from openadmin import spec
 from openadmin.fastapi import AdminPage, reference_table, reference_action
-from openadmin.fastapi.deps import PageDep, SearchQueryDep
+from openadmin.fastapi.deps import PageDep, SearchDep
 
 from ..lib import models
 from ..lib.database import AsyncSessionDep
@@ -69,7 +69,7 @@ async def get_avg_books_per_author(session: AsyncSessionDep) -> float:
     color="indigo",
 )
 async def get_all_authors(
-    session: AsyncSessionDep, pagination: PageDep, search: SearchQueryDep
+    session: AsyncSessionDep, pagination: PageDep, search: SearchDep
 ) -> spec.Table:
     stmt = (
         select(models.Author, func.count(models.Book.id).label("book_count"))

@@ -8,7 +8,7 @@ from sqlalchemy import func, select
 
 from openadmin import spec
 from openadmin.fastapi import AdminPage
-from openadmin.fastapi.deps import PageDep, SearchQueryDep
+from openadmin.fastapi.deps import PageDep, SearchDep
 
 from ..lib import models
 from ..lib.database import AsyncSessionDep
@@ -46,7 +46,7 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
     columns={"published_year": {"label": "Published Year"}},
 )
 async def get_all_books(
-    session: AsyncSessionDep, pagination: PageDep, search: SearchQueryDep
+    session: AsyncSessionDep, pagination: PageDep, search: SearchDep
 ):
     stmt = (
         select(models.Book, models.Author)

@@ -7,7 +7,7 @@ from sqlalchemy import func, select
 
 from openadmin import spec
 from openadmin.fastapi import AdminPage
-from openadmin.fastapi.deps import PageDep, SearchQueryDep
+from openadmin.fastapi.deps import PageDep, SearchDep
 
 from ..lib import models
 from ..lib.database import AsyncSessionDep
@@ -50,7 +50,7 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
     color="amber",
 )
 async def get_all_publishers(
-    session: AsyncSessionDep, pagination: PageDep, search: SearchQueryDep
+    session: AsyncSessionDep, pagination: PageDep, search: SearchDep
 ):
     stmt = (
         select(models.Publisher, func.count(models.Book.id).label("book_count"))
