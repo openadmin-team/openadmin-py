@@ -124,6 +124,12 @@ export const useTable = ({
 		return columnHelper.value.columns(dataColumns)
 	})
 
+	const total = computed(() => {
+		if (!data.value) return 0
+		if (Array.isArray(data.value)) return data.value.length
+		return data.value.total ?? data.value.data.length
+	})
+
 	return {
 		table,
 		data,
@@ -136,6 +142,7 @@ export const useTable = ({
 		searchQuery,
 		pageId,
 		perPage,
+		total,
 	}
 }
 
