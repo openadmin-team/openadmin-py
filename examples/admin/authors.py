@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 
 from openadmin import spec
-from openadmin.fastapi import AdminPage
+from openadmin.fastapi import AdminPage, reference_table
 from openadmin.fastapi.deps import PageDep, SearchQueryDep
 
 from ..lib import models
@@ -136,7 +136,7 @@ class AddAuthorBody(BaseModel):
     description="Register a new author in the catalog",
     fields={
         "friend": {
-            "reference": get_all_authors,
+            "reference": reference_table(get_all_authors),
             "icon": "user",
             "color": "blue",
             "reference_field": "id",
