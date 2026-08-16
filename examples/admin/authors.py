@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 
 from openadmin import spec
-from openadmin.fastapi import AdminPage, reference_table
+from openadmin.fastapi import AdminPage, reference_table, reference_action
 from openadmin.fastapi.deps import PageDep, SearchQueryDep
 
 from ..lib import models
@@ -94,11 +94,28 @@ async def get_all_authors(
             "__actions__": [
                 {
                     "label": "Delete this user",
-                    "action": delete_author,
+                    "action": reference_action(delete_author),
                     "query": {
                         "id": author.id,
                     },
-                }
+                    'color': 'red',
+                },
+                {
+                    "label": "Bun this user",
+                    "action": reference_action(delete_author),
+                    "query": {
+                        "id": author.id,
+                    },
+                    'color': 'yellow',
+                },
+                {
+                    "label": "Unban this user",
+                    "action": reference_action(delete_author),
+                    "query": {
+                        "id": author.id,
+                    },
+                    'color': 'green',
+                },
             ],
         }
         for author, count in result.all()
