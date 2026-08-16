@@ -43,6 +43,11 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
     description="Browse all books with search and pagination",
     icon="book",
     color="blue",
+    columns={
+        'published_year': {
+            'label': 'Published Year'
+        }
+    }
 )
 async def get_all_books(
     session: AsyncSessionDep, pagination: PageDep, search: SearchQueryDep
