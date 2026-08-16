@@ -19,11 +19,13 @@ export const useTable = ({
 	tableId: MaybeRefOrGetter<string>
 }) => {
 	const { page } = usePageSpec({ sectionId, pageId })
+	
 	const table = computed(() =>
 		page.value?.components.find(
 			(c): c is TableComponent => c.type === "table" && c.id === toValue(tableId),
 		),
 	)
+	
 	const { data, isLoading, isFetching } = useQuery<Table, AppError>({
 		queryKey: computed(() => [
 			"openadmin-stat",
@@ -46,6 +48,7 @@ export const useTable = ({
 		},
 		refetchInterval: computed(() => table.value?.refresh ?? false),
 	})
+	
 	const rows = computed<TableData | null>(() => {
 		if (!data.value) return null
 		if (Array.isArray(data.value)) return data.value
