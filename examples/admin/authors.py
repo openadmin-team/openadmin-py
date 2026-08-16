@@ -99,6 +99,7 @@ async def get_all_authors(
                         "id": author.id,
                     },
                     'color': 'red',
+                    'icon': 'trash'
                 },
                 {
                     "label": "Bun this user",
@@ -107,6 +108,7 @@ async def get_all_authors(
                         "id": author.id,
                     },
                     'color': 'yellow',
+                    'icon': 'alarm-clock-check'
                 },
                 {
                     "label": "Unban this user",
@@ -115,6 +117,7 @@ async def get_all_authors(
                         "id": author.id,
                     },
                     'color': 'green',
+                    'icon': 'leaf',
                 },
             ],
         }
