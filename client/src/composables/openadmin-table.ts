@@ -4,7 +4,7 @@
 
 import { useQuery } from "@tanstack/vue-query"
 import { type ColumnDef, createColumnHelper } from "@tanstack/vue-table"
-import { computed, h, type MaybeRefOrGetter, ref, toValue } from "vue"
+import { computed, h, type MaybeRefOrGetter, ref, toValue, watch } from "vue"
 import DataTableDropDown from "@/components/page/DataTableDropDown.vue"
 import type { DataTableFeatures } from "@/lib/data-table"
 import { errorSchema } from "@/schemas/error"
@@ -40,6 +40,10 @@ export const useTable = ({
 	const perPage = ref(10)
 
 	const hasSearch = computed(() => !!table.value?.query?.properties?.search)
+
+	watch(searchQuery, () => {
+		pageIndex.value = 1
+	})
 
 	const hasPagination = computed(() => {
 		const properties = table.value?.query?.properties

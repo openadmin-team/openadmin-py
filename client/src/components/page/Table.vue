@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts">
 import { computed } from "vue"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
 	Pagination,
 	PaginationContent,
@@ -29,6 +30,8 @@ const props = defineProps<{
 const {
 	columns,
 	rows,
+	hasSearch,
+	searchQuery,
 	hasPagination,
 	pageIndex,
 	perPage,
@@ -46,6 +49,10 @@ const data = computed(() => (rows.value ?? []).filter(isTableRow))
 
 <template>
 	<div class="container py-10 mx-auto space-y-4">
+		<div v-if="hasSearch" class="flex items-center">
+			<Input v-model="searchQuery" class="max-w-sm" placeholder="Search..." />
+		</div>
+
 		<DataTable :columns="columns" :data="data" :manual-pagination="hasPagination" />
 
 		<Pagination
