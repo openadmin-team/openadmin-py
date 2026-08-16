@@ -35,7 +35,7 @@ export const useTable = ({
 		]),
 		queryFn: async () => {
 			const response = await fetch(
-				`${toValue(sectionId)}/${toValue(pageId)}/stat/${toValue(tableId)}`,
+				`${toValue(sectionId)}/${toValue(pageId)}/table/${toValue(tableId)}`,
 			)
 			const data = await response.json()
 
