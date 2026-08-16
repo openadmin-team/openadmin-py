@@ -120,6 +120,7 @@ export const useTable = ({
 			dataColumns.push(
 				columnHelper.value.display({
 					id: "__actions__",
+					enableHiding: false,
 					cell: ({ row }) => h(DataTableDropDown, { actions: row.original.__actions__ ?? [] }),
 				}),
 			)

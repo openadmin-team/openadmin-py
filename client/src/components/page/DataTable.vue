@@ -7,6 +7,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts" generic="TData extends RowData">
 import type { ColumnDef, RowData } from "@tanstack/vue-table"
 import { FlexRender, useTable as useTanStackTable } from "@tanstack/vue-table"
+import { ChevronDownIcon } from "@lucide/vue"
+import { Button } from "@/components/ui/button"
+import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
 	Table,
 	TableBody,
@@ -38,33 +46,56 @@ const table = useTanStackTable({
 </script>
 
 <template>
-	<div class="border rounded-md">
-		<Table>
-			<TableHeader>
-				<TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-					<TableHead v-for="header in headerGroup.headers" :key="header.id">
-						<FlexRender v-if="!header.isPlaceholder" :header="header" />
-					</TableHead>
-				</TableRow>
-			</TableHeader>
-			<TableBody>
-				<template v-if="table.getRowModel().rows?.length">
-					<TableRow
-						v-for="row in table.getRowModel().rows"
-						:key="row.id"
-						:data-state="row.getIsSelected() && 'selected'"
+	<div class="flex flex-col gap-2">
+		<div class="flex justify-end">
+			<DropdownMenu>
+				<DropdownMenuTrigger as-child>
+					<Button variant="outline">
+						Columns
+						<ChevronDownIcon data-icon="inline-end" />
+					</Button>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent align="end">
+					<DropdownMenuCheckboxItem
+						v-for="column in table.getAllColumns().filter((column) => column.getCanHide())"
+						:key="column.id"
+						:model-value="column.getIsVisible()"
+						@update:model-value="(value) => column.toggleVisibility(!!value)"
 					>
-						<TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-							<FlexRender :cell="cell" />
-						</TableCell>
+						{{ column.columnDef.header ?? column.id }}
+					</DropdownMenuCheckboxItem>
+				</DropdownMenuContent>
+			</DropdownMenu>
+		</div>
+
+		<div class="border rounded-md">
+			<Table>
+				<TableHeader>
+					<TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
+						<TableHead v-for="header in headerGroup.headers" :key="header.id">
+							<FlexRender v-if="!header.isPlaceholder" :header="header" />
+						</TableHead>
 					</TableRow>
-				</template>
-				<template v-else>
-					<TableRow>
-						<TableCell :colspan="columns.length" class="h-24 text-center"> No results. </TableCell>
-					</TableRow>
-				</template>
-			</TableBody>
-		</Table>
+				</TableHeader>
+				<TableBody>
+					<template v-if="table.getRowModel().rows?.length">
+						<TableRow
+							v-for="row in table.getRowModel().rows"
+							:key="row.id"
+							:data-state="row.getIsSelected() && 'selected'"
+						>
+							<TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+								<FlexRender :cell="cell" />
+							</TableCell>
+						</TableRow>
+					</template>
+					<template v-else>
+						<TableRow>
+							<TableCell :colspan="columns.length" class="h-24 text-center"> No results. </TableCell>
+						</TableRow>
+					</template>
+				</TableBody>
+			</Table>
+		</div>
 	</div>
 </template>
