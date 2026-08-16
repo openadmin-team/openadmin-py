@@ -82,10 +82,6 @@ export const useTable = ({
 		),
 	)
 
-	const actions = computed(() => {
-		// implement
-	})
-
 	return {
 		table,
 		data,
@@ -93,7 +89,6 @@ export const useTable = ({
 		columns,
 		isLoading,
 		isFetching,
-		actions,
 	}
 }
 
