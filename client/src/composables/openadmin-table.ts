@@ -93,6 +93,7 @@ export const useTable = ({
 		columns,
 		isLoading,
 		isFetching,
+		actions,
 	}
 }
 
