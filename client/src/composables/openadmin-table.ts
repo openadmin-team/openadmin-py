@@ -47,14 +47,15 @@ export const useTable = ({
 		refetchInterval: computed(() => table.value?.refresh ?? false),
 	})
 	const rows = computed<TableData | null>(() => {
-		if (!data.value) return null;
-		if (Array.isArray(data.value)) return data.value as TableData
-		return data.value.data as TableData
+		if (!data.value) return null
+		if (Array.isArray(data.value)) return data.value
+		return data.value.data
 	})
 
 	return {
 		table,
 		data,
+		rows,
 		isLoading,
 		isFetching,
 	}
