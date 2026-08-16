@@ -131,6 +131,11 @@ export const useTable = ({
 		columns,
 		isLoading,
 		isFetching,
+		hasSearch,
+		hasPagination,
+		searchQuery,
+		pageId,
+		perPage,
 	}
 }
 
