@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 
 from openadmin import spec
-from openadmin.fastapi import AdminPage, reference_table, reference_action
+from openadmin.fastapi import AdminPage, reference_action, reference_table
 from openadmin.fastapi.deps import PageDep, SearchDep
 
 from ..lib import models
@@ -98,8 +98,8 @@ async def get_all_authors(
                     "query": {
                         "id": author.id,
                     },
-                    'color': 'red',
-                    'icon': 'trash'
+                    "color": "red",
+                    "icon": "trash",
                 },
                 {
                     "label": "Bun this user",
@@ -107,8 +107,8 @@ async def get_all_authors(
                     "query": {
                         "id": author.id,
                     },
-                    'color': 'yellow',
-                    'icon': 'alarm-clock-check'
+                    "color": "yellow",
+                    "icon": "alarm-clock-check",
                 },
                 {
                     "label": "Unban this user",
@@ -116,8 +116,8 @@ async def get_all_authors(
                     "query": {
                         "id": author.id,
                     },
-                    'color': 'green',
-                    'icon': 'leaf',
+                    "color": "green",
+                    "icon": "leaf",
                 },
             ],
         }
