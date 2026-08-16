@@ -5,6 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts">
+import { ChevronLeftIcon, ChevronRightIcon } from "@lucide/vue"
 import { computed } from "vue"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -84,12 +85,24 @@ const data = computed(() => (rows.value ?? []).filter(isTableRow))
 			</PaginationContent>
 		</Pagination>
 
-		<div v-else-if="hasPagination" class="flex items-center justify-end gap-2">
-			<Button variant="outline" size="sm" :disabled="!hasPreviousPage" @click="pageIndex--">
-				Previous
+		<div v-else-if="hasPagination" class="flex items-center justify-center gap-1">
+			<Button
+				variant="ghost"
+				class="gap-1 px-2.5 sm:pr-2.5"
+				:disabled="!hasPreviousPage"
+				@click="pageIndex--"
+			>
+				<ChevronLeftIcon data-icon="inline-start" />
+				<span class="hidden sm:block">Previous</span>
 			</Button>
-			<Button variant="outline" size="sm" :disabled="!hasNextPage" @click="pageIndex++">
-				Next
+			<Button
+				variant="ghost"
+				class="gap-1 px-2.5 sm:pr-2.5"
+				:disabled="!hasNextPage"
+				@click="pageIndex++"
+			>
+				<span class="hidden sm:block">Next</span>
+				<ChevronRightIcon data-icon="inline-end" />
 			</Button>
 		</div>
 	</div>
