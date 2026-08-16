@@ -5,9 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts">
-import { computed } from "vue"
-import { MoreHorizontal } from "@lucide/vue"
 import { Icon } from "@iconify/vue"
+import { MoreHorizontal } from "@lucide/vue"
+import { computed } from "vue"
 import { Button } from "@/components/ui/button"
 import {
 	DropdownMenu,

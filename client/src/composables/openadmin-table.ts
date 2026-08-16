@@ -2,21 +2,21 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { computed, h, toValue, type MaybeRefOrGetter } from "vue"
-import { usePageSpec } from "./openadmin-page"
 import { useQuery } from "@tanstack/vue-query"
+import { type ColumnDef, createColumnHelper } from "@tanstack/vue-table"
+import { computed, h, type MaybeRefOrGetter, toValue } from "vue"
+import DataTableDropDown from "@/components/page/DataTableDropDown.vue"
+import type { DataTableFeatures } from "@/lib/data-table"
 import { errorSchema } from "@/schemas/error"
-import type { AppError } from "@/types/errors"
 import {
-	tableSchema,
 	type Table,
 	type TableComponent,
 	type TableData,
 	type TableRow,
+	tableSchema,
 } from "@/schemas/table"
-import { createColumnHelper, type ColumnDef } from "@tanstack/vue-table"
-import type { DataTableFeatures } from "@/lib/data-table"
-import DataTableDropDown from "@/components/page/DataTableDropDown.vue"
+import type { AppError } from "@/types/errors"
+import { usePageSpec } from "./openadmin-page"
 
 export const useTable = ({
 	sectionId,
@@ -77,12 +77,11 @@ export const useTable = ({
 	)
 
 	const columns = computed(() => {
-		const dataColumns: ColumnDef<DataTableFeatures, TableRow, any>[] = columnKeys.value.map(
-			(key) =>
-				columnHelper.value.accessor((row) => row[key], {
-					id: key,
-					header: table.value?.columns?.[key]?.label ?? key,
-				}),
+		const dataColumns: ColumnDef<DataTableFeatures, TableRow, any>[] = columnKeys.value.map((key) =>
+			columnHelper.value.accessor((row) => row[key], {
+				id: key,
+				header: table.value?.columns?.[key]?.label ?? key,
+			}),
 		)
 
 		if (hasActions.value) {
