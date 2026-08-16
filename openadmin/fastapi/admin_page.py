@@ -9,7 +9,6 @@ from fastapi import APIRouter
 from openadmin import spec
 
 from . import utils
-from .field_config import FieldConfig
 
 
 class AdminPage:
@@ -215,29 +214,13 @@ class AdminPage:
         name: str,
         *,
         method: spec.HttpMethod = "post",
-        fields: dict[str, FieldConfig] | None = None,
+        fields: dict[str, spec.FieldConfig] | None = None,
         description: str | None = None,
         is_hidden: bool = False,
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
         form_id = utils.get_id(name)
-
-        filed_config: dict[str, spec.FieldConfig] = {}
-
-        for filed, config in (fields or {}).items():
-            filed_config[filed] = {  # type: ignore
-                "color": config.get("color"),
-                "icon": config.get("icon"),
-                "reference": getattr(
-                    config.get("reference"),
-                    "__openadmin_table_id__",
-                    config.get("reference"),
-                )
-                if isinstance(config.get("reference"), Callable)
-                else config.get("reference"),
-                "reference_field": config.get("reference_field"),
-            }
 
         item: spec.FormComponent = {
             "type": "form",
@@ -251,7 +234,7 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
-            "fields": filed_config,
+            "fields": fields,
         }
 
         self.components.append(item)

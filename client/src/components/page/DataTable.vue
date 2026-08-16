@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 OpenAdmin
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script setup lang="ts" generic="TData extends RowData">
 import type { ColumnDef, RowData } from "@tanstack/vue-table"
 import { FlexRender, useTable as useTanStackTable } from "@tanstack/vue-table"
