@@ -4,7 +4,7 @@
 
 import { useQuery } from "@tanstack/vue-query"
 import { type ColumnDef, createColumnHelper } from "@tanstack/vue-table"
-import { computed, h, type MaybeRefOrGetter, toValue } from "vue"
+import { computed, h, type MaybeRefOrGetter, ref, toValue } from "vue"
 import DataTableDropDown from "@/components/page/DataTableDropDown.vue"
 import type { DataTableFeatures } from "@/lib/data-table"
 import { errorSchema } from "@/schemas/error"
@@ -34,6 +34,17 @@ export const useTable = ({
 			(c): c is TableComponent => c.type === "table" && c.id === toValue(tableId),
 		),
 	)
+
+	const searchQuery = ref('')
+	const pageIndex = ref(1)
+	const perPage = ref(10)
+
+	const hasSearch = computed(() => !!table.value?.query?.properties?.search)
+
+	const hasPagination = computed(() => {
+		const properties = table.value?.query?.properties
+		return !!properties && "page" in properties && "per_page" in properties
+	})
 
 	const { data, isLoading, isFetching } = useQuery<Table, AppError>({
 		queryKey: computed(() => [
