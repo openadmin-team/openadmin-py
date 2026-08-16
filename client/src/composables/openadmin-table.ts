@@ -35,7 +35,7 @@ export const useTable = ({
 		),
 	)
 
-	const searchQuery = ref('')
+	const searchQuery = ref("")
 	const pageIndex = ref(1)
 	const perPage = ref(10)
 

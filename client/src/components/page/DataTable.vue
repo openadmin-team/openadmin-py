@@ -94,7 +94,9 @@ const table = useTanStackTable({
 					</template>
 					<template v-else>
 						<TableRow>
-							<TableCell :colspan="columns.length" class="h-24 text-center"> No results. </TableCell>
+							<TableCell :colspan="columns.length" class="h-24 text-center">
+								No results.
+							</TableCell>
 						</TableRow>
 					</template>
 				</TableBody>
