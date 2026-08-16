@@ -49,7 +49,7 @@ const data = computed(() => (rows.value ?? []).filter(isTableRow))
 </script>
 
 <template>
-	<div class="container py-10 mx-auto space-y-4">
+	<div class="container mx-auto space-y-4">
 		<DataTable :columns="columns" :data="data" :manual-pagination="hasPagination">
 			<template v-if="hasSearch" #toolbar-start>
 				<Input v-model="searchQuery" class="max-w-sm" placeholder="Search..." />
