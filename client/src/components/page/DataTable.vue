@@ -63,6 +63,7 @@ const table = useTanStackTable({
 						:key="column.id"
 						:model-value="column.getIsVisible()"
 						@update:model-value="(value) => column.toggleVisibility(!!value)"
+						@select="(event) => event.preventDefault()"
 					>
 						{{ column.columnDef.header ?? column.id }}
 					</DropdownMenuCheckboxItem>
