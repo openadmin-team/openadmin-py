@@ -33,7 +33,7 @@ const tabItems = computed(() =>
 </script>
 
 <template>
-	<div class="flex flex-col gap-12">
+	<div class="flex flex-col gap-24">
 		<section class="flex flex-wrap justify-end gap-2">
 			<Action
 				v-for="action in actions"

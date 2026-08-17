@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from random import randint
 from time import sleep
 from typing import Annotated
@@ -11,7 +11,8 @@ from fastapi import Body, Depends, Form, Query
 from pydantic import BaseModel
 
 from openadmin import spec
-from openadmin.fastapi import AdminPage
+from openadmin.fastapi import AdminPage, reference_action
+from openadmin.fastapi.deps import PageDep, SearchDep
 
 page = AdminPage(
     "Control Panel",
@@ -128,6 +129,278 @@ async def purge_temp_files(
             f"Would delete files older than {older_than_days} days "
             "(example — nothing was purged)"
         )
+    }
+
+
+# ---------------------------------------------------------------------------
+# Feature flags — a searchable table with a badge-styled status column and
+# per-row Enable/Disable actions. Held in memory for the demo.
+# ---------------------------------------------------------------------------
+
+
+FEATURE_FLAGS: list[dict[str, str | bool]] = [
+    {
+        "name": "new-dashboard",
+        "description": "Enables the redesigned analytics dashboard",
+        "enabled": True,
+        "created_by": "grace.hopper",
+        "created_at": "2026-01-12T09:30:00Z",
+        "last_changed_at": "2026-06-02T14:05:00Z",
+    },
+    {
+        "name": "beta-search",
+        "description": "Turns on the experimental full-text search backend",
+        "enabled": False,
+        "created_by": "alan.turing",
+        "created_at": "2026-03-04T11:00:00Z",
+        "last_changed_at": "2026-03-04T11:00:00Z",
+    },
+    {
+        "name": "dark-mode-v2",
+        "description": "Rolls out the refreshed dark theme palette",
+        "enabled": True,
+        "created_by": "ada.lovelace",
+        "created_at": "2025-11-20T16:45:00Z",
+        "last_changed_at": "2026-07-30T08:12:00Z",
+    },
+    {
+        "name": "checkout-retry",
+        "description": "Automatically retries failed checkout payment attempts",
+        "enabled": False,
+        "created_by": "margaret.hamilton",
+        "created_at": "2026-05-08T13:20:00Z",
+        "last_changed_at": "2026-05-15T09:40:00Z",
+    },
+    {
+        "name": "notif-batching",
+        "description": "Batches push notifications instead of sending one at a time",
+        "enabled": True,
+        "created_by": "grace.hopper",
+        "created_at": "2025-09-02T10:15:00Z",
+        "last_changed_at": "2026-04-11T17:30:00Z",
+    },
+    {
+        "name": "ai-recommendations",
+        "description": "Shows AI-generated product recommendations on the home feed",
+        "enabled": False,
+        "created_by": "katherine.johnson",
+        "created_at": "2026-02-18T08:00:00Z",
+        "last_changed_at": "2026-02-18T08:00:00Z",
+    },
+    {
+        "name": "gdpr-export-v2",
+        "description": "Uses the streaming exporter for user data download requests",
+        "enabled": True,
+        "created_by": "alan.turing",
+        "created_at": "2025-12-01T09:00:00Z",
+        "last_changed_at": "2026-07-05T12:45:00Z",
+    },
+    {
+        "name": "multi-currency",
+        "description": "Allows prices to be displayed in the shopper's local currency",
+        "enabled": False,
+        "created_by": "ada.lovelace",
+        "created_at": "2026-04-22T15:10:00Z",
+        "last_changed_at": "2026-04-22T15:10:00Z",
+    },
+    {
+        "name": "lazy-image-loading",
+        "description": "Defers off-screen image loading on catalog pages",
+        "enabled": True,
+        "created_by": "margaret.hamilton",
+        "created_at": "2025-10-14T13:40:00Z",
+        "last_changed_at": "2026-01-09T09:55:00Z",
+    },
+    {
+        "name": "two-factor-required",
+        "description": "Requires two-factor authentication for admin accounts",
+        "enabled": True,
+        "created_by": "grace.hopper",
+        "created_at": "2025-08-19T11:20:00Z",
+        "last_changed_at": "2026-06-30T16:00:00Z",
+    },
+    {
+        "name": "cart-abandonment-email",
+        "description": "Sends a reminder email 24 hours after an abandoned cart",
+        "enabled": False,
+        "created_by": "katherine.johnson",
+        "created_at": "2026-03-27T09:45:00Z",
+        "last_changed_at": "2026-03-27T09:45:00Z",
+    },
+    {
+        "name": "graphql-gateway",
+        "description": "Routes catalog reads through the new GraphQL gateway",
+        "enabled": True,
+        "created_by": "alan.turing",
+        "created_at": "2026-01-30T14:00:00Z",
+        "last_changed_at": "2026-05-22T10:10:00Z",
+    },
+    {
+        "name": "warehouse-auto-routing",
+        "description": "Automatically routes orders to the nearest warehouse",
+        "enabled": False,
+        "created_by": "ada.lovelace",
+        "created_at": "2026-05-19T08:30:00Z",
+        "last_changed_at": "2026-05-19T08:30:00Z",
+    },
+    {
+        "name": "session-replay",
+        "description": "Records anonymized session replays for support debugging",
+        "enabled": False,
+        "created_by": "margaret.hamilton",
+        "created_at": "2025-11-03T10:00:00Z",
+        "last_changed_at": "2026-02-14T11:25:00Z",
+    },
+    {
+        "name": "loyalty-points-v3",
+        "description": "Switches loyalty point accrual to the new rewards engine",
+        "enabled": True,
+        "created_by": "grace.hopper",
+        "created_at": "2026-02-09T16:20:00Z",
+        "last_changed_at": "2026-07-18T13:15:00Z",
+    },
+    {
+        "name": "server-side-cart",
+        "description": "Moves cart state from local storage to the server",
+        "enabled": True,
+        "created_by": "katherine.johnson",
+        "created_at": "2025-07-22T09:00:00Z",
+        "last_changed_at": "2026-03-01T09:00:00Z",
+    },
+    {
+        "name": "vendor-payout-automation",
+        "description": "Automates weekly payouts to third-party vendors",
+        "enabled": False,
+        "created_by": "alan.turing",
+        "created_at": "2026-06-11T12:00:00Z",
+        "last_changed_at": "2026-06-11T12:00:00Z",
+    },
+    {
+        "name": "accessibility-audit-banner",
+        "description": "Shows an in-app banner linking to the accessibility audit report",
+        "enabled": True,
+        "created_by": "ada.lovelace",
+        "created_at": "2025-09-28T14:30:00Z",
+        "last_changed_at": "2026-01-16T15:40:00Z",
+    },
+    {
+        "name": "price-match-guarantee",
+        "description": "Enables the automated price-match request flow",
+        "enabled": False,
+        "created_by": "margaret.hamilton",
+        "created_at": "2026-04-03T10:50:00Z",
+        "last_changed_at": "2026-04-03T10:50:00Z",
+    },
+    {
+        "name": "edge-caching",
+        "description": "Serves catalog pages from the CDN edge cache",
+        "enabled": True,
+        "created_by": "grace.hopper",
+        "created_at": "2025-06-30T08:15:00Z",
+        "last_changed_at": "2026-05-27T09:35:00Z",
+    },
+]
+
+
+def _find_feature_flag(name: str) -> dict[str, str | bool] | None:
+    return next((flag for flag in FEATURE_FLAGS if flag["name"] == name), None)
+
+
+@page.action(
+    "Enable Feature Flag",
+    method="post",
+    description="Turn a feature flag on for every user",
+    icon="toggle-right",
+    color="green",
+    is_hidden=True,
+)
+async def enable_feature_flag(
+    name: str = Query(..., description="Flag name"),
+) -> spec.Action:
+    flag = _find_feature_flag(name)
+    if flag is None:
+        return {"toast": f"No such flag '{name}'"}
+    flag["enabled"] = True
+    flag["last_changed_at"] = datetime.now(timezone.utc).isoformat()
+    return {"toast": f"'{name}' enabled"}
+
+
+@page.action(
+    "Disable Feature Flag",
+    method="post",
+    description="Turn a feature flag off for every user",
+    icon="toggle-left",
+    color="red",
+    is_hidden=True,
+)
+async def disable_feature_flag(
+    name: str = Query(..., description="Flag name"),
+) -> spec.Action:
+    flag = _find_feature_flag(name)
+    if flag is None:
+        return {"toast": f"No such flag '{name}'"}
+    flag["enabled"] = False
+    flag["last_changed_at"] = datetime.now(timezone.utc).isoformat()
+    return {"toast": f"'{name}' disabled"}
+
+
+@page.table(
+    "Feature Flags",
+    description="Search feature flags and enable or disable them",
+    icon="flag",
+    color="violet",
+    columns={
+        "name": {"label": "Name", "icon": "flag", "color": "violet"},
+        "description": {"label": "Description", "icon": "notepad-text", "color": "gray"},
+        "status": {"style": "badge", "label": "Status", "icon": "toggle-right", "color": "emerald"},
+        "created_by": {"label": "Created By", "icon": "user", "color": "indigo"},
+        "created_at": {"label": "Created At", "icon": "calendar-plus", "color": "slate"},
+        "last_changed_at": {"label": "Last Changed At", "icon": "history", "color": "amber"},
+    },
+)
+async def get_feature_flags(search: SearchDep, pagination: PageDep) -> spec.Table:
+    flags = FEATURE_FLAGS
+    if search:
+        needle = search.lower()
+        flags = [
+            flag
+            for flag in flags
+            if needle in str(flag["name"]).lower() or needle in str(flag["description"]).lower()
+        ]
+
+    start = (pagination.page - 1) * pagination.per_page
+    page_flags = flags[start : start + pagination.per_page]
+
+    return {
+        "data": [
+            {
+                "name": flag["name"],
+                "description": flag["description"],
+                "status": "on" if flag["enabled"] else "off",
+                "created_by": flag["created_by"],
+                "created_at": flag["created_at"],
+                "last_changed_at": flag["last_changed_at"],
+                "__actions__": [
+                    {
+                        "label": "Disable",
+                        "action": reference_action(disable_feature_flag),
+                        "query": {"name": flag["name"]},
+                        "icon": "toggle-left",
+                        "color": "red",
+                    }
+                    if flag["enabled"]
+                    else {
+                        "label": "Enable",
+                        "action": reference_action(enable_feature_flag),
+                        "query": {"name": flag["name"]},
+                        "icon": "toggle-right",
+                        "color": "green",
+                    },
+                ],
+            }
+            for flag in page_flags
+        ],
+        "total": len(flags),
     }
 
 
