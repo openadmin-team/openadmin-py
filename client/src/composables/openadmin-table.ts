@@ -4,6 +4,7 @@
 
 import { useQuery } from "@tanstack/vue-query"
 import { type ColumnDef, createColumnHelper } from "@tanstack/vue-table"
+import { Icon } from "@iconify/vue"
 import { computed, h, type MaybeRefOrGetter, ref, toValue, watch } from "vue"
 import DataTableDropDown from "@/components/page/DataTableDropDown.vue"
 import type { DataTableFeatures } from "@/lib/data-table"
@@ -16,6 +17,7 @@ import {
 	tableSchema,
 } from "@/schemas/table"
 import type { AppError } from "@/types/errors"
+import { useColor } from "./colors"
 import { usePageSpec } from "./openadmin-page"
 
 export const useTable = ({
@@ -109,12 +111,25 @@ export const useTable = ({
 	)
 
 	const columns = computed(() => {
-		const dataColumns: ColumnDef<DataTableFeatures, TableRow, any>[] = columnKeys.value.map((key) =>
-			columnHelper.value.accessor((row) => row[key], {
+		const dataColumns: ColumnDef<DataTableFeatures, TableRow, any>[] = columnKeys.value.map((key) => {
+			const column = table.value?.columns?.[key]
+			const label = column?.label ?? key
+			const { style } = useColor(column?.color ?? "slate")
+
+			return columnHelper.value.accessor((row) => row[key], {
 				id: key,
-				header: table.value?.columns?.[key]?.label ?? key,
-			}),
-		)
+				header: () =>
+					h("div", { class: "flex items-center gap-1.5" }, [
+						column?.icon
+							? h(Icon, {
+									icon: `lucide:${column.icon}`,
+									class: [style.value.text, "size-3.5 shrink-0"],
+								})
+							: null,
+						label,
+					]),
+			})
+		})
 
 		if (hasActions.value) {
 			dataColumns.push(
