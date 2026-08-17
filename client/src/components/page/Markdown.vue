@@ -5,9 +5,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts">
-import { computed } from "vue"
 import DOMPurify from "dompurify"
 import { marked } from "marked"
+import { computed } from "vue"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useMarkdown } from "@/composables/openadmin-markdown"
 

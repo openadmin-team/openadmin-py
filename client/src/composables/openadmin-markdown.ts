@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { computed, toValue, type MaybeRefOrGetter } from "vue"
-import { usePageSpec } from "./openadmin-page"
 import { useQuery } from "@tanstack/vue-query"
+import { computed, type MaybeRefOrGetter, toValue } from "vue"
 import { errorSchema } from "@/schemas/error"
+import { type Markdown, type MarkdownComponent, markdownSchema } from "@/schemas/markdown"
 import type { AppError } from "@/types/errors"
-import { markdownSchema, type Markdown, type MarkdownComponent } from "@/schemas/markdown"
+import { usePageSpec } from "./openadmin-page"
 
 export const useMarkdown = ({
 	sectionId,
