@@ -5,10 +5,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts">
+import { Icon } from "@iconify/vue"
 import DOMPurify from "dompurify"
 import { marked } from "marked"
 import { computed } from "vue"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useColor } from "@/composables/colors"
 import { useMarkdown } from "@/composables/openadmin-markdown"
 
 const props = defineProps<{
@@ -17,11 +19,13 @@ const props = defineProps<{
 	markdownId: string
 }>()
 
-const { content, isLoading } = useMarkdown({
+const { content, icon, color, markdown, isLoading } = useMarkdown({
 	sectionId: props.sectionId,
 	pageId: props.pageId,
 	markdownId: props.markdownId,
 })
+
+const { style } = useColor(() => color.value ?? "slate")
 
 const html = computed(() => {
 	if (!content.value) return ""
@@ -36,5 +40,14 @@ const html = computed(() => {
 		<Skeleton class="h-4 w-full" />
 		<Skeleton class="h-4 w-5/6" />
 	</div>
-	<div v-else class="typeset typeset-docs w-full max-w-[37em]" v-html="html" />
+	<div v-else class="flex w-full max-w-[37em] flex-col gap-8">
+		<div
+			v-if="icon || markdown?.name"
+			class="flex items-center justify-end gap-1.5 text-muted-foreground text-sm"
+		>
+			<Icon v-if="icon" :icon="`lucide:${icon}`" :class="style.text" class="size-4" />
+			<span v-if="markdown?.name">{{ markdown.name }}</span>
+		</div>
+		<div class="typeset typeset-docs w-full" v-html="html" />
+	</div>
 </template>
