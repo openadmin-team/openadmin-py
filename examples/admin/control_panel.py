@@ -218,17 +218,17 @@ async def schedule_config_reset(
 
 @page.stat("Random number 1", icon="sun", color="yellow", refresh=timedelta(seconds=1))
 def random_number_1():
-    sleep(5)
+    sleep(1)
     return randint(100, 1000)
 
 
 @page.stat("Random number 2", icon="moon", color="blue")
 def random_number_2():
-    sleep(5)
+    sleep(1)
     return randint(100, 1000)
 
 
 @page.stat("Random number 3", icon="mars", color="red")
 def random_number_3():
-    sleep(5)
+    sleep(1)
     return randint(100, 1000)
