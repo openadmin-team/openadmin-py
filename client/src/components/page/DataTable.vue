@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts" generic="TData extends RowData">
 import type { ColumnDef, RowData } from "@tanstack/vue-table"
 import { FlexRender, useTable as useTanStackTable } from "@tanstack/vue-table"
-import { ChevronDownIcon } from "@lucide/vue"
+import { ChevronDownIcon, Columns3 } from "@lucide/vue"
 import { Button } from "@/components/ui/button"
 import {
 	DropdownMenu,
@@ -53,8 +53,7 @@ const table = useTanStackTable({
 			<DropdownMenu>
 				<DropdownMenuTrigger as-child>
 					<Button variant="outline" class="ml-auto">
-						Columns
-						<ChevronDownIcon data-icon="inline-end" />
+						<Columns3 data-icon="inline-end" />
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">
