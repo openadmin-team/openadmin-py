@@ -47,7 +47,11 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
         "id": {"label": "ID", "icon": "hash", "color": "slate"},
         "title": {"label": "Title", "icon": "book-text", "color": "blue"},
         "author": {"label": "Author", "icon": "user-pen", "color": "violet"},
-        "published_year": {"label": "Published Year", "icon": "puzzle", "color": "blue"},
+        "published_year": {
+            "label": "Published Year",
+            "icon": "puzzle",
+            "color": "blue",
+        },
     },
 )
 async def get_all_books(

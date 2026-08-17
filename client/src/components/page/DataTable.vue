@@ -103,8 +103,10 @@ const table = useTanStackTable({
 		</div>
 
 		<div class="text-sm text-muted-foreground">
-			{{ table.getFilteredSelectedRowModel().rows.length }} of
-			{{ table.getFilteredRowModel().rows.length }} row(s) selected.
+			{{ table.getFilteredSelectedRowModel().rows.length }}
+			of
+			{{ table.getFilteredRowModel().rows.length }}
+			row(s) selected.
 		</div>
 	</div>
 </template>
