@@ -55,11 +55,23 @@ export const useMarkdown = ({
 		return data.value
 	})
 
+	const icon = computed(() => {
+		if (typeof data.value === "object" && data.value?.icon) return data.value.icon
+		return markdown.value?.icon ?? null
+	})
+
+	const color = computed(() => {
+		if (typeof data.value === "object" && data.value?.color) return data.value.color
+		return markdown.value?.color ?? null
+	})
+
 	return {
 		markdown,
 		data,
 		content,
 		isLoading,
 		isFetching,
+		color,
+		icon,
 	}
 }
