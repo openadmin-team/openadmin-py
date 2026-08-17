@@ -4,7 +4,7 @@
 
 import { createApp } from "vue"
 import { VueQueryPlugin } from "@tanstack/vue-query"
-import "@/style.css"
+import "@/styles/style.css"
 import App from "@/App.vue"
 import { router } from "@/router"
 
