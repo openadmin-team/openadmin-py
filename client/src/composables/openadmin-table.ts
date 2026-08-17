@@ -7,6 +7,7 @@ import { type ColumnDef, createColumnHelper } from "@tanstack/vue-table"
 import { Icon } from "@iconify/vue"
 import { computed, h, type MaybeRefOrGetter, ref, toValue, watch } from "vue"
 import DataTableDropDown from "@/components/page/DataTableDropDown.vue"
+import { Checkbox } from "@/components/ui/checkbox"
 import type { DataTableFeatures } from "@/lib/data-table"
 import { errorSchema } from "@/schemas/error"
 import {
@@ -111,25 +112,47 @@ export const useTable = ({
 	)
 
 	const columns = computed(() => {
-		const dataColumns: ColumnDef<DataTableFeatures, TableRow, any>[] = columnKeys.value.map((key) => {
-			const column = table.value?.columns?.[key]
-			const label = column?.label ?? key
-			const { style } = useColor(column?.color ?? "slate")
+		const dataColumns: ColumnDef<DataTableFeatures, TableRow, any>[] = [
+			columnHelper.value.display({
+				id: "__select__",
+				header: ({ table: t }) =>
+					h(Checkbox, {
+						modelValue:
+							t.getIsAllPageRowsSelected() || (t.getIsSomePageRowsSelected() && "indeterminate"),
+						"onUpdate:modelValue": (value: boolean | "indeterminate") =>
+							t.toggleAllPageRowsSelected(!!value),
+						ariaLabel: "Select all",
+					}),
+				cell: ({ row }) =>
+					h(Checkbox, {
+						modelValue: row.getIsSelected(),
+						"onUpdate:modelValue": (value: boolean | "indeterminate") =>
+							row.toggleSelected(!!value),
+						ariaLabel: "Select row",
+					}),
+				enableSorting: false,
+				enableHiding: false,
+			}),
+			...columnKeys.value.map((key) => {
+				const column = table.value?.columns?.[key]
+				const label = column?.label ?? key
+				const { style } = useColor(column?.color ?? "slate")
 
-			return columnHelper.value.accessor((row) => row[key], {
-				id: key,
-				header: () =>
-					h("div", { class: "flex items-center gap-1.5" }, [
-						column?.icon
-							? h(Icon, {
-									icon: `lucide:${column.icon}`,
-									class: [style.value.text, "size-3.5 shrink-0"],
-								})
-							: null,
-						label,
-					]),
-			})
-		})
+				return columnHelper.value.accessor((row) => row[key], {
+					id: key,
+					header: () =>
+						h("div", { class: "flex items-center gap-1.5" }, [
+							column?.icon
+								? h(Icon, {
+										icon: `lucide:${column.icon}`,
+										class: [style.value.text, "size-3.5 shrink-0"],
+									})
+								: null,
+							label,
+						]),
+				})
+			}),
+		]
 
 		if (hasActions.value) {
 			dataColumns.push(
