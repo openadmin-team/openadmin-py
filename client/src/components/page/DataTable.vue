@@ -101,5 +101,10 @@ const table = useTanStackTable({
 				</TableBody>
 			</Table>
 		</div>
+
+		<div class="text-sm text-muted-foreground">
+			{{ table.getFilteredSelectedRowModel().rows.length }} of
+			{{ table.getFilteredRowModel().rows.length }} row(s) selected.
+		</div>
 	</div>
 </template>
