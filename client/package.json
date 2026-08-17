@@ -16,6 +16,8 @@
 		"check": "bun run check:format && bun run check:lint && bun run check:types"
 	},
 	"dependencies": {
+		"@fontsource/geist": "^5.3.0",
+		"@fontsource/geist-mono": "^5.3.0",
 		"@lucide/vue": "^1.31.0",
 		"@tailwindcss/vite": "^4.3.3",
 		"@tanstack/vue-form": "^1.33.5",
