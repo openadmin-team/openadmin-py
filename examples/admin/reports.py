@@ -51,6 +51,11 @@ async def get_heavily_tagged_books(session: AsyncSessionDep) -> int:
     description="Books with the highest number of tag assignments",
     icon="tags",
     color="orange",
+    columns={
+        "id": {"label": "ID", "icon": "hash", "color": "slate"},
+        "title": {"label": "Title", "icon": "book-text", "color": "blue"},
+        "tag_count": {"label": "Tag Count", "icon": "tags", "color": "orange"},
+    },
 )
 async def get_most_tagged_books(session: AsyncSessionDep, pagination: PageDep):
     stmt = (

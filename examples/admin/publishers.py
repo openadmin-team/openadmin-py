@@ -48,6 +48,12 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
     description="Browse publishers with their book counts",
     icon="building-2",
     color="amber",
+    columns={
+        "id": {"label": "ID", "icon": "hash", "color": "slate"},
+        "name": {"label": "Name", "icon": "building-2", "color": "amber"},
+        "country": {"label": "Country", "icon": "globe", "color": "sky"},
+        "book_count": {"label": "Book Count", "icon": "book-copy", "color": "blue"},
+    },
 )
 async def get_all_publishers(
     session: AsyncSessionDep, pagination: PageDep, search: SearchDep

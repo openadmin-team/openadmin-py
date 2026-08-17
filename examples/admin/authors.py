@@ -67,6 +67,12 @@ async def get_avg_books_per_author(session: AsyncSessionDep) -> float:
     description="Browse authors with search and book counts",
     icon="user-pen",
     color="indigo",
+    columns={
+        "id": {"label": "ID", "icon": "hash", "color": "slate"},
+        "name": {"label": "Name", "icon": "user", "color": "indigo"},
+        "bio": {"label": "Bio", "icon": "notepad-text", "color": "gray"},
+        "book_count": {"label": "Book Count", "icon": "book-copy", "color": "emerald"},
+    },
 )
 async def get_all_authors(
     session: AsyncSessionDep, pagination: PageDep, search: SearchDep

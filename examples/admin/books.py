@@ -44,7 +44,10 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
     icon="book",
     color="blue",
     columns={
-        "published_year": {"label": "Published Year", "icon": "puzzle", "color": "blue"}
+        "id": {"label": "ID", "icon": "hash", "color": "slate"},
+        "title": {"label": "Title", "icon": "book-text", "color": "blue"},
+        "author": {"label": "Author", "icon": "user-pen", "color": "violet"},
+        "published_year": {"label": "Published Year", "icon": "puzzle", "color": "blue"},
     },
 )
 async def get_all_books(
@@ -83,6 +86,10 @@ class AddBookBody(BaseModel):
     description="Number of books per author",
     icon="users-round",
     color="violet",
+    columns={
+        "author": {"label": "Author", "icon": "user-pen", "color": "violet"},
+        "book_count": {"label": "Book Count", "icon": "book-copy", "color": "blue"},
+    },
 )
 async def get_books_by_author(session: AsyncSessionDep, pagination: PageDep):
     stmt = (
