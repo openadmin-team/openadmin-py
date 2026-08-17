@@ -36,5 +36,5 @@ const html = computed(() => {
 		<Skeleton class="h-4 w-full" />
 		<Skeleton class="h-4 w-5/6" />
 	</div>
-	<div v-else class="typeset typeset-docs max-w-[37em]" v-html="html" />
+	<div v-else class="typeset typeset-docs w-full max-w-[37em]" v-html="html" />
 </template>

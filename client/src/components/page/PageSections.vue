@@ -47,7 +47,7 @@ const tabItems = computed(() =>
 		<section class="flex flex-wrap justify-center gap-4">
 			<Stat v-for="stat in stats" :section-id="sectionId" :page-id="pageId" :stat-id="stat.id" />
 		</section>
-		<section v-if="markdowns.length" class="flex flex-col gap-8">
+		<section v-if="markdowns.length" class="flex flex-col items-center gap-8">
 			<Markdown
 				v-for="markdown in markdowns"
 				:key="markdown.id"
