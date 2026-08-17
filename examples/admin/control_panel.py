@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from random import randint
 from time import sleep
 from typing import Annotated
@@ -321,7 +321,7 @@ async def enable_feature_flag(
     if flag is None:
         return {"toast": f"No such flag '{name}'"}
     flag["enabled"] = True
-    flag["last_changed_at"] = datetime.now(timezone.utc).isoformat()
+    flag["last_changed_at"] = datetime.now(UTC).isoformat()
     return {"toast": f"'{name}' enabled"}
 
 
@@ -340,7 +340,7 @@ async def disable_feature_flag(
     if flag is None:
         return {"toast": f"No such flag '{name}'"}
     flag["enabled"] = False
-    flag["last_changed_at"] = datetime.now(timezone.utc).isoformat()
+    flag["last_changed_at"] = datetime.now(UTC).isoformat()
     return {"toast": f"'{name}' disabled"}
 
 
@@ -351,11 +351,28 @@ async def disable_feature_flag(
     color="violet",
     columns={
         "name": {"label": "Name", "icon": "flag", "color": "violet"},
-        "description": {"label": "Description", "icon": "notepad-text", "color": "gray"},
-        "status": {"style": "badge", "label": "Status", "icon": "toggle-right", "color": "emerald"},
+        "description": {
+            "label": "Description",
+            "icon": "notepad-text",
+            "color": "gray",
+        },
+        "status": {
+            "style": "badge",
+            "label": "Status",
+            "icon": "toggle-right",
+            "color": "emerald",
+        },
         "created_by": {"label": "Created By", "icon": "user", "color": "indigo"},
-        "created_at": {"label": "Created At", "icon": "calendar-plus", "color": "slate"},
-        "last_changed_at": {"label": "Last Changed At", "icon": "history", "color": "amber"},
+        "created_at": {
+            "label": "Created At",
+            "icon": "calendar-plus",
+            "color": "slate",
+        },
+        "last_changed_at": {
+            "label": "Last Changed At",
+            "icon": "history",
+            "color": "amber",
+        },
     },
 )
 async def get_feature_flags(search: SearchDep, pagination: PageDep) -> spec.Table:
@@ -365,7 +382,8 @@ async def get_feature_flags(search: SearchDep, pagination: PageDep) -> spec.Tabl
         flags = [
             flag
             for flag in flags
-            if needle in str(flag["name"]).lower() or needle in str(flag["description"]).lower()
+            if needle in str(flag["name"]).lower()
+            or needle in str(flag["description"]).lower()
         ]
 
     start = (pagination.page - 1) * pagination.per_page
