@@ -35,7 +35,7 @@ const tabItems = computed(() =>
 
 <template>
 	<div class="flex flex-col gap-24">
-		<section class="flex flex-wrap justify-end gap-2">
+		<section v-if="actions.length" class="flex flex-wrap justify-end gap-2">
 			<Action
 				v-for="action in actions"
 				:section-id="sectionId"
@@ -44,7 +44,7 @@ const tabItems = computed(() =>
 			/>
 			<Form v-for="form in forms" :section-id="sectionId" :page-id="pageId" :form-id="form.id" />
 		</section>
-		<section class="flex flex-wrap justify-center gap-4">
+		<section v-if="stats.length" class="flex flex-wrap justify-center gap-4">
 			<Stat v-for="stat in stats" :section-id="sectionId" :page-id="pageId" :stat-id="stat.id" />
 		</section>
 		<section v-if="markdowns.length" class="flex flex-col items-center gap-8">
