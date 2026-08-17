@@ -9,7 +9,7 @@ import { errorSchema } from "@/schemas/error"
 import type { AppError } from "@/types/errors"
 import { markdownSchema, type Markdown, type MarkdownComponent } from "@/schemas/markdown"
 
-export const useStat = ({
+export const useMarkdown = ({
 	sectionId,
 	pageId,
 	markdownId,
@@ -28,14 +28,14 @@ export const useStat = ({
 
 	const { data, isLoading, isFetching } = useQuery<Markdown, AppError>({
 		queryKey: computed(() => [
-			"openadmin-stat",
+			"openadmin-markdown",
 			toValue(sectionId),
 			toValue(pageId),
 			toValue(markdownId),
 		]),
 		queryFn: async () => {
 			const response = await fetch(
-				`${toValue(sectionId)}/${toValue(pageId)}/stat/${toValue(markdownId)}`,
+				`${toValue(sectionId)}/${toValue(pageId)}/markdown/${toValue(markdownId)}`,
 			)
 			const data = await response.json()
 

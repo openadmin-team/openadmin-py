@@ -9,6 +9,7 @@ import { Icon } from "@iconify/vue"
 import { computed } from "vue"
 import Action from "@/components/page/Action.vue"
 import Form from "@/components/page/Form.vue"
+import Markdown from "@/components/page/Markdown.vue"
 import Stat from "@/components/page/Stat.vue"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useColor } from "@/composables/colors"
@@ -19,7 +20,7 @@ const props = defineProps<{
 	sectionId: string
 	pageId: string
 }>()
-const { actions, forms, stats, tables } = usePageSpec({
+const { actions, forms, stats, tables, markdowns } = usePageSpec({
 	sectionId: props.sectionId,
 	pageId: props.pageId,
 })
@@ -45,6 +46,15 @@ const tabItems = computed(() =>
 		</section>
 		<section class="flex flex-wrap justify-center gap-4">
 			<Stat v-for="stat in stats" :section-id="sectionId" :page-id="pageId" :stat-id="stat.id" />
+		</section>
+		<section v-if="markdowns.length" class="flex flex-col gap-8">
+			<Markdown
+				v-for="markdown in markdowns"
+				:key="markdown.id"
+				:section-id="sectionId"
+				:page-id="pageId"
+				:markdown-id="markdown.id"
+			/>
 		</section>
 		<section v-if="tables.length > 1">
 			<Tabs :key="pageId" :default-value="tables[0]?.id">
