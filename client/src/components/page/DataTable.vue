@@ -64,7 +64,7 @@ const table = useTanStackTable({
 						@update:model-value="(value) => column.toggleVisibility(!!value)"
 						@select="(event) => event.preventDefault()"
 					>
-						{{ column.columnDef.header ?? column.id }}
+						<FlexRender :render="column.columnDef.header" :props="{ table, column }" />
 					</DropdownMenuCheckboxItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
