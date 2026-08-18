@@ -12,7 +12,7 @@ from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
 
-type ColumnStyle = Literal["avatar", "image", "badge", "link"]
+type ColumnStyle = Literal["image", "badge", "link", "file"]
 
 
 class ColumnConfigValue(TypedDict):
