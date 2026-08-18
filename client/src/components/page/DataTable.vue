@@ -9,7 +9,7 @@ import { Columns3 } from "@lucide/vue"
 import type { Cell, ColumnDef, Header, HeaderGroup, Row, RowData } from "@tanstack/vue-table"
 import { FlexRender, useTable as useTanStackTable } from "@tanstack/vue-table"
 import { moveArrayElement, useSortable } from "@vueuse/integrations/useSortable"
-import { type ComponentPublicInstance, computed } from "vue"
+import { type ComponentPublicInstance, computed, ref } from "vue"
 import { Button } from "@/components/ui/button"
 import {
 	DropdownMenu,
@@ -54,8 +54,15 @@ const getDataHeaders = (headerGroup: TableHeaderGroup): TableHeader[] =>
 const getCell = (row: TableRow, id: string): Cell<DataTableFeatures, TData> | undefined =>
 	row.getVisibleCells().find((cell) => cell.column.id === id)
 
-const getDataCells = (row: TableRow) =>
-	row.getVisibleCells().filter((cell) => !FIXED_COLUMN_IDS.has(cell.column.id))
+const previewOrder = ref<string[] | null>(null)
+
+const getDataCells = (row: TableRow) => {
+	const cells = row.getVisibleCells().filter((cell) => !FIXED_COLUMN_IDS.has(cell.column.id))
+	if (!previewOrder.value) return cells
+
+	const cellsById = new Map(cells.map((cell) => [cell.column.id, cell]))
+	return previewOrder.value.map((id) => cellsById.get(id)).filter((cell) => cell != null)
+}
 
 const onLayout = (headerGroup: TableHeaderGroup, sizes: number[]) => {
 	const dataHeaders = getDataHeaders(headerGroup)
@@ -90,9 +97,25 @@ const setHeaderRowEl = (component: ComponentPublicInstance | Element | null) => 
 		component) as HTMLElement | null
 }
 
+// While a header is being dragged, SortableJS already moves the header's own DOM node
+// live. Mirror that same live position into the row cells below by reading the current
+// drag order straight off the DOM (each panel carries its column id in `data-column-header`).
+const readDraggedOrder = (): string[] =>
+	headerRowEl
+		? Array.from(headerRowEl.querySelectorAll<HTMLElement>("[data-column-header]")).map(
+				(el) => el.dataset.columnHeader ?? "",
+			)
+		: []
+
 useSortable(() => headerRowEl, dataColumnIds, {
 	draggable: "[data-column-header]",
 	animation: 150,
+	onChange: () => {
+		previewOrder.value = readDraggedOrder()
+	},
+	onEnd: () => {
+		previewOrder.value = null
+	},
 	// The default `onUpdate` reorders using `oldIndex`/`newIndex`, which count every DOM
 	// child including the interleaved `ResizableHandle` elements. We only want the index
 	// among `[data-column-header]` items, so re-run it with the *Draggable* variants.
@@ -160,7 +183,7 @@ useSortable(() => headerRowEl, dataColumnIds, {
 							<ResizablePanel
 								:default-size="header.getSize()"
 								:min-size="10"
-								data-column-header
+								:data-column-header="header.column.id"
 								class="min-w-0"
 							>
 								<div
