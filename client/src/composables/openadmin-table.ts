@@ -9,6 +9,7 @@ import { computed, h, type MaybeRefOrGetter, ref, toValue, watch } from "vue"
 import DataTableDropDown from "@/components/page/DataTableDropDown.vue"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Kbd } from "@/components/ui/kbd"
 import type { DataTableFeatures } from "@/lib/data-table"
 import { errorSchema } from "@/schemas/error"
 import {
@@ -153,7 +154,7 @@ export const useTable = ({
 						]),
 					cell: ({ getValue }) => {
 						const value = getValue()
-						if (value === null || value === undefined) return null
+						if (value === null || value === undefined) return h(Kbd, {}, () => "null")
 
 						switch (column?.style) {
 							case "image":
