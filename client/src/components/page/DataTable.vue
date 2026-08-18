@@ -57,9 +57,6 @@ const getCell = (row: TableRow, id: string): Cell<DataTableFeatures, TData> | un
 const previewOrder = ref<string[] | null>(null)
 const draggedColumnId = ref<string | null>(null)
 
-// `row.getVisibleCells()` is always built from the columns' original definition order —
-// unlike headers, cells don't follow `table.setColumnOrder(...)` on their own. Reorder
-// them ourselves against the same order the headers use (or the live drag preview).
 const getDataCells = (row: TableRow) => {
 	const cells = row.getVisibleCells().filter((cell) => !FIXED_COLUMN_IDS.has(cell.column.id))
 	const cellsById = new Map(cells.map((cell) => [cell.column.id, cell]))
@@ -100,9 +97,6 @@ const setHeaderRowEl = (component: ComponentPublicInstance | Element | null) => 
 		component) as HTMLElement | null
 }
 
-// While a header is being dragged, SortableJS already moves the header's own DOM node
-// live. Mirror that same live position into the row cells below by reading the current
-// drag order straight off the DOM (each panel carries its column id in `data-column-header`).
 const readDraggedOrder = (): string[] =>
 	headerRowEl
 		? Array.from(headerRowEl.querySelectorAll<HTMLElement>("[data-column-header]")).map(
@@ -123,9 +117,7 @@ useSortable(() => headerRowEl, dataColumnIds, {
 		previewOrder.value = null
 		draggedColumnId.value = null
 	},
-	// The default `onUpdate` reorders using `oldIndex`/`newIndex`, which count every DOM
-	// child including the interleaved `ResizableHandle` elements. We only want the index
-	// among `[data-column-header]` items, so re-run it with the *Draggable* variants.
+
 	onUpdate: (event) => {
 		const { oldDraggableIndex, newDraggableIndex } = event
 		if (oldDraggableIndex == null || newDraggableIndex == null) return
