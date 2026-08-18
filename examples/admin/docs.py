@@ -7,7 +7,6 @@ from openadmin import fastapi, spec
 page = fastapi.AdminPage("Docs", icon="dock")
 
 
-
 @page.markdown("Markdown Guide - Part 1", icon="heading", color="indigo")
 def markdown_guide_part_1() -> spec.Markdown:
     return """
