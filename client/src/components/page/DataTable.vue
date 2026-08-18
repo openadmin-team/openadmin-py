@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 import { Columns3 } from "@lucide/vue"
 import type { Cell, ColumnDef, Header, HeaderGroup, Row, RowData } from "@tanstack/vue-table"
 import { FlexRender, useTable as useTanStackTable } from "@tanstack/vue-table"
-import { moveArrayElement, useSortable } from "@vueuse/integrations/useSortable"
+import { useSortable } from "@vueuse/integrations/useSortable"
 import { type ComponentPublicInstance, computed, ref } from "vue"
 import { Button } from "@/components/ui/button"
 import {
@@ -114,15 +114,20 @@ useSortable(() => headerRowEl, dataColumnIds, {
 		previewOrder.value = readDraggedOrder()
 	},
 	onEnd: () => {
+		// Commit whatever order the DOM actually ended up in, rather than replaying
+		// SortableJS's oldIndex/newIndex math ourselves — that counts every sibling
+		// (including the interleaved `ResizableHandle`s) and drifted out of sync with
+		// `dataColumnIds`, producing the wrong final order.
+		const finalOrder = readDraggedOrder()
+		if (finalOrder.length === dataColumnIds.value.length) {
+			dataColumnIds.value = finalOrder
+		}
 		previewOrder.value = null
 		draggedColumnId.value = null
 	},
-
-	onUpdate: (event) => {
-		const { oldDraggableIndex, newDraggableIndex } = event
-		if (oldDraggableIndex == null || newDraggableIndex == null) return
-		moveArrayElement(dataColumnIds, oldDraggableIndex, newDraggableIndex, event)
-	},
+	// The default `onUpdate` would also try to commit a reorder using the mismatched
+	// oldIndex/newIndex above; disable it so only the `onEnd` commit above applies.
+	onUpdate: () => {},
 })
 </script>
 
