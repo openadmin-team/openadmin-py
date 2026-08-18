@@ -57,12 +57,14 @@ const getCell = (row: TableRow, id: string): Cell<DataTableFeatures, TData> | un
 const previewOrder = ref<string[] | null>(null)
 const draggedColumnId = ref<string | null>(null)
 
+// `row.getVisibleCells()` is always built from the columns' original definition order —
+// unlike headers, cells don't follow `table.setColumnOrder(...)` on their own. Reorder
+// them ourselves against the same order the headers use (or the live drag preview).
 const getDataCells = (row: TableRow) => {
 	const cells = row.getVisibleCells().filter((cell) => !FIXED_COLUMN_IDS.has(cell.column.id))
-	if (!previewOrder.value) return cells
-
 	const cellsById = new Map(cells.map((cell) => [cell.column.id, cell]))
-	return previewOrder.value.map((id) => cellsById.get(id)).filter((cell) => cell != null)
+	const order = previewOrder.value ?? dataColumnIds.value
+	return order.map((id) => cellsById.get(id)).filter((cell) => cell != null)
 }
 
 const onLayout = (headerGroup: TableHeaderGroup, sizes: number[]) => {
