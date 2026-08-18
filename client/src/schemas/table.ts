@@ -8,7 +8,7 @@ import { httpMethodSchema } from "./http-method"
 import { iconSchema } from "./icon"
 import { jsonSchemaSchema } from "./json-schema"
 
-export const COLUMN_STYLES = ["avatar", "image", "badge", "link"] as const
+export const COLUMN_STYLES = ["image", "badge", "link", "file"] as const
 
 export const columnStyleSchema = z.enum(COLUMN_STYLES)
 

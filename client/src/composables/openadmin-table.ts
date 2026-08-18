@@ -7,6 +7,7 @@ import { type ColumnDef, createColumnHelper } from "@tanstack/vue-table"
 import { Icon } from "@iconify/vue"
 import { computed, h, type MaybeRefOrGetter, ref, toValue, watch } from "vue"
 import DataTableDropDown from "@/components/page/DataTableDropDown.vue"
+import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import type { DataTableFeatures } from "@/lib/data-table"
 import { errorSchema } from "@/schemas/error"
@@ -150,6 +151,47 @@ export const useTable = ({
 								: null,
 							label,
 						]),
+					cell: ({ getValue }) => {
+						const value = getValue()
+						if (value === null || value === undefined) return null
+
+						switch (column?.style) {
+							case "image":
+								return h("img", {
+									src: String(value),
+									alt: label,
+									class: "size-8 rounded-md object-cover",
+								})
+							case "badge":
+								return h(Badge, { variant: "outline", class: style.value.badge }, () =>
+									String(value),
+								)
+							case "link":
+								return h(
+									"a",
+									{
+										href: String(value),
+										target: "_blank",
+										rel: "noopener noreferrer",
+										class: ["hover:underline", style.value.text],
+									},
+									String(value),
+								)
+							case "file":
+								return h(
+									"a",
+									{
+										href: String(value),
+										target: "_blank",
+										rel: "noopener noreferrer",
+										class: ["flex items-center gap-1.5 hover:underline", style.value.text],
+									},
+									[h(Icon, { icon: "lucide:file", class: "size-3.5 shrink-0" }), String(value)],
+								)
+							default:
+								return String(value)
+						}
+					},
 				})
 			}),
 		]
