@@ -5,9 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts" generic="TData extends RowData">
-import type { ColumnDef, RowData } from "@tanstack/vue-table"
-import { FlexRender, useTable as useTanStackTable } from "@tanstack/vue-table"
 import { Columns3 } from "@lucide/vue"
+import type { Cell, ColumnDef, Header, HeaderGroup, Row, RowData } from "@tanstack/vue-table"
+import { FlexRender, useTable as useTanStackTable } from "@tanstack/vue-table"
+import { moveArrayElement, useSortable } from "@vueuse/integrations/useSortable"
+import { type ComponentPublicInstance, computed } from "vue"
 import { Button } from "@/components/ui/button"
 import {
 	DropdownMenu,
@@ -15,15 +17,8 @@ import {
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table"
-import { features, type DataTableFeatures } from "@/lib/data-table"
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
+import { type DataTableFeatures, features } from "@/lib/data-table"
 
 const props = defineProps<{
 	columns: ColumnDef<DataTableFeatures, TData>[]
@@ -41,6 +36,70 @@ const table = useTanStackTable({
 	},
 	get manualPagination() {
 		return props.manualPagination
+	},
+})
+
+const FIXED_COLUMN_IDS = new Set(["__select__", "__actions__"])
+
+type TableHeaderGroup = HeaderGroup<DataTableFeatures, TData>
+type TableHeader = Header<DataTableFeatures, TData>
+type TableRow = Row<DataTableFeatures, TData>
+
+const getHeader = (headerGroup: TableHeaderGroup, id: string): TableHeader | undefined =>
+	headerGroup.headers.find((header) => header.column.id === id)
+
+const getDataHeaders = (headerGroup: TableHeaderGroup): TableHeader[] =>
+	headerGroup.headers.filter((header) => !FIXED_COLUMN_IDS.has(header.column.id))
+
+const getCell = (row: TableRow, id: string): Cell<DataTableFeatures, TData> | undefined =>
+	row.getVisibleCells().find((cell) => cell.column.id === id)
+
+const getDataCells = (row: TableRow) =>
+	row.getVisibleCells().filter((cell) => !FIXED_COLUMN_IDS.has(cell.column.id))
+
+const onLayout = (headerGroup: TableHeaderGroup, sizes: number[]) => {
+	const dataHeaders = getDataHeaders(headerGroup)
+	table.setColumnSizing((previous) => ({
+		...previous,
+		...Object.fromEntries(dataHeaders.map((header, index) => [header.column.id, sizes[index]])),
+	}))
+}
+
+const dataColumnIds = computed<string[]>({
+	get: () => {
+		const headerGroup = table.getHeaderGroups()[0]
+		return headerGroup ? getDataHeaders(headerGroup).map((header) => header.column.id) : []
+	},
+	set: (ids) => {
+		const headerGroup = table.getHeaderGroups()[0]
+		if (!headerGroup) return
+
+		let cursor = 0
+		table.setColumnOrder(
+			headerGroup.headers.map((header) =>
+				FIXED_COLUMN_IDS.has(header.column.id) ? header.column.id : ids[cursor++],
+			),
+		)
+	},
+})
+
+let headerRowEl: HTMLElement | null = null
+
+const setHeaderRowEl = (component: ComponentPublicInstance | Element | null) => {
+	headerRowEl = ((component as ComponentPublicInstance | null)?.$el ??
+		component) as HTMLElement | null
+}
+
+useSortable(() => headerRowEl, dataColumnIds, {
+	draggable: "[data-column-header]",
+	animation: 150,
+	// The default `onUpdate` reorders using `oldIndex`/`newIndex`, which count every DOM
+	// child including the interleaved `ResizableHandle` elements. We only want the index
+	// among `[data-column-header]` items, so re-run it with the *Draggable* variants.
+	onUpdate: (event) => {
+		const { oldDraggableIndex, newDraggableIndex } = event
+		if (oldDraggableIndex == null || newDraggableIndex == null) return
+		moveArrayElement(dataColumnIds, oldDraggableIndex, newDraggableIndex, event)
 	},
 })
 </script>
@@ -70,36 +129,110 @@ const table = useTanStackTable({
 			</DropdownMenu>
 		</div>
 
-		<div class="border rounded-md">
-			<Table>
-				<TableHeader>
-					<TableRow v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
-						<TableHead v-for="header in headerGroup.headers" :key="header.id">
-							<FlexRender v-if="!header.isPlaceholder" :header="header" />
-						</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					<template v-if="table.getRowModel().rows?.length">
-						<TableRow
-							v-for="row in table.getRowModel().rows"
-							:key="row.id"
-							:data-state="row.getIsSelected() && 'selected'"
+		<div class="rounded-md border overflow-hidden" role="table">
+			<div role="rowgroup">
+				<div
+					v-for="headerGroup in table.getHeaderGroups()"
+					:key="headerGroup.id"
+					role="row"
+					class="bg-muted/60 flex border-b"
+				>
+					<div
+						v-if="getHeader(headerGroup, '__select__')"
+						role="columnheader"
+						class="text-muted-foreground flex h-10 w-10 shrink-0 items-center px-4 text-xs font-semibold tracking-wide [&:has([role=checkbox])]:pr-0"
+					>
+						<FlexRender :header="getHeader(headerGroup, '__select__')!" />
+					</div>
+
+					<ResizablePanelGroup
+						:ref="setHeaderRowEl"
+						direction="horizontal"
+						class="h-10 flex-1"
+						@layout="(sizes) => onLayout(headerGroup, sizes)"
+					>
+						<template v-for="(header, index) in getDataHeaders(headerGroup)" :key="header.id">
+							<ResizableHandle
+								v-if="index > 0"
+								with-handle
+								class="opacity-0 transition-opacity focus-visible:opacity-100 data-[state=hover]:opacity-100 data-[state=drag]:opacity-100"
+							/>
+							<ResizablePanel
+								:default-size="header.getSize()"
+								:min-size="10"
+								data-column-header
+								class="min-w-0"
+							>
+								<div
+									role="columnheader"
+									class="text-muted-foreground flex h-10 min-w-0 cursor-grab items-center truncate px-4 text-xs font-semibold tracking-wide active:cursor-grabbing"
+								>
+									<FlexRender v-if="!header.isPlaceholder" :header="header" />
+								</div>
+							</ResizablePanel>
+						</template>
+					</ResizablePanelGroup>
+
+					<div
+						v-if="getHeader(headerGroup, '__actions__')"
+						role="columnheader"
+						class="flex h-10 w-14 shrink-0 items-center justify-end px-4"
+					>
+						<FlexRender
+							v-if="!getHeader(headerGroup, '__actions__')!.isPlaceholder"
+							:header="getHeader(headerGroup, '__actions__')!"
+						/>
+					</div>
+				</div>
+			</div>
+
+			<div role="rowgroup">
+				<template v-if="table.getRowModel().rows?.length">
+					<div
+						v-for="row in table.getRowModel().rows"
+						:key="row.id"
+						role="row"
+						:data-state="row.getIsSelected() && 'selected'"
+						class="data-[state=selected]:bg-muted flex border-b transition-colors last:border-0 hover:bg-muted/50"
+					>
+						<div
+							v-if="getCell(row, '__select__')"
+							role="cell"
+							class="flex w-10 shrink-0 items-center px-4 py-3 [&:has([role=checkbox])]:pr-0"
 						>
-							<TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
+							<FlexRender :cell="getCell(row, '__select__')!" />
+						</div>
+
+						<div class="flex min-w-0 flex-1">
+							<div
+								v-for="cell in getDataCells(row)"
+								:key="cell.id"
+								role="cell"
+								class="flex min-w-0 items-center truncate px-4 py-3"
+								:style="{ width: `${cell.column.getSize()}%` }"
+							>
 								<FlexRender :cell="cell" />
-							</TableCell>
-						</TableRow>
-					</template>
-					<template v-else>
-						<TableRow>
-							<TableCell :colspan="columns.length" class="h-24 text-center">
-								No results.
-							</TableCell>
-						</TableRow>
-					</template>
-				</TableBody>
-			</Table>
+							</div>
+						</div>
+
+						<div
+							v-if="getCell(row, '__actions__')"
+							role="cell"
+							class="flex w-14 shrink-0 items-center justify-end px-4 py-3"
+						>
+							<FlexRender :cell="getCell(row, '__actions__')!" />
+						</div>
+					</div>
+				</template>
+				<template v-else>
+					<div
+						role="row"
+						class="flex h-24 items-center justify-center text-sm text-muted-foreground"
+					>
+						No results.
+					</div>
+				</template>
+			</div>
 		</div>
 
 		<div class="text-sm text-muted-foreground">
