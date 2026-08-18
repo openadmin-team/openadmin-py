@@ -55,6 +55,7 @@ const getCell = (row: TableRow, id: string): Cell<DataTableFeatures, TData> | un
 	row.getVisibleCells().find((cell) => cell.column.id === id)
 
 const previewOrder = ref<string[] | null>(null)
+const draggedColumnId = ref<string | null>(null)
 
 const getDataCells = (row: TableRow) => {
 	const cells = row.getVisibleCells().filter((cell) => !FIXED_COLUMN_IDS.has(cell.column.id))
@@ -110,11 +111,15 @@ const readDraggedOrder = (): string[] =>
 useSortable(() => headerRowEl, dataColumnIds, {
 	draggable: "[data-column-header]",
 	animation: 150,
+	onStart: (event) => {
+		draggedColumnId.value = event.item.dataset.columnHeader ?? null
+	},
 	onChange: () => {
 		previewOrder.value = readDraggedOrder()
 	},
 	onEnd: () => {
 		previewOrder.value = null
+		draggedColumnId.value = null
 	},
 	// The default `onUpdate` reorders using `oldIndex`/`newIndex`, which count every DOM
 	// child including the interleaved `ResizableHandle` elements. We only want the index
@@ -189,6 +194,7 @@ useSortable(() => headerRowEl, dataColumnIds, {
 								<div
 									role="columnheader"
 									class="text-muted-foreground flex h-10 min-w-0 cursor-grab items-center truncate px-4 text-xs font-semibold tracking-wide active:cursor-grabbing"
+									:class="{ 'bg-muted': header.column.id === draggedColumnId }"
 								>
 									<FlexRender v-if="!header.isPlaceholder" :header="header" />
 								</div>
@@ -232,6 +238,7 @@ useSortable(() => headerRowEl, dataColumnIds, {
 								:key="cell.id"
 								role="cell"
 								class="flex min-w-0 items-center truncate px-4 py-3"
+								:class="{ 'bg-muted': cell.column.id === draggedColumnId }"
 								:style="{ width: `${cell.column.getSize()}%` }"
 							>
 								<FlexRender :cell="cell" />
