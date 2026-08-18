@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+from urllib.parse import quote
+
 from fastapi import Query
 from pydantic import BaseModel
 from sqlalchemy import func, select
@@ -38,6 +40,9 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
     return result.scalar_one()
 
 
+BOOK_COVER_URL = "https://img.magnific.com/free-photo/beautiful-tropical-beach-sea-ocean-with-white-cloud-blue-sky-copyspace_74190-8663.jpg?semt=ais_hybrid&w=740&q=80"
+
+
 @page.table(
     "All Books",
     description="Browse all books with search and pagination",
@@ -45,12 +50,36 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
     color="blue",
     columns={
         "id": {"label": "ID", "icon": "hash", "color": "slate"},
+        "cover": {
+            "style": "image",
+            "label": "Cover",
+            "icon": "image",
+            "color": "sky",
+        },
         "title": {"label": "Title", "icon": "book-text", "color": "blue"},
         "author": {"label": "Author", "icon": "user-pen", "color": "violet"},
         "published_year": {
             "label": "Published Year",
             "icon": "puzzle",
             "color": "blue",
+        },
+        "status": {
+            "style": "badge",
+            "label": "Status",
+            "icon": "badge-check",
+            "color": "emerald",
+        },
+        "reference": {
+            "style": "link",
+            "label": "Reference",
+            "icon": "external-link",
+            "color": "indigo",
+        },
+        "attachment": {
+            "style": "file",
+            "label": "Attachment",
+            "icon": "file",
+            "color": "amber",
         },
     },
 )
@@ -69,9 +98,13 @@ async def get_all_books(
     return [
         {
             "id": book.id,
+            "cover": BOOK_COVER_URL,
             "title": book.title,
             "author": f"{author.first_name} {author.last_name}",
             "published_year": book.published_year,
+            "status": "Published" if book.published_year else "Draft",
+            "reference": f"https://www.google.com/search?tbm=bks&q={quote(book.title)}",
+            "attachment": BOOK_COVER_URL,
         }
         for book, author in result.all()
     ]
