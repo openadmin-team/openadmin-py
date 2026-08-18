@@ -173,7 +173,8 @@ export const useTable = ({
 										href: String(value),
 										target: "_blank",
 										rel: "noopener noreferrer",
-										class: ["hover:underline", style.value.text],
+										title: String(value),
+										class: ["block max-w-64 truncate hover:underline", style.value.text],
 									},
 									String(value),
 								)
@@ -184,9 +185,13 @@ export const useTable = ({
 										href: String(value),
 										target: "_blank",
 										rel: "noopener noreferrer",
-										class: ["flex items-center gap-1.5 hover:underline", style.value.text],
+										title: String(value),
+										class: ["flex items-center gap-1.5 max-w-64 hover:underline", style.value.text],
 									},
-									[h(Icon, { icon: "lucide:file", class: "size-3.5 shrink-0" }), String(value)],
+									[
+										h(Icon, { icon: "lucide:file", class: "size-3.5 shrink-0" }),
+										h("span", { class: "truncate" }, String(value)),
+									],
 								)
 							default:
 								return String(value)
