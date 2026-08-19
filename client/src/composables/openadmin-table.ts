@@ -154,21 +154,32 @@ export const useTable = ({
 								: null,
 							label,
 						]),
-					cell: ({ getValue }) => {
+					cell: ({ row, getValue }) => {
 						const value = getValue()
 						if (value === null || value === undefined) return h(Kbd, {}, () => "null")
 
-						switch (column?.style) {
+						const valueConfig = row.original.__values__?.[key]
+						const cellStyle = valueConfig?.style ?? column?.style
+						const cellLabel = valueConfig?.label ?? String(value)
+						const cellIcon = valueConfig?.icon
+						const { style: cellColorStyle } = useColor(
+							valueConfig?.color ?? column?.color ?? "slate",
+						)
+
+						switch (cellStyle) {
 							case "image":
 								return h("img", {
 									src: String(value),
-									alt: label,
+									alt: cellLabel,
 									class: "size-8 rounded-md object-cover",
 								})
 							case "badge":
-								return h(Badge, { variant: "outline", class: style.value.badge }, () =>
-									String(value),
-								)
+								return h(Badge, { variant: "outline", class: cellColorStyle.value.badge }, () => [
+									cellIcon
+										? h(Icon, { icon: `lucide:${cellIcon}`, class: "size-3 shrink-0" })
+										: null,
+									cellLabel,
+								])
 							case "link":
 								return h(
 									"a",
@@ -177,9 +188,12 @@ export const useTable = ({
 										target: "_blank",
 										rel: "noopener noreferrer",
 										title: String(value),
-										class: ["block w-full min-w-0 truncate hover:underline", style.value.text],
+										class: [
+											"block w-full min-w-0 truncate hover:underline",
+											cellColorStyle.value.text,
+										],
 									},
-									String(value),
+									cellLabel,
 								)
 							case "file":
 								return h(
@@ -191,16 +205,16 @@ export const useTable = ({
 										title: String(value),
 										class: [
 											"flex items-center gap-1.5 w-full min-w-0 hover:underline",
-											style.value.text,
+											cellColorStyle.value.text,
 										],
 									},
 									[
-										h(Icon, { icon: "lucide:file", class: "size-3.5 shrink-0" }),
-										h("span", { class: "min-w-0 truncate" }, String(value)),
+										h(Icon, { icon: `lucide:${cellIcon ?? "file"}`, class: "size-3.5 shrink-0" }),
+										h("span", { class: "min-w-0 truncate" }, cellLabel),
 									],
 								)
 							default:
-								return String(value)
+								return cellLabel
 						}
 					},
 				})
@@ -250,7 +264,7 @@ export const useTable = ({
 	}
 }
 
-const SPECIAL_ROW_KEYS = new Set(["__view__", "__actions__", "__style__"])
+const SPECIAL_ROW_KEYS = new Set(["__view__", "__actions__", "__values__"])
 
 export const isTableRow = (row: TableData[number]): row is TableRow =>
 	typeof row === "object" && row !== null && !Array.isArray(row)

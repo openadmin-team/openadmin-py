@@ -23,6 +23,15 @@ export const columnConfigValueSchema = z.object({
 
 export type ColumnConfigValue = z.infer<typeof columnConfigValueSchema>
 
+export const valueConfigValueSchema = z.object({
+	style: columnStyleSchema.optional(),
+	label: z.string().optional(),
+	icon: iconSchema.optional(),
+	color: colorSchema.optional(),
+})
+
+export type ValueConfigValue = z.infer<typeof valueConfigValueSchema>
+
 export const actionConfigSchema = z.object({
 	action: z.string(),
 	label: z.string().optional(),
@@ -59,7 +68,7 @@ export const tableRowSchema = z
 	.object({
 		__view__: tableRowValueSchema.optional(),
 		__actions__: z.array(actionConfigSchema).optional(),
-		__style__: columnStyleSchema.nullable().optional(),
+		__values__: z.record(z.string(), valueConfigValueSchema).optional(),
 	})
 	.catchall(tableRowValueSchema)
 
