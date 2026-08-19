@@ -85,7 +85,7 @@ BOOK_COVER_URL = "https://img.magnific.com/free-photo/beautiful-tropical-beach-s
 )
 async def get_all_books(
     session: AsyncSessionDep, pagination: PageDep, search: SearchDep
-):
+) -> spec.Table:
     stmt = (
         select(models.Book, models.Author)
         .join(models.Author, models.Author.id == models.Book.author_id)
@@ -95,19 +95,29 @@ async def get_all_books(
     if search:
         stmt = stmt.where(models.Book.title.ilike(f"%{search}%"))
     result = await session.execute(stmt)
-    return [
-        {
-            "id": book.id,
-            "cover": BOOK_COVER_URL,
-            "title": book.title,
-            "author": f"{author.first_name} {author.last_name}",
-            "published_year": book.published_year,
-            "status": "Published" if book.published_year else "Draft",
-            "reference": f"https://www.google.com/search?tbm=bks&q={quote(book.title)}",
-            "attachment": BOOK_COVER_URL,
-        }
-        for book, author in result.all()
-    ]
+    return {
+        "data": [
+            {
+                "id": book.id,
+                "cover": BOOK_COVER_URL,
+                "title": book.title,
+                "author": f"{author.first_name} {author.last_name}",
+                "published_year": book.published_year,
+                "status": "Published" if book.published_year else "Draft",
+                "reference": f"https://www.google.com/search?tbm=bks&q={quote(book.title)}",
+                "attachment": BOOK_COVER_URL,
+                '__values__': {
+                    'reference': {
+                        'label': 'Link to the book'
+                    },
+                    'attachment': {
+                        'label': 'Book in pdf'
+                    } 
+                }
+            }
+            for book, author in result.all()
+        ],
+    }
 
 
 class AddBookBody(BaseModel):

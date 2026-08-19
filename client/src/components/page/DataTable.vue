@@ -97,7 +97,9 @@ const SELECT_COLUMN_WIDTH = 40
 const ACTIONS_COLUMN_WIDTH = 56
 
 const hasSelectColumn = computed(() => table.getAllLeafColumns().some((c) => c.id === "__select__"))
-const hasActionsColumn = computed(() => table.getAllLeafColumns().some((c) => c.id === "__actions__"))
+const hasActionsColumn = computed(() =>
+	table.getAllLeafColumns().some((c) => c.id === "__actions__"),
+)
 
 // Rows are at least as wide as the table container, but grow past it (and scroll)
 // once there isn't enough room to give every column its minimum width.

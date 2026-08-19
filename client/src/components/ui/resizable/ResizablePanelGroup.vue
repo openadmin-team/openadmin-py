@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 OpenAdmin
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script setup lang="ts">
 import type { SplitterGroupEmits, SplitterGroupProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
@@ -14,12 +20,12 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
-  <SplitterGroup
-    v-slot="slotProps"
-    data-slot="resizable-panel-group"
-    v-bind="forwarded"
-    :class="cn('flex h-full w-full data-[orientation=vertical]:flex-col', props.class)"
-  >
-    <slot v-bind="slotProps" />
-  </SplitterGroup>
+	<SplitterGroup
+		v-slot="slotProps"
+		data-slot="resizable-panel-group"
+		v-bind="forwarded"
+		:class="cn('flex h-full w-full data-[orientation=vertical]:flex-col', props.class)"
+	>
+		<slot v-bind="slotProps" />
+	</SplitterGroup>
 </template>
