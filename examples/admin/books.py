@@ -106,14 +106,10 @@ async def get_all_books(
                 "status": "Published" if book.published_year else "Draft",
                 "reference": f"https://www.google.com/search?tbm=bks&q={quote(book.title)}",
                 "attachment": BOOK_COVER_URL,
-                '__values__': {
-                    'reference': {
-                        'label': 'Link to the book'
-                    },
-                    'attachment': {
-                        'label': 'Book in pdf'
-                    } 
-                }
+                "__values__": {
+                    "reference": {"label": "Link to the book"},
+                    "attachment": {"label": "Book in pdf"},
+                },
             }
             for book, author in result.all()
         ],
