@@ -177,7 +177,7 @@ export const useTable = ({
 										target: "_blank",
 										rel: "noopener noreferrer",
 										title: String(value),
-										class: ["block max-w-64 truncate hover:underline", style.value.text],
+										class: ["block w-full min-w-0 truncate hover:underline", style.value.text],
 									},
 									String(value),
 								)
@@ -189,11 +189,14 @@ export const useTable = ({
 										target: "_blank",
 										rel: "noopener noreferrer",
 										title: String(value),
-										class: ["flex items-center gap-1.5 max-w-64 hover:underline", style.value.text],
+										class: [
+											"flex items-center gap-1.5 w-full min-w-0 hover:underline",
+											style.value.text,
+										],
 									},
 									[
 										h(Icon, { icon: "lucide:file", class: "size-3.5 shrink-0" }),
-										h("span", { class: "truncate" }, String(value)),
+										h("span", { class: "min-w-0 truncate" }, String(value)),
 									],
 								)
 							default:
