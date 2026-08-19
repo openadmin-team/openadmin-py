@@ -90,6 +90,25 @@ const dataColumnIds = computed<string[]>({
 	},
 })
 
+// Below this width per column, text starts getting uncomfortably cramped —
+// beyond that point the table should grow wider and scroll instead of squeezing columns.
+const MIN_COLUMN_WIDTH = 150
+const SELECT_COLUMN_WIDTH = 40
+const ACTIONS_COLUMN_WIDTH = 56
+
+const hasSelectColumn = computed(() => table.getAllLeafColumns().some((c) => c.id === "__select__"))
+const hasActionsColumn = computed(() => table.getAllLeafColumns().some((c) => c.id === "__actions__"))
+
+// Rows are at least as wide as the table container, but grow past it (and scroll)
+// once there isn't enough room to give every column its minimum width.
+const rowWidthStyle = computed(() => {
+	const fixedWidth =
+		(hasSelectColumn.value ? SELECT_COLUMN_WIDTH : 0) +
+		(hasActionsColumn.value ? ACTIONS_COLUMN_WIDTH : 0)
+	const dataWidth = (dataColumnIds.value.length || 1) * MIN_COLUMN_WIDTH
+	return { width: `max(100%, ${fixedWidth + dataWidth}px)` }
+})
+
 let headerRowEl: HTMLElement | null = null
 
 const setHeaderRowEl = (component: ComponentPublicInstance | Element | null) => {
@@ -156,13 +175,14 @@ useSortable(() => headerRowEl, dataColumnIds, {
 			</DropdownMenu>
 		</div>
 
-		<div class="rounded-md border overflow-hidden" role="table">
+		<div class="rounded-md border overflow-x-auto" role="table">
 			<div role="rowgroup">
 				<div
 					v-for="headerGroup in table.getHeaderGroups()"
 					:key="headerGroup.id"
 					role="row"
 					class="bg-muted/60 flex border-b"
+					:style="rowWidthStyle"
 				>
 					<div
 						v-if="getHeader(headerGroup, '__select__')"
@@ -222,6 +242,7 @@ useSortable(() => headerRowEl, dataColumnIds, {
 						role="row"
 						:data-state="row.getIsSelected() && 'selected'"
 						class="data-[state=selected]:bg-muted flex border-b transition-colors last:border-0 hover:bg-muted/50"
+						:style="rowWidthStyle"
 					>
 						<div
 							v-if="getCell(row, '__select__')"
