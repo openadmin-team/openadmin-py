@@ -63,7 +63,7 @@ dev/client:
 	@ cd client && bun run dev
 
 dev/docs:
-	@ cd client && bun run dev
+	@ cd docs && bun run dev
 
 dev/example:
 	@ cd client && bun run build
