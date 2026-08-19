@@ -142,6 +142,8 @@ export const useTable = ({
 
 				return columnHelper.value.accessor((row) => row[key], {
 					id: key,
+					size: 100 / (columnKeys.value.length || 1),
+					minSize: 10,
 					header: () =>
 						h("div", { class: "flex items-center gap-1.5" }, [
 							column?.icon
