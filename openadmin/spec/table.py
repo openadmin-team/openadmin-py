@@ -21,6 +21,11 @@ class ColumnConfigValue(TypedDict):
     icon: NotRequired[Icon]
     color: NotRequired[Color]
 
+class ValueConfigValue(TypedDict):
+    style: NotRequired[ColumnStyle]
+    label: NotRequired[str]
+    icon: NotRequired[Icon]
+    color: NotRequired[Color]
 
 class ActionConfig(TypedDict):
     action: str
@@ -55,7 +60,7 @@ TableData = Iterable[
         {
             "__view__": str | int | float | bool | None,
             "__actions__": list[ActionConfig],
-            "__style__": ColumnStyle | None,
+            "__values__": dict[str, ValueConfigValue]
         },
         extra_items=str | int | float | bool | None,
     )
