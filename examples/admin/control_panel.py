@@ -415,6 +415,12 @@ async def get_feature_flags(search: SearchDep, pagination: PageDep) -> spec.Tabl
                         "color": "green",
                     },
                 ],
+                '__values__': {
+                    'status': {
+                        'color': 'green' if flag["enabled"] else 'red',
+                        'icon': 'antenna',
+                    }
+                }
             }
             for flag in page_flags
         ],
