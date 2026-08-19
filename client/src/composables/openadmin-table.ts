@@ -174,10 +174,15 @@ export const useTable = ({
 									class: "size-8 rounded-md object-cover",
 								})
 							case "badge":
-								return h(Badge, { variant: "outline", class: cellColorStyle.value.badge }, () => [
+								return h(Badge, { variant: "secondary", class: "gap-1.5" }, () => [
 									cellIcon
-										? h(Icon, { icon: `lucide:${cellIcon}`, class: "size-3 shrink-0" })
-										: null,
+										? h(Icon, {
+												icon: `lucide:${cellIcon}`,
+												class: [cellColorStyle.value.text, "size-3 shrink-0"],
+											})
+										: h("span", {
+												class: [cellColorStyle.value.dot, "size-1.5 rounded-full shrink-0"],
+											}),
 									cellLabel,
 								])
 							case "link":
