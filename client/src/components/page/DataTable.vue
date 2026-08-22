@@ -18,13 +18,24 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
+import { Skeleton } from "@/components/ui/skeleton"
 import { type DataTableFeatures, features } from "@/lib/data-table"
 
-const props = defineProps<{
-	columns: ColumnDef<DataTableFeatures, TData>[]
-	data: TData[]
-	manualPagination?: boolean
-}>()
+const props = withDefaults(
+	defineProps<{
+		columns: ColumnDef<DataTableFeatures, TData>[]
+		data: TData[]
+		manualPagination?: boolean
+		/** Rows per page, used to keep the table's height stable across page/search transitions. */
+		pageSize?: number
+		/** True only on the very first load, before any data has ever been shown. */
+		isLoading?: boolean
+		/** True while a newer page/search is loading and `data` still holds the previous result. */
+		isPlaceholderData?: boolean
+		emptyMessage?: string
+	}>(),
+	{ emptyMessage: "No results." },
+)
 
 const table = useTanStackTable({
 	features,
@@ -100,6 +111,37 @@ const hasSelectColumn = computed(() => table.getAllLeafColumns().some((c) => c.i
 const hasActionsColumn = computed(() =>
 	table.getAllLeafColumns().some((c) => c.id === "__actions__"),
 )
+
+const bodyRows = computed(() => table.getRowModel().rows)
+
+const firstHeaderGroup = computed<TableHeaderGroup | undefined>(() => table.getHeaderGroups()[0])
+const skeletonHeaders = computed<TableHeader[]>(() =>
+	firstHeaderGroup.value ? getDataHeaders(firstHeaderGroup.value) : [],
+)
+
+// While loading (no data ever shown yet) or showing a stale placeholder page (mid page/search
+// transition), mask row values with skeletons instead of letting the table shrink to "No results."
+const showSkeleton = computed(() => props.isLoading || props.isPlaceholderData)
+
+// True first load only: there are no previous rows to reuse the shape/height of, so fall back
+// to a generic page's worth of skeleton rows built from the column headers.
+const initialSkeletonRowCount = computed(() => props.pageSize || 5)
+
+// Once real data lands, pad a short last page back up to a full page so the table doesn't
+// shrink just because this page has fewer rows than usual.
+const fillerRowCount = computed(() => {
+	if (showSkeleton.value || !props.manualPagination || !props.pageSize) return 0
+	const count = bodyRows.value.length
+	if (count === 0 || count >= props.pageSize) return 0
+	return props.pageSize - count
+})
+
+// Same idea for a page with zero rows: the empty-state message takes up one row, and the
+// rest is padded out to a full page instead of collapsing to a small fixed-height box.
+const emptyFillerRowCount = computed(() => {
+	if (!props.manualPagination || !props.pageSize) return 0
+	return Math.max(props.pageSize - 1, 0)
+})
 
 // Rows are at least as wide as the table container, but grow past it (and scroll)
 // once there isn't enough room to give every column its minimum width.
@@ -237,21 +279,28 @@ useSortable(() => headerRowEl, dataColumnIds, {
 			</div>
 
 			<div role="rowgroup">
-				<template v-if="table.getRowModel().rows?.length">
+				<template v-if="bodyRows.length">
 					<div
-						v-for="row in table.getRowModel().rows"
+						v-for="row in bodyRows"
 						:key="row.id"
 						role="row"
 						:data-state="row.getIsSelected() && 'selected'"
-						class="data-[state=selected]:bg-muted flex border-b transition-colors last:border-0 hover:bg-muted/50"
+						class="data-[state=selected]:bg-muted flex border-b transition-colors last:border-0"
+						:class="{ 'hover:bg-muted/50': !showSkeleton }"
 						:style="rowWidthStyle"
 					>
 						<div
 							v-if="getCell(row, '__select__')"
 							role="cell"
-							class="flex w-10 shrink-0 items-center px-4 py-3 [&:has([role=checkbox])]:pr-0"
+							class="relative flex w-10 shrink-0 items-center px-4 py-3 [&:has([role=checkbox])]:pr-0"
 						>
-							<FlexRender :cell="getCell(row, '__select__')!" />
+							<span :class="{ invisible: showSkeleton }">
+								<FlexRender :cell="getCell(row, '__select__')!" />
+							</span>
+							<Skeleton
+								v-if="showSkeleton"
+								class="absolute left-4 top-1/2 size-4 -translate-y-1/2 rounded-sm"
+							/>
 						</div>
 
 						<div class="flex min-w-0 flex-1">
@@ -259,21 +308,101 @@ useSortable(() => headerRowEl, dataColumnIds, {
 								v-for="cell in getDataCells(row)"
 								:key="cell.id"
 								role="cell"
-								class="flex min-w-0 items-center truncate px-4 py-3"
+								class="relative flex min-w-0 items-center px-4 py-3"
 								:class="{ 'bg-muted': cell.column.id === draggedColumnId }"
 								:style="{ width: `${cell.column.getSize()}%` }"
 							>
-								<FlexRender :cell="cell" />
+								<span class="min-w-0 truncate" :class="{ invisible: showSkeleton }">
+									<FlexRender :cell="cell" />
+								</span>
+								<Skeleton
+									v-if="showSkeleton"
+									class="absolute left-4 top-1/2 h-4 w-[calc(100%-2rem)] max-w-40 -translate-y-1/2"
+								/>
 							</div>
 						</div>
 
 						<div
 							v-if="getCell(row, '__actions__')"
 							role="cell"
+							class="relative flex w-14 shrink-0 items-center justify-end px-4 py-3"
+						>
+							<span :class="{ invisible: showSkeleton }">
+								<FlexRender :cell="getCell(row, '__actions__')!" />
+							</span>
+							<Skeleton
+								v-if="showSkeleton"
+								class="absolute right-4 top-1/2 size-5 -translate-y-1/2 rounded-sm"
+							/>
+						</div>
+					</div>
+
+					<div
+						v-for="n in fillerRowCount"
+						:key="`filler-${n}`"
+						role="row"
+						aria-hidden="true"
+						class="flex border-b last:border-0"
+						:style="rowWidthStyle"
+					>
+						<div class="px-4 py-3 text-sm">&nbsp;</div>
+					</div>
+				</template>
+				<template v-else-if="isLoading">
+					<div
+						v-for="n in initialSkeletonRowCount"
+						:key="`skeleton-${n}`"
+						role="row"
+						aria-hidden="true"
+						class="flex border-b last:border-0"
+						:style="rowWidthStyle"
+					>
+						<div
+							v-if="hasSelectColumn"
+							role="cell"
+							class="flex w-10 shrink-0 items-center px-4 py-3"
+						>
+							<Skeleton class="size-4 rounded-sm" />
+						</div>
+
+						<div class="flex min-w-0 flex-1">
+							<div
+								v-for="header in skeletonHeaders"
+								:key="header.id"
+								role="cell"
+								class="flex min-w-0 items-center px-4 py-3"
+								:style="{ width: `${header.column.getSize()}%` }"
+							>
+								<Skeleton class="h-4 w-full max-w-40" />
+							</div>
+						</div>
+
+						<div
+							v-if="hasActionsColumn"
+							role="cell"
 							class="flex w-14 shrink-0 items-center justify-end px-4 py-3"
 						>
-							<FlexRender :cell="getCell(row, '__actions__')!" />
+							<Skeleton class="size-5 rounded-sm" />
 						</div>
+					</div>
+				</template>
+				<template v-else-if="manualPagination && pageSize">
+					<div
+						role="row"
+						class="flex items-center justify-center px-4 py-3 text-sm text-muted-foreground"
+						:style="rowWidthStyle"
+					>
+						{{ emptyMessage }}
+					</div>
+					<div
+						v-for="n in emptyFillerRowCount"
+						:key="`empty-filler-${n}`"
+						role="row"
+						aria-hidden="true"
+						class="flex"
+						:style="rowWidthStyle"
+					>
+						<div class="px-4 py-3 text-sm">&nbsp;</div>
 					</div>
 				</template>
 				<template v-else>
@@ -281,7 +410,7 @@ useSortable(() => headerRowEl, dataColumnIds, {
 						role="row"
 						class="flex h-24 items-center justify-center text-sm text-muted-foreground"
 					>
-						No results.
+						{{ emptyMessage }}
 					</div>
 				</template>
 			</div>

@@ -31,6 +31,8 @@ const props = defineProps<{
 const {
 	columns,
 	rows,
+	isLoading,
+	isPlaceholderData,
 	hasSearch,
 	searchQuery,
 	hasPagination,
@@ -46,11 +48,21 @@ const {
 })
 
 const data = computed(() => (rows.value ?? []).filter(isTableRow))
+
+const emptyMessage = computed(() => (pageIndex.value > 1 ? "No rows left." : "No results."))
 </script>
 
 <template>
 	<div class="container mx-auto space-y-4">
-		<DataTable :columns="columns" :data="data" :manual-pagination="hasPagination">
+		<DataTable
+			:columns="columns"
+			:data="data"
+			:manual-pagination="hasPagination"
+			:page-size="perPage"
+			:is-loading="isLoading"
+			:is-placeholder-data="isPlaceholderData"
+			:empty-message="emptyMessage"
+		>
 			<template v-if="hasSearch" #toolbar-start>
 				<Input v-model="searchQuery" class="max-w-sm" placeholder="Search..." />
 			</template>

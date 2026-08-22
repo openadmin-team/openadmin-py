@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { useQuery } from "@tanstack/vue-query"
+import { keepPreviousData, useQuery } from "@tanstack/vue-query"
 import { type ColumnDef, createColumnHelper } from "@tanstack/vue-table"
 import { Icon } from "@iconify/vue"
 import { computed, h, type MaybeRefOrGetter, ref, toValue, watch } from "vue"
@@ -70,7 +70,7 @@ export const useTable = ({
 		return params
 	})
 
-	const { data, isLoading, isFetching } = useQuery<Table, AppError>({
+	const { data, isLoading, isFetching, isPlaceholderData } = useQuery<Table, AppError>({
 		queryKey: computed(() => [
 			"openadmin-stat",
 			toValue(sectionId),
@@ -92,6 +92,7 @@ export const useTable = ({
 
 			return tableSchema.parse(data)
 		},
+		placeholderData: keepPreviousData,
 		refetchInterval: computed(() => table.value?.refresh ?? false),
 	})
 
@@ -258,6 +259,7 @@ export const useTable = ({
 		columns,
 		isLoading,
 		isFetching,
+		isPlaceholderData,
 		hasSearch,
 		hasPagination,
 		searchQuery,
