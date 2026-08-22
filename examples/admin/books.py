@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import asyncio
 from urllib.parse import quote
 
 from fastapi import Query
@@ -86,6 +87,7 @@ BOOK_COVER_URL = "https://img.magnific.com/free-photo/beautiful-tropical-beach-s
 async def get_all_books(
     session: AsyncSessionDep, pagination: PageDep, search: SearchDep
 ) -> spec.Table:
+    await asyncio.sleep(5)  # TEMP: simulate latency for manual UX testing
     stmt = (
         select(models.Book, models.Author)
         .join(models.Author, models.Author.id == models.Book.author_id)
