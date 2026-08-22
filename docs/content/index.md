@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "OpenAdmin"
   text: "Admin panel for python"
-  tagline: Build admin dashboards as FastAPI routes — stats, tables, charts, and actions, all in pure Python.
+  tagline: Build admin dashboards as FastAPI routes — stats, tables, charts, and actions, all in pure Python using any orm and api.
   actions:
     - theme: brand
       text: What is OpenAdmin?
