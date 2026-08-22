@@ -5,21 +5,24 @@ layout: home
 hero:
   name: "OpenAdmin"
   text: "Admin panel for python"
-  tagline: My great project tagline
+  tagline: Build admin dashboards as FastAPI routes — stats, tables, charts, and actions, all in pure Python.
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: What is OpenAdmin?
+      link: /introduction/what-is-openadmin
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Getting Started
+      link: /introduction/getting-started
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - icon: 📊
+    title: Stats, Tables & Charts
+    details: Single-value stats, paginated searchable tables, and bar/pie charts — each just a decorated FastAPI endpoint.
+  - icon: 📝
+    title: Forms & Actions
+    details: Structured forms and one-off action buttons that submit to your own endpoints, with typed parameters inferred automatically.
+  - icon: 🔌
+    title: FastAPI-native
+    details: A page is a router, a widget is an endpoint. Full dependency injection, OpenAPI docs, and middleware compatibility for free.
 ---
 

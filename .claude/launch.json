@@ -7,6 +7,13 @@
 			"runtimeArgs": ["run", "--cwd", "client", "dev"],
 			"port": 5173,
 			"autoPort": true
+		},
+		{
+			"name": "docs-dev",
+			"runtimeExecutable": "bun",
+			"runtimeArgs": ["run", "--cwd", "docs", "dev"],
+			"port": 5174,
+			"autoPort": true
 		}
 	]
 }
