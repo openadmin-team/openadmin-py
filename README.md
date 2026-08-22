@@ -13,6 +13,8 @@
   <p><a href="https://openadmin-team.github.io/openadmin-py/">Documentation</a></p>
 </div>
 
+<img src="docs/assets/dashboard-screenshot.png" alt="OpenAdmin dashboard" width="100%" />
+
 ---
 
 OpenAdmin is a FastAPI-native library for building admin panels. A page is a router, a widget is an endpoint — stats, tables, forms, actions, and charts, defined with typed decorators in plain Python.
