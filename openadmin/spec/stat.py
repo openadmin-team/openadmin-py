@@ -16,6 +16,7 @@ class StatComponent(TypedDict):
     icon: Icon | None
     color: Color | None
     name: str
+    refresh: int | None
     description: str | None
     method: HttpMethod
     form: JsonSchema | None
@@ -28,6 +29,7 @@ type StatValue = str | int | float | bool | None
 
 class StatResponse(TypedDict):
     value: StatValue
+    refresh: NotRequired[int | None]
     icon: NotRequired[Icon]
     color: NotRequired[Color]
 

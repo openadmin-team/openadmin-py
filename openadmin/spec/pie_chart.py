@@ -29,6 +29,7 @@ class PieChartComponent(TypedDict):
     caption: str | None
     caption_description: str | None
     caption_icon: Icon | None
+    refresh: int | None
     method: HttpMethod
     form: JsonSchema | None
     body: JsonSchema | None
@@ -47,6 +48,7 @@ class PieChartResponce(TypedDict):
     icon: NotRequired[Icon]
     color: NotRequired[Color]
     data: PieChartData
+    refresh: NotRequired[int | None]
 
 
 type PieChart = PieChartData | PieChartResponce

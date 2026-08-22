@@ -13,6 +13,7 @@ class LineChartComponent(TypedDict):
     id: str
     name: str
     description: str | None
+    refresh: int | None
     method: HttpMethod
     form: JsonSchema | None
     body: JsonSchema | None

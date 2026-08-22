@@ -11,6 +11,7 @@ export const lineChartComponentSchema = z.object({
 	id: z.string(),
 	name: z.string(),
 	description: z.string().nullable(),
+	refresh: z.number().nullable(),
 	method: httpMethodSchema,
 	form: jsonSchemaSchema.nullable(),
 	body: jsonSchemaSchema.nullable(),

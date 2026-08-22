@@ -47,6 +47,11 @@ async def get_most_popular_tag(session: AsyncSessionDep) -> str:
     description="All tags sorted by usage count",
     icon="tag",
     color="pink",
+    columns={
+        "id": {"label": "ID", "icon": "hash", "color": "slate"},
+        "name": {"label": "Name", "icon": "tag", "color": "pink"},
+        "usage_count": {"label": "Usage Count", "icon": "bar-chart", "color": "rose"},
+    },
 )
 async def get_all_tags(session: AsyncSessionDep, pagination: PageDep):
     stmt = (

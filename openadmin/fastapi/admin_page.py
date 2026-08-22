@@ -3,12 +3,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from collections.abc import Awaitable, Callable
+from datetime import timedelta
 
 from fastapi import APIRouter
 from openadmin import spec
 
 from . import utils
-from .field_config import FieldConfig
 
 
 class AdminPage:
@@ -38,6 +38,7 @@ class AdminPage:
         columns: dict[str, spec.ColumnConfigValue] | None = None,
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
+        refresh: timedelta | None = None,
     ):
         table_id = utils.get_id(name)
 
@@ -54,6 +55,9 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
+            "refresh": refresh // timedelta(milliseconds=1)
+            if refresh is not None
+            else None,
         }
 
         self.components.append(item)
@@ -63,6 +67,12 @@ class AdminPage:
             self.router.get(
                 f"/table/{table_id}",
                 description=description,
+                # `spec.Table` unions a bare row iterable with a `TableResponse`
+                # dict. FastAPI's inferred response model validates a dict
+                # against the iterable arm first, collapsing it to its keys, so
+                # response validation is disabled and the return value is
+                # serialized as-is.
+                response_model=None,
             ),
         )
 
@@ -73,6 +83,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
         description: str | None = None,
+        refresh: timedelta | None = None,
     ):
         stat_id = utils.get_id(name)
 
@@ -87,6 +98,9 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
+            "refresh": refresh // timedelta(milliseconds=1)
+            if refresh is not None
+            else None,
         }
 
         self.components.append(item)
@@ -106,6 +120,7 @@ class AdminPage:
         description: str | None = None,
         color: spec.Color | None = None,
         icon: spec.Icon | None = None,
+        refresh: timedelta | None = None,
     ):
         markdown_id = utils.get_id(name)
 
@@ -120,6 +135,9 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
+            "refresh": refresh // timedelta(milliseconds=1)
+            if refresh is not None
+            else None,
         }
 
         self.components.append(item)
@@ -202,29 +220,13 @@ class AdminPage:
         name: str,
         *,
         method: spec.HttpMethod = "post",
-        fields: dict[str, FieldConfig] | None = None,
+        fields: dict[str, spec.FieldConfig] | None = None,
         description: str | None = None,
         is_hidden: bool = False,
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
     ):
         form_id = utils.get_id(name)
-
-        filed_config: dict[str, spec.FieldConfig] = {}
-
-        for filed, config in (fields or {}).items():
-            filed_config[filed] = {  # type: ignore
-                "color": config.get("color"),
-                "icon": config.get("icon"),
-                "reference": getattr(
-                    config.get("reference"),
-                    "__openadmin_table_id__",
-                    config.get("reference"),
-                )
-                if isinstance(config.get("reference"), Callable)
-                else config.get("reference"),
-                "reference_field": config.get("reference_field"),
-            }
 
         item: spec.FormComponent = {
             "type": "form",
@@ -238,7 +240,7 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
-            "fields": filed_config,
+            "fields": fields,
         }
 
         self.components.append(item)
@@ -320,6 +322,7 @@ class AdminPage:
         caption_icon: spec.Icon | None = None,
         config: dict[str, spec.BarChartConfigValue] | None = None,
         data_key: str | None = None,
+        refresh: timedelta | None = None,
     ):
         bar_chart_id = utils.get_id(name)
 
@@ -339,6 +342,9 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
+            "refresh": refresh // timedelta(milliseconds=1)
+            if refresh is not None
+            else None,
         }
 
         self.components.append(item)
@@ -393,6 +399,7 @@ class AdminPage:
         caption: str | None = None,
         caption_description: str | None = None,
         caption_icon: spec.Icon | None = None,
+        refresh: timedelta | None = None,
     ):
         pie_chart_id = utils.get_id(name)
 
@@ -413,6 +420,9 @@ class AdminPage:
             "query": None,
             "body": None,
             "form": None,
+            "refresh": refresh // timedelta(milliseconds=1)
+            if refresh is not None
+            else None,
         }
 
         self.components.append(item)
@@ -474,6 +484,8 @@ class AdminPage:
             item["query"] = utils.get_query_params(func)
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
+
+            func.__openadmin_action_id__ = item["id"]  # type: ignore
 
             return fastapi_decorator(func)
 

@@ -29,6 +29,7 @@ export const pieChartComponentSchema = z.object({
 	caption: z.string().nullable(),
 	caption_description: z.string().nullable(),
 	caption_icon: iconSchema.nullable(),
+	refresh: z.number().nullable(),
 	method: httpMethodSchema,
 	form: jsonSchemaSchema.nullable(),
 	body: jsonSchemaSchema.nullable(),
@@ -50,6 +51,7 @@ export const pieChartResponseSchema = z.object({
 	icon: iconSchema.optional(),
 	color: colorSchema.optional(),
 	data: pieChartDataSchema,
+	refresh: z.number().nullable().optional(),
 })
 
 export type PieChartResponse = z.infer<typeof pieChartResponseSchema>

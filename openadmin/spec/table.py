@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from collections.abc import Iterable
-from typing import Literal, NotRequired
+from typing import Any, Literal, NotRequired
 
 from typing_extensions import TypedDict
 
@@ -12,7 +12,7 @@ from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
 
-type ColumnStyle = Literal["avatar", "image", "badge", "link"]
+type ColumnStyle = Literal["image", "badge", "link", "file"]
 
 
 class ColumnConfigValue(TypedDict):
@@ -20,6 +20,24 @@ class ColumnConfigValue(TypedDict):
     label: NotRequired[str]
     icon: NotRequired[Icon]
     color: NotRequired[Color]
+
+
+class ValueConfigValue(TypedDict):
+    style: NotRequired[ColumnStyle]
+    label: NotRequired[str]
+    icon: NotRequired[Icon]
+    color: NotRequired[Color]
+
+
+class ActionConfig(TypedDict):
+    action: str
+    label: NotRequired[str]
+    icon: NotRequired[Icon]
+    color: NotRequired[Color]
+
+    query: dict[str, Any]
+    body: dict[str, Any]
+    form: dict[str, Any]
 
 
 class TableComponent(TypedDict):
@@ -32,6 +50,7 @@ class TableComponent(TypedDict):
     color: Color | None
     method: HttpMethod
     is_hidden: bool
+    refresh: int | None
     form: JsonSchema | None
     body: JsonSchema | None
     query: JsonSchema | None
@@ -42,6 +61,8 @@ TableData = Iterable[
         "TableRow",
         {
             "__view__": str | int | float | bool | None,
+            "__actions__": list[ActionConfig],
+            "__values__": dict[str, ValueConfigValue],
         },
         extra_items=str | int | float | bool | None,
     )
@@ -53,6 +74,8 @@ class TableResponse(TypedDict):
     data: TableData
     icon: NotRequired[Icon]
     color: NotRequired[Color]
+    refresh: NotRequired[int | None]
+    total: NotRequired[int]
 
 
 type Table = TableData | TableResponse

@@ -17,6 +17,7 @@ class MarkdownComponent(TypedDict):
     description: str | None
     color: Color | None
     icon: Icon | None
+    refresh: int | None
     method: HttpMethod
     form: JsonSchema | None
     body: JsonSchema | None
@@ -29,6 +30,7 @@ type MarkdownContent = str
 class MarkdownResponse(TypedDict):
     icon: NotRequired[Icon]
     color: NotRequired[Color]
+    refresh: NotRequired[int | None]
     content: MarkdownContent
 
 

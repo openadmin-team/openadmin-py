@@ -8,15 +8,53 @@ import { httpMethodSchema } from "./http-method"
 import { iconSchema } from "./icon"
 import { jsonSchemaSchema } from "./json-schema"
 
+export const COLUMN_STYLES = ["image", "badge", "link", "file"] as const
+
+export const columnStyleSchema = z.enum(COLUMN_STYLES)
+
+export type ColumnStyle = z.infer<typeof columnStyleSchema>
+
+export const columnConfigValueSchema = z.object({
+	style: columnStyleSchema.optional(),
+	label: z.string().optional(),
+	icon: iconSchema.optional(),
+	color: colorSchema.optional(),
+})
+
+export type ColumnConfigValue = z.infer<typeof columnConfigValueSchema>
+
+export const valueConfigValueSchema = z.object({
+	style: columnStyleSchema.optional(),
+	label: z.string().optional(),
+	icon: iconSchema.optional(),
+	color: colorSchema.optional(),
+})
+
+export type ValueConfigValue = z.infer<typeof valueConfigValueSchema>
+
+export const actionConfigSchema = z.object({
+	action: z.string(),
+	label: z.string().optional(),
+	icon: iconSchema.optional(),
+	color: colorSchema.optional(),
+	query: z.record(z.string(), z.unknown()),
+	body: z.record(z.string(), z.unknown()),
+	form: z.record(z.string(), z.unknown()),
+})
+
+export type ActionConfig = z.infer<typeof actionConfigSchema>
+
 export const tableComponentSchema = z.object({
 	type: z.literal("table"),
 	id: z.string(),
 	name: z.string(),
 	description: z.string().nullable(),
+	columns: z.record(z.string(), columnConfigValueSchema).nullable(),
 	icon: iconSchema.nullable(),
 	color: colorSchema.nullable(),
 	method: httpMethodSchema,
 	is_hidden: z.boolean(),
+	refresh: z.number().nullable(),
 	form: jsonSchemaSchema.nullable(),
 	body: jsonSchemaSchema.nullable(),
 	query: jsonSchemaSchema.nullable(),
@@ -26,7 +64,15 @@ export type TableComponent = z.infer<typeof tableComponentSchema>
 
 const tableRowValueSchema = z.union([z.string(), z.number(), z.boolean(), z.null()])
 
-const tableRowSchema = z.record(z.string(), tableRowValueSchema)
+export const tableRowSchema = z
+	.object({
+		__view__: tableRowValueSchema.optional(),
+		__actions__: z.array(actionConfigSchema).optional(),
+		__values__: z.record(z.string(), valueConfigValueSchema).optional(),
+	})
+	.catchall(tableRowValueSchema)
+
+export type TableRow = z.infer<typeof tableRowSchema>
 
 export const tableDataSchema = z.array(z.union([tableRowSchema, z.unknown()]))
 
@@ -36,6 +82,8 @@ export const tableResponseSchema = z.object({
 	data: tableDataSchema,
 	icon: iconSchema.optional(),
 	color: colorSchema.optional(),
+	refresh: z.number().nullable().optional(),
+	total: z.number().optional(),
 })
 
 export type TableResponse = z.infer<typeof tableResponseSchema>

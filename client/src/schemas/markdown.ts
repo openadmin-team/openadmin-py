@@ -15,6 +15,7 @@ export const markdownComponentSchema = z.object({
 	description: z.string().nullable(),
 	color: colorSchema.nullable(),
 	icon: iconSchema.nullable(),
+	refresh: z.number().nullable(),
 	method: httpMethodSchema,
 	form: jsonSchemaSchema.nullable(),
 	body: jsonSchemaSchema.nullable(),
@@ -30,6 +31,7 @@ export type MarkdownContent = z.infer<typeof markdownContentSchema>
 export const markdownResponseSchema = z.object({
 	icon: iconSchema.optional(),
 	color: colorSchema.optional(),
+	refresh: z.number().nullable().optional(),
 	content: markdownContentSchema,
 })
 

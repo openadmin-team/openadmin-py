@@ -4,11 +4,13 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
 from openadmin.fastapi import AdminPanel
 
 from .admin import (
     analytics,
+    auth,
     authors,
     books,
     control_panel,
@@ -33,8 +35,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.add_middleware(SessionMiddleware, secret_key="test")
+
 admin_panel = AdminPanel(
-    "Book Library Admin", description="Manage and explore the book catalog"
+    "Book Library Admin",
+    description="Manage and explore the book catalog",
+    auth=auth.auth,
 )
 
 admin_panel.section(

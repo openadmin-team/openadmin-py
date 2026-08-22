@@ -49,6 +49,11 @@ async def get_books_without_genre(session: AsyncSessionDep) -> int:
     description="All genres sorted by book count",
     icon="flower",
     color="green",
+    columns={
+        "id": {"label": "ID", "icon": "hash", "color": "slate"},
+        "name": {"label": "Name", "icon": "flower", "color": "green"},
+        "book_count": {"label": "Book Count", "icon": "book-copy", "color": "emerald"},
+    },
 )
 async def get_all_genres(session: AsyncSessionDep, pagination: PageDep):
     stmt = (

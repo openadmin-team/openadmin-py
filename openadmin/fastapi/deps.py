@@ -2,9 +2,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+from collections.abc import Awaitable, Callable
 from typing import Annotated
 
-from fastapi import Depends, Query
+from fastapi import Depends, Query, Request
 
 from .req import PaginationParams
 
@@ -22,5 +23,14 @@ def get_search_query(
     return search
 
 
+def create_authenticate_dep(
+    auth_func: Callable[[Request], None | Awaitable[None]],
+):
+    def _(req: Request):
+        auth_func(req)
+
+    return Depends(_)
+
+
 PageDep = Annotated[PaginationParams, Depends(pagination_params)]
-SearchQueryDep = Annotated[str | None, Depends(get_search_query)]
+SearchDep = Annotated[str | None, Depends(get_search_query)]
