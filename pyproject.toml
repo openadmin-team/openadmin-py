@@ -37,7 +37,7 @@ artifacts = ["openadmin/__client__/**"]
 
 [tool.codespell]
 ignore-words-list = "astroid,dependant"
-skip = "*/node_modules/*,*/dist/*,*.lock,*/.git/*,*/DESIGN.md"
+skip = "*/node_modules/*,*/dist/*,*.lock,*/.git/*,*/DESIGN.md,**/__client__/**"
 
 [tool.pyright]
 typeCheckingMode = "standard"
