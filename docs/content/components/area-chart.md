@@ -18,6 +18,7 @@ class AreaChartComponent(TypedDict):
     body: JsonSchema | None
     query: JsonSchema | None
 
+
 type AreaChart = AreaChartComponent
 ```
 

@@ -4,7 +4,9 @@ An action is a one-off button that calls an endpoint — standalone on a page, o
 
 ```python
 @page.action("Delete Book", method="delete", description="Remove a book by ID")
-async def delete_book(session: AsyncSessionDep, book_id: int = Query(...)) -> spec.Action:
+async def delete_book(
+    session: AsyncSessionDep, book_id: int = Query(...)
+) -> spec.Action:
     book = await session.get(models.Book, book_id)
     if book:
         await session.delete(book)
@@ -38,6 +40,7 @@ class ActionResponse(TypedDict):
     table: NotRequired[dict | object]
     message: NotRequired[str]
 
+
 type Action = ActionResponse | None | str
 ```
 
@@ -61,8 +64,7 @@ Actions take parameters the same way any FastAPI endpoint does — `Query` for `
 async def rotate_api_key(
     key_name: str = Form(..., description="Key to rotate"),
     expires_in_days: int = Form(30, description="Validity period for the new key"),
-) -> spec.Action:
-    ...
+) -> spec.Action: ...
 ```
 
 ## Attaching an action to a table row

@@ -39,7 +39,9 @@ from .users import verify_password, get_user_by_username
 async def login(req: Request, login_req: LoginReq) -> None:
     user = await get_user_by_username(login_req.username)
     if user is None or not verify_password(login_req.password, user.password_hash):
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid username or password")
+        raise HTTPException(
+            status.HTTP_401_UNAUTHORIZED, "Invalid username or password"
+        )
 
     req.session["user_id"] = user.id
 ```

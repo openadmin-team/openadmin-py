@@ -40,6 +40,7 @@ class TableResponse(TypedDict):
     refresh: NotRequired[int | None]
     total: NotRequired[int]
 
+
 type Table = TableData | TableResponse
 ```
 
@@ -89,6 +90,7 @@ A column left out of `columns` is still shown, using its raw key as the label.
 
 ```python
 from openadmin.fastapi.deps import PageDep, SearchDep
+
 
 @page.table("All Books")
 async def get_all_books(

@@ -28,11 +28,13 @@ The decorated function is registered as `GET /<page-id>/stat/<stat-id>`.
 ```python
 type StatValue = str | int | float | bool | None
 
+
 class StatResponse(TypedDict):
     value: StatValue
     refresh: NotRequired[int | None]
     icon: NotRequired[Icon]
     color: NotRequired[Color]
+
 
 type Stat = StatValue | StatResponse
 ```
@@ -60,6 +62,7 @@ Pass `refresh` to poll the stat's endpoint automatically:
 
 ```python
 from datetime import timedelta
+
 
 @page.stat("Random Number", icon="sun", color="yellow", refresh=timedelta(seconds=1))
 def random_number():

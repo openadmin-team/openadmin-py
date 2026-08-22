@@ -25,10 +25,7 @@ page = AdminPage("Authors", icon="users")
 async def get_all_authors(session: AsyncSessionDep) -> spec.Table:
     authors = (await session.execute(select(Author))).scalars().all()
     return {
-        "data": [
-            {"id": a.id, "name": a.name, "__view__": a.name}
-            for a in authors
-        ],
+        "data": [{"id": a.id, "name": a.name, "__view__": a.name} for a in authors],
     }
 ```
 
@@ -39,6 +36,7 @@ async def get_all_authors(session: AsyncSessionDep) -> spec.Table:
 ```python
 # admin/books.py
 from pydantic import BaseModel
+
 
 class AddBookBody(BaseModel):
     title: str

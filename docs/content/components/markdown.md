@@ -33,11 +33,13 @@ The decorated function is registered as `GET /<page-id>/markdown/<markdown-id>`.
 ```python
 type MarkdownContent = str
 
+
 class MarkdownResponse(TypedDict):
     icon: NotRequired[Icon]
     color: NotRequired[Color]
     refresh: NotRequired[int | None]
     content: MarkdownContent
+
 
 type Markdown = MarkdownContent | MarkdownResponse
 ```
@@ -49,7 +51,9 @@ Return a bare string for the common case, or a `MarkdownResponse` dict to overri
 async def status_markdown(session: AsyncSessionDep) -> spec.MarkdownResponse:
     healthy = await check_health(session)
     return {
-        "content": "All systems operational." if healthy else "**Degraded** — investigating.",
+        "content": "All systems operational."
+        if healthy
+        else "**Degraded** — investigating.",
         "color": "emerald" if healthy else "amber",
     }
 ```

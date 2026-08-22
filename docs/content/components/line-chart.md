@@ -18,6 +18,7 @@ class LineChartComponent(TypedDict):
     body: JsonSchema | None
     query: JsonSchema | None
 
+
 type LineChart = LineChartComponent
 ```
 

@@ -18,8 +18,10 @@ An `AdminAuth()` instance's three hooks are no-op stubs until you override them:
 @auth.login()
 def login(req: Request, login_req: LoginReq) -> None: ...
 
+
 @auth.authenticate()
 def authenticate(req: Request) -> None: ...
+
 
 @auth.logout()
 def logout(req: Request) -> None: ...
@@ -57,7 +59,9 @@ def login(req: Request, login_req: LoginReq) -> None:
     if login_req.username == "admin" and login_req.password == "admin":
         req.session.update({"token": "admin-token"})
     else:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid username or password")
+        raise HTTPException(
+            status.HTTP_401_UNAUTHORIZED, "Invalid username or password"
+        )
 
 
 @auth.authenticate()

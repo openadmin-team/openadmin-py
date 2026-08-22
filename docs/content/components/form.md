@@ -45,6 +45,7 @@ class FormResponse(TypedDict):
     table: NotRequired[dict | object]
     message: NotRequired[str]
 
+
 type Form = FormResponse | None | str
 ```
 
@@ -78,6 +79,7 @@ class FieldConfig(TypedDict):
 
 ```python
 from openadmin.fastapi import reference_table
+
 
 @page.form(
     "Add Author",

@@ -30,11 +30,22 @@ page = AdminPage("Users", icon="users")
     columns={
         "id": {"label": "ID", "icon": "hash", "color": "slate"},
         "name": {"label": "Name", "icon": "user", "color": "indigo"},
-        "role": {"style": "badge", "label": "Role", "icon": "shield", "color": "emerald"},
+        "role": {
+            "style": "badge",
+            "label": "Role",
+            "icon": "shield",
+            "color": "emerald",
+        },
     },
 )
-async def get_all_users(session: AsyncSessionDep, pagination: PageDep, search: SearchDep) -> spec.Table:
-    stmt = select(User).offset((pagination.page - 1) * pagination.per_page).limit(pagination.per_page)
+async def get_all_users(
+    session: AsyncSessionDep, pagination: PageDep, search: SearchDep
+) -> spec.Table:
+    stmt = (
+        select(User)
+        .offset((pagination.page - 1) * pagination.per_page)
+        .limit(pagination.per_page)
+    )
     count_stmt = select(func.count(User.id))
     if search:
         stmt = stmt.where(User.name.ilike(f"%{search}%"))
@@ -59,12 +70,16 @@ Declare the action with `is_hidden=True` — it exists purely to be triggered fr
 
 ```python
 @page.action("Delete User", method="delete", is_hidden=True)
-async def delete_user(session: AsyncSessionDep, user_id: int = Query(...)) -> spec.Action:
+async def delete_user(
+    session: AsyncSessionDep, user_id: int = Query(...)
+) -> spec.Action:
     user = await session.get(User, user_id)
     if user:
         await session.delete(user)
         await session.commit()
-    return {"toast": f"User #{user_id} deleted" if user else f"User #{user_id} not found"}
+    return {
+        "toast": f"User #{user_id} deleted" if user else f"User #{user_id} not found"
+    }
 ```
 
 ## 4. Attach it to each row

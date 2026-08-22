@@ -39,12 +39,14 @@ type PieChartData = (
     | object
 )
 
+
 class PieChartResponce(TypedDict):
     config: NotRequired[dict[str, PieChartConfigValue]]
     icon: NotRequired[Icon]
     color: NotRequired[Color]
     data: PieChartData
     refresh: NotRequired[int | None]
+
 
 type PieChart = PieChartData | PieChartResponce
 ```
