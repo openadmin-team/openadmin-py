@@ -10,6 +10,7 @@
   [![FastAPI](https://img.shields.io/badge/built%20on-FastAPI-009688?style=flat-square)](https://fastapi.tiangolo.com)
 </div> -->
 # 🚧 Project is under development 🚧
+
 ---
 
 **OpenAdmin** is a FastAPI-native library for building admin dashboards. Define pages with typed decorators — no frontend code, no templates, no configuration files. Every page is just a router; every widget is just an endpoint
