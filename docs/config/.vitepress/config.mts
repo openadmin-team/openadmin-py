@@ -3,7 +3,8 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   srcDir: "../content",
-  
+  base: "/openadmin-py/",
+
   title: "OpenAdmin",
   description: "Admin panel for python",
   themeConfig: {
