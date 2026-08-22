@@ -6,6 +6,9 @@ runs:
     - uses: astral-sh/setup-uv@v4
       with:
         enable-cache: true
+    - uses: oven-sh/setup-bun@v2
+    - shell: bash
+      run: cd client && bun install --frozen-lockfile
     - shell: bash
       run: uv sync
     - shell: bash
