@@ -42,7 +42,7 @@ export default defineConfig({
       {
         text: 'Auth',
         items: [
-          { text: 'Email Authentication', link: '/auth/' }
+          { text: 'Password Authentication', link: '/auth/' }
         ]
       },
       {
