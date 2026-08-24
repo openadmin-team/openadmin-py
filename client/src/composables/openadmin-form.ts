@@ -83,8 +83,8 @@ const useFormMutation = ({
 			body?: Record<string, unknown> | null
 		}) => {
 			const method = (toValue(form)?.method ?? "post").toUpperCase()
-			const search = query?.toString()
-			const url = `${toValue(sectionId)}/${toValue(pageId)}/form/${toValue(formId)}${search ? `?${search}` : ""}`
+			const queryParams = query?.toString()
+			const url = `${toValue(sectionId)}/${toValue(pageId)}/form/${toValue(formId)}${queryParams ? `?${queryParams}` : ""}`
 
 			const response = await fetch(
 				url,
