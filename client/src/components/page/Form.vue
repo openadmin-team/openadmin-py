@@ -37,16 +37,25 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select"
+import {
 	TagsInput,
 	TagsInputInput,
 	TagsInputItem,
 	TagsInputItemDelete,
 	TagsInputItemText,
+	TagsInputSuggestions,
 } from "@/components/ui/tags-input"
 import { useForm } from "@/composables/openadmin-form"
 import type { JsonSchema } from "@/schemas/json-schema"
 
-type ArrayItemKind = "integer" | "number" | "boolean" | "date" | "date-time" | "string"
+type ArrayItemKind = "integer" | "number" | "boolean" | "date" | "date-time" | "string" | "enum"
 
 const props = defineProps<{
 	sectionId: string
@@ -60,8 +69,16 @@ const { form, dataForm } = useForm({
 	formId: props.formId,
 })
 
-const arrayItemKind = (items: JsonSchema["items"]): ArrayItemKind => {
-	const item = Array.isArray(items) ? items[0] : items
+function resolveRef(schema: JsonSchema | undefined, root: JsonSchema): JsonSchema | undefined {
+	if (!schema?.$ref) return schema
+	const key = schema.$ref.split("/").pop()
+	const target = key ? (root.$defs?.[key] ?? root.definitions?.[key]) : undefined
+	return target ? resolveRef(target, root) : schema
+}
+
+const arrayItemKind = (items: JsonSchema["items"], root: JsonSchema): ArrayItemKind => {
+	const item = resolveRef(Array.isArray(items) ? items[0] : items, root)
+	if (item?.enum) return "enum"
 	if (item?.type === "integer") return "integer"
 	if (item?.type === "number") return "number"
 	if (item?.type === "boolean") return "boolean"
@@ -73,20 +90,29 @@ const arrayItemKind = (items: JsonSchema["items"]): ArrayItemKind => {
 const fieldsOf = (schema: JsonSchema | null | undefined, source: "query" | "body" | "form") => {
 	if (!schema?.properties) return []
 	const required = new Set(schema.required ?? [])
-	return Object.entries(schema.properties).map(([key, property]) => ({
-		key,
-		label: property.title ?? key,
-		required: required.has(key),
-		boolean: property.type === "boolean",
-		numeric: property.type === "number" || property.type === "integer",
-		date: property.type === "string" && property.format === "date",
-		datetime: property.type === "string" && property.format === "date-time",
-		file: source === "form" && property.type === "string",
-		fileArray: source === "form" && property.type === "array",
-		array: source !== "form" && property.type === "array",
-		itemKind:
-			source !== "form" && property.type === "array" ? arrayItemKind(property.items) : undefined,
-	}))
+	return Object.entries(schema.properties).map(([key, rawProperty]) => {
+		const property = resolveRef(rawProperty, schema) ?? rawProperty
+		const array = source !== "form" && property.type === "array"
+		const itemSchema = array
+			? resolveRef(Array.isArray(property.items) ? property.items[0] : property.items, schema)
+			: undefined
+		return {
+			key,
+			label: rawProperty.title ?? key,
+			required: required.has(key),
+			boolean: property.type === "boolean",
+			numeric: property.type === "number" || property.type === "integer",
+			date: property.type === "string" && property.format === "date",
+			datetime: property.type === "string" && property.format === "date-time",
+			file: source === "form" && property.type === "string",
+			fileArray: source === "form" && property.type === "array",
+			array,
+			itemKind: array ? arrayItemKind(property.items, schema) : undefined,
+			select: !array && Array.isArray(property.enum),
+			options: !array && Array.isArray(property.enum) ? property.enum.map(String) : undefined,
+			itemOptions: itemSchema?.enum ? itemSchema.enum.map(String) : undefined,
+		}
+	})
 }
 
 const fields = computed(() => [
@@ -309,7 +335,17 @@ function removeFileAt(field: AnyFieldApi, index: number) {
 							<FieldLabel :for="field.name">
 								{{ f.label }}<span v-if="f.required" class="text-destructive"> *</span>
 							</FieldLabel>
+							<TagsInputSuggestions
+								v-if="f.itemKind === 'enum'"
+								:id="field.name"
+								:options="f.itemOptions ?? []"
+								:model-value="(field.state.value as string[] | undefined) ?? []"
+								:aria-invalid="isInvalid(field)"
+								@update:model-value="(values) => field.handleChange(values)"
+								@blur="field.handleBlur"
+							/>
 							<TagsInput
+								v-else
 								:id="field.name"
 								:model-value="arrayValues(field)"
 								:aria-invalid="isInvalid(field)"
@@ -429,6 +465,32 @@ function removeFileAt(field: AnyFieldApi, index: number) {
 									<AttachmentTrigger as="label" :for="field.name" />
 								</Attachment>
 							</AttachmentGroup>
+							<FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
+						</Field>
+						<Field v-else-if="f.select" :data-invalid="isInvalid(field)">
+							<FieldLabel :for="field.name">
+								{{ f.label }}<span v-if="f.required" class="text-destructive"> *</span>
+							</FieldLabel>
+							<Select
+								:model-value="field.state.value as string | undefined"
+								@update:model-value="(value) => field.handleChange(value)"
+							>
+								<SelectTrigger
+									:id="field.name"
+									class="w-full"
+									:aria-invalid="isInvalid(field)"
+									@blur="field.handleBlur"
+								>
+									<SelectValue placeholder="Select an option" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectItem v-for="option in f.options ?? []" :key="option" :value="option">
+											{{ option }}
+										</SelectItem>
+									</SelectGroup>
+								</SelectContent>
+							</Select>
 							<FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
 						</Field>
 						<Field v-else :data-invalid="isInvalid(field)">
