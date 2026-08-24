@@ -30,42 +30,54 @@ export const useForm = ({
 
 	const { mutate } = useFormMutation({ sectionId, pageId, formId, form })
 
-	const queryForm = useTanstackForm({
+	const queryKeys = computed(() => new Set(Object.keys(toValue(form)?.query?.properties ?? {})))
+	const bodyKeys = computed(() => new Set(Object.keys(toValue(form)?.body?.properties ?? {})))
+	const formKeys = computed(() => new Set(Object.keys(toValue(form)?.form?.properties ?? {})))
+
+	const dataForm = useTanstackForm({
 		defaultValues: {} as Record<string, unknown>,
 		validators: {
-			onChange: ({ value }) => querySchema.value?.safeParse(value).error?.issues,
+			onChange: ({ value }) => {
+				const fields: Record<string, string[]> = {}
+				for (const [schema, keys] of [
+					[querySchema.value, queryKeys.value],
+					[bodySchema.value, bodyKeys.value],
+					[formSchema.value, formKeys.value],
+				] as const) {
+					if (!schema || keys.size === 0) continue
+					const slice = Object.fromEntries(Object.entries(value).filter(([key]) => keys.has(key)))
+					const result = schema.safeParse(slice)
+					if (result.success) continue
+					for (const issue of result.error.issues) {
+						const key = String(issue.path[0])
+						fields[key] = [...(fields[key] ?? []), issue.message]
+					}
+				}
+				return Object.keys(fields).length ? { fields } : undefined
+			},
 		},
 		onSubmit: async ({ value }) => {
 			const query = new URLSearchParams()
-			for (const [key, val] of Object.entries(value)) {
+			for (const key of queryKeys.value) {
+				const val = value[key]
 				if (val !== undefined && val !== null) query.set(key, String(val))
 			}
-			mutate({ query })
-		},
-	})
 
-	const bodyForm = useTanstackForm({
-		defaultValues: {} as Record<string, unknown>,
-		validators: {
-			onChange: ({ value }) => bodySchema.value?.safeParse(value).error?.issues,
-		},
-		onSubmit: async ({ value }) => {
-			mutate({ body: value })
-		},
-	})
+			const body = bodyKeys.value.size
+				? Object.fromEntries(Object.entries(value).filter(([key]) => bodyKeys.value.has(key)))
+				: null
 
-	const formForm = useTanstackForm({
-		defaultValues: {} as Record<string, unknown>,
-		validators: {
-			onChange: ({ value }) => formSchema.value?.safeParse(value).error?.issues,
-		},
-		onSubmit: async ({ value }) => {
-			const formData = new FormData()
-			for (const [key, val] of Object.entries(value)) {
-				if (val instanceof Blob) formData.append(key, val)
-				else if (val !== undefined && val !== null) formData.append(key, String(val))
+			let formData: FormData | null = null
+			if (formKeys.value.size) {
+				formData = new FormData()
+				for (const key of formKeys.value) {
+					const val = value[key]
+					if (val instanceof Blob) formData.append(key, val)
+					else if (val !== undefined && val !== null) formData.append(key, String(val))
+				}
 			}
-			mutate({ formData })
+
+			mutate({ query: queryKeys.value.size ? query : null, body, formData })
 		},
 	})
 
@@ -74,9 +86,7 @@ export const useForm = ({
 		querySchema,
 		formSchema,
 		bodySchema,
-		queryForm,
-		bodyForm,
-		formForm,
+		dataForm,
 	}
 }
 
