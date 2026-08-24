@@ -1,15 +1,16 @@
-from openadmin.fastapi import AdminPage
-from openadmin import spec
+# SPDX-FileCopyrightText: 2026 OpenAdmin
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 from datetime import datetime
 
-page = AdminPage("Test forms", icon='test-tube')
+from openadmin import spec
+from openadmin.fastapi import AdminPage
 
-@page.form(
-    'Test all fields',
-    method='post',
-    icon='university',
-    color='green'
-)
+page = AdminPage("Test forms", icon="test-tube")
+
+
+@page.form("Test all fields", method="post", icon="university", color="green")
 def get_info(
     string: str,
     int: int,
@@ -20,5 +21,5 @@ def get_info(
     list_of_ints: list[str],
 ) -> spec.Form:
     return {
-        'toast': f'All good ! {string=} {int=} {float=} {date=} {bool=} {list_of_ints=} {list_of_strings=}'
+        "toast": f"All good ! {string=} {int=} {float=} {date=} {bool=} {list_of_ints=} {list_of_strings=}"
     }
