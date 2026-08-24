@@ -82,7 +82,10 @@ function onUpdateModelValue(value: unknown) {
 					</PopoverTrigger>
 				</TagsInput>
 			</PopoverAnchor>
-			<PopoverContent class="p-1" @open-auto-focus.prevent>
+			<PopoverContent
+				class="w-(--reka-popper-anchor-width) rounded-md p-1"
+				@open-auto-focus.prevent
+			>
 				<ListboxContent
 					class="max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto empty:p-1 empty:after:block empty:after:content-['No_options']"
 					tabindex="0"
