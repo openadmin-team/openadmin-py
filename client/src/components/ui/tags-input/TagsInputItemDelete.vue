@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 OpenAdmin
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script setup lang="ts">
 import type { TagsInputItemDeleteProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
@@ -14,9 +20,16 @@ const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <TagsInputItemDelete v-bind="forwardedProps" :class="cn('flex rounded bg-transparent mr-1', props.class)">
-    <slot>
-      <X class="w-4 h-4" />
-    </slot>
-  </TagsInputItemDelete>
+	<TagsInputItemDelete
+		data-slot="tags-input-item-delete"
+		v-bind="forwardedProps"
+		:class="cn(
+      'text-muted-foreground hover:text-foreground hover:bg-accent mr-1 flex items-center justify-center rounded-xs bg-transparent transition-colors',
+      props.class,
+    )"
+	>
+		<slot>
+			<X class="size-3" />
+		</slot>
+	</TagsInputItemDelete>
 </template>

@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 OpenAdmin
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script setup lang="ts">
 import type { TagsInputItemTextProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
@@ -13,7 +19,11 @@ const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <TagsInputItemText v-bind="forwardedProps" :class="cn('py-0.5 px-2 text-sm rounded bg-transparent', props.class)">
-    <slot />
-  </TagsInputItemText>
+	<TagsInputItemText
+		data-slot="tags-input-item-text"
+		v-bind="forwardedProps"
+		:class="cn('rounded-xs bg-transparent py-0.5 pl-2 pr-1 text-xs', props.class)"
+	>
+		<slot />
+	</TagsInputItemText>
 </template>
