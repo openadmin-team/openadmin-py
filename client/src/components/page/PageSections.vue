@@ -35,7 +35,7 @@ const tabItems = computed(() =>
 
 <template>
 	<div class="flex flex-col gap-24">
-		<section v-if="actions.length" class="flex flex-wrap justify-end gap-2">
+		<section v-if="actions.length || forms.length" class="flex flex-wrap justify-end gap-2">
 			<ActionButton
 				v-for="action in actions"
 				:section-id="sectionId"
