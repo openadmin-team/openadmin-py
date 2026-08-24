@@ -55,16 +55,18 @@ function isInvalid(field: AnyFieldApi) {
 			<FieldGroup class="grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-x-8 gap-y-4">
 				<dataForm.Field v-for="f in fields" :key="f.key" :name="f.key">
 					<template #default="{ field }">
-						<Field v-if="f.boolean" orientation="horizontal" :data-invalid="isInvalid(field)">
-							<Checkbox
-								:id="field.name"
-								:name="field.name"
-								:model-value="!!field.state.value"
-								@update:model-value="(value) => field.handleChange(!!value)"
-							/>
+						<Field v-if="f.boolean" :data-invalid="isInvalid(field)">
 							<FieldLabel :for="field.name">
 								{{ f.label }}<span v-if="f.required" class="text-destructive"> *</span>
 							</FieldLabel>
+							<div class="flex h-9 items-center">
+								<Checkbox
+									:id="field.name"
+									:name="field.name"
+									:model-value="!!field.state.value"
+									@update:model-value="(value) => field.handleChange(!!value)"
+								/>
+							</div>
 							<FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
 						</Field>
 						<Field v-else :data-invalid="isInvalid(field)">
