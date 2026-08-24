@@ -1,21 +1,27 @@
+<!--
+SPDX-FileCopyrightText: 2026 OpenAdmin
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 
 const props = defineProps<{
-  class?: HTMLAttributes["class"]
+	class?: HTMLAttributes["class"]
 }>()
 </script>
 
 <template>
-  <span
-    data-slot="attachment-description"
-    :class="cn(
+	<span
+		data-slot="attachment-description"
+		:class="cn(
       'mt-0.5 text-xs block min-w-0 truncate text-muted-foreground group-data-[state=error]/attachment:text-destructive/80',
       'max-w-full',
       props.class,
     )"
-  >
-    <slot />
-  </span>
+	>
+		<slot />
+	</span>
 </template>

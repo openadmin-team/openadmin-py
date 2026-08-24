@@ -3,21 +3,26 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from datetime import datetime
+from enum import Enum, StrEnum
+from typing import Literal
+
 from fastapi import UploadFile
+
 from openadmin import spec
 from openadmin.fastapi import AdminPage
-from typing import Literal
-from enum import Enum, StrEnum
 
 page = AdminPage("Test forms", icon="test-tube")
+
 
 class Methods(Enum):
     GET = "GET"
     POST = "POST"
 
+
 class MethodsStr(StrEnum):
     GET = "GET"
     POST = "POST"
+
 
 @page.form("Test all fields", method="post", icon="university", color="green")
 def get_info(
@@ -30,13 +35,13 @@ def get_info(
     list_of_ints: list[int],
     file: UploadFile,
     files: list[UploadFile],
-    literals: Literal['get', 'post'],
+    literals: Literal["get", "post"],
     enum: Methods,
     str_enum: MethodsStr,
-    list_literals: list[Literal['get', 'post']],
+    list_literals: list[Literal["get", "post"]],
     list_enum: list[Methods],
     list_str_enum: list[MethodsStr],
 ) -> spec.Form:
     return {
-        "toast": f"All good ! {string=} {int=} {float=} {date=} {bool=} {list_of_ints=} {list_of_strings=} {file.filename=} {len(files)=}"
+        "toast": f"All good ! {list_literals=} {list_str_enum=} {list_enum=} {enum=} {literals=} {str_enum} {string=} {int=} {float=} {date=} {bool=} {list_of_ints=} {list_of_strings=} {file.filename=} {len(files)=}"
     }
