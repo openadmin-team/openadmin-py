@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 OpenAdmin
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script setup lang="ts">
 import type { SelectRootEmits, SelectRootProps } from "reka-ui"
 import { SelectRoot, useForwardPropsEmits } from "reka-ui"
@@ -9,11 +15,7 @@ const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>
-  <SelectRoot
-    v-slot="slotProps"
-    data-slot="select"
-    v-bind="forwarded"
-  >
-    <slot v-bind="slotProps" />
-  </SelectRoot>
+	<SelectRoot v-slot="slotProps" data-slot="select" v-bind="forwarded">
+		<slot v-bind="slotProps" />
+	</SelectRoot>
 </template>

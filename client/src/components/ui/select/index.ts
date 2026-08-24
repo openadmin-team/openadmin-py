@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 OpenAdmin
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export { default as Select } from "./Select.vue"
 export { default as SelectContent } from "./SelectContent.vue"
 export { default as SelectGroup } from "./SelectGroup.vue"
