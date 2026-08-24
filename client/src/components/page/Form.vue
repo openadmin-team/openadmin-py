@@ -92,8 +92,9 @@ function isInvalid(field: AnyFieldApi) {
 						</Field>
 					</template>
 				</dataForm.Field>
-				<Field class="col-span-full mt-48 items-end">
-					<Button class="max-w-48" type="submit">Submit</Button>
+				<Field orientation="horizontal" class="col-span-full mt-48 justify-end gap-3">
+					<Button size="lg" type="button" variant="outline" @click="dataForm.reset()">Clear</Button>
+					<Button size="lg" type="submit">Submit</Button>
 				</Field>
 			</FieldGroup>
 		</form>
