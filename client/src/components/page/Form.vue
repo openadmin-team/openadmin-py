@@ -454,7 +454,7 @@ function removeFileAt(field: AnyFieldApi, index: number) {
 						</Field>
 					</template>
 				</dataForm.Field>
-				<Field orientation="horizontal" class="col-span-full mt-48 justify-end gap-3">
+				<Field orientation="horizontal" class="col-span-full mt-12 justify-end gap-3">
 					<Button size="lg" type="button" variant="outline" @click="dataForm.reset()">Clear</Button>
 					<Button size="lg" type="submit">Submit</Button>
 				</Field>
