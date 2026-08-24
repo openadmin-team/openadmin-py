@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+from datetime import date as date_type
 from datetime import datetime
 
 from openadmin import spec
@@ -16,10 +17,11 @@ def get_info(
     int: int,
     float: float,
     date: datetime,
+    day: date_type,
     bool: bool,
     list_of_strings: list[str],
-    list_of_ints: list[str],
+    list_of_ints: list[int],
 ) -> spec.Form:
     return {
-        "toast": f"All good ! {string=} {int=} {float=} {date=} {bool=} {list_of_ints=} {list_of_strings=}"
+        "toast": f"All good ! {string=} {int=} {float=} {date=} {day=} {bool=} {list_of_ints=} {list_of_strings=}"
     }
