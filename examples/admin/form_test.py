@@ -33,6 +33,9 @@ def get_info(
     literals: Literal['get', 'post'],
     enum: Methods,
     str_enum: MethodsStr,
+    list_literals: list[Literal['get', 'post']],
+    list_enum: list[Methods],
+    list_str_enum: list[MethodsStr],
 ) -> spec.Form:
     return {
         "toast": f"All good ! {string=} {int=} {float=} {date=} {bool=} {list_of_ints=} {list_of_strings=} {file.filename=} {len(files)=}"
