@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from datetime import datetime
-
+from fastapi import UploadFile
 from openadmin import spec
 from openadmin.fastapi import AdminPage
 
@@ -19,7 +19,9 @@ def get_info(
     bool: bool,
     list_of_strings: list[str],
     list_of_ints: list[int],
+    file: UploadFile,
+    files: list[UploadFile],
 ) -> spec.Form:
     return {
-        "toast": f"All good ! {string=} {int=} {float=} {date=} {bool=} {list_of_ints=} {list_of_strings=}"
+        "toast": f"All good ! {string=} {int=} {float=} {date=} {bool=} {list_of_ints=} {list_of_strings=} {file.filename=} {len(files)=}"
     }
