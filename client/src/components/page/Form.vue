@@ -15,10 +15,21 @@ import {
 	today,
 	toZoned,
 } from "@internationalized/date"
-import { CalendarIcon } from "@lucide/vue"
+import { CalendarIcon, FileIcon, PaperclipIcon, XIcon } from "@lucide/vue"
 import type { AnyFieldApi } from "@tanstack/vue-form"
 import type { DateValue } from "reka-ui"
 import { computed } from "vue"
+import {
+	Attachment,
+	AttachmentAction,
+	AttachmentActions,
+	AttachmentContent,
+	AttachmentDescription,
+	AttachmentGroup,
+	AttachmentMedia,
+	AttachmentTitle,
+	AttachmentTrigger,
+} from "@/components/ui/attachment"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -59,7 +70,7 @@ const arrayItemKind = (items: JsonSchema["items"]): ArrayItemKind => {
 	return "string"
 }
 
-const fieldsOf = (schema: JsonSchema | null | undefined) => {
+const fieldsOf = (schema: JsonSchema | null | undefined, source: "query" | "body" | "form") => {
 	if (!schema?.properties) return []
 	const required = new Set(schema.required ?? [])
 	return Object.entries(schema.properties).map(([key, property]) => ({
@@ -70,15 +81,18 @@ const fieldsOf = (schema: JsonSchema | null | undefined) => {
 		numeric: property.type === "number" || property.type === "integer",
 		date: property.type === "string" && property.format === "date",
 		datetime: property.type === "string" && property.format === "date-time",
-		array: property.type === "array",
-		itemKind: property.type === "array" ? arrayItemKind(property.items) : undefined,
+		file: source === "form" && property.type === "string",
+		fileArray: source === "form" && property.type === "array",
+		array: source !== "form" && property.type === "array",
+		itemKind:
+			source !== "form" && property.type === "array" ? arrayItemKind(property.items) : undefined,
 	}))
 }
 
 const fields = computed(() => [
-	...fieldsOf(form.value?.query),
-	...fieldsOf(form.value?.body),
-	...fieldsOf(form.value?.form),
+	...fieldsOf(form.value?.query, "query"),
+	...fieldsOf(form.value?.body, "body"),
+	...fieldsOf(form.value?.form, "form"),
 ])
 
 function isInvalid(field: AnyFieldApi) {
@@ -164,6 +178,34 @@ function arrayPlaceholder(kind: ArrayItemKind | undefined) {
 	if (kind === "date") return "Add a date (YYYY-MM-DD) and press Enter..."
 	if (kind === "date-time") return "Add a date-time (YYYY-MM-DDTHH:mm:ss) and press Enter..."
 	return "Add a value and press Enter..."
+}
+
+function formatFileSize(bytes: number) {
+	if (bytes < 1024) return `${bytes} B`
+	if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+	return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+function onFileChange(field: AnyFieldApi, event: Event) {
+	const input = event.target as HTMLInputElement
+	const file = input.files?.[0]
+	if (file) field.handleChange(file)
+	input.value = ""
+}
+
+function onFilesChange(field: AnyFieldApi, event: Event) {
+	const input = event.target as HTMLInputElement
+	const added = Array.from(input.files ?? [])
+	if (added.length) {
+		const existing = (field.state.value as File[] | undefined) ?? []
+		field.handleChange([...existing, ...added])
+	}
+	input.value = ""
+}
+
+function removeFileAt(field: AnyFieldApi, index: number) {
+	const existing = (field.state.value as File[] | undefined) ?? []
+	field.handleChange(existing.filter((_, i) => i !== index))
 }
 </script>
 
@@ -274,6 +316,92 @@ function arrayPlaceholder(kind: ArrayItemKind | undefined) {
 									@blur="field.handleBlur"
 								/>
 							</TagsInput>
+							<FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
+						</Field>
+						<Field v-else-if="f.file" :data-invalid="isInvalid(field)">
+							<FieldLabel :for="field.name">
+								{{ f.label }}<span v-if="f.required" class="text-destructive"> *</span>
+							</FieldLabel>
+							<input
+								:id="field.name"
+								type="file"
+								class="hidden"
+								:aria-invalid="isInvalid(field)"
+								@change="(event) => onFileChange(field, event)"
+								@blur="field.handleBlur"
+							>
+							<Attachment :state="field.state.value ? 'done' : 'idle'">
+								<AttachmentMedia>
+									<PaperclipIcon v-if="!field.state.value" />
+									<FileIcon v-else />
+								</AttachmentMedia>
+								<AttachmentContent>
+									<AttachmentTitle>
+										{{ (field.state.value as File | undefined)?.name ?? "Choose a file" }}
+									</AttachmentTitle>
+									<AttachmentDescription v-if="field.state.value">
+										{{ formatFileSize((field.state.value as File).size) }}
+									</AttachmentDescription>
+								</AttachmentContent>
+								<AttachmentActions v-if="field.state.value">
+									<AttachmentAction
+										type="button"
+										aria-label="Remove file"
+										@click="field.handleChange(undefined)"
+									>
+										<XIcon />
+									</AttachmentAction>
+								</AttachmentActions>
+								<AttachmentTrigger as="label" :for="field.name" />
+							</Attachment>
+							<FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
+						</Field>
+						<Field v-else-if="f.fileArray" :data-invalid="isInvalid(field)">
+							<FieldLabel :for="field.name">
+								{{ f.label }}<span v-if="f.required" class="text-destructive"> *</span>
+							</FieldLabel>
+							<input
+								:id="field.name"
+								type="file"
+								multiple
+								class="hidden"
+								:aria-invalid="isInvalid(field)"
+								@change="(event) => onFilesChange(field, event)"
+								@blur="field.handleBlur"
+							>
+							<AttachmentGroup>
+								<Attachment
+									v-for="(file, index) in (field.state.value as File[] | undefined) ?? []"
+									:key="`${index}-${file.name}`"
+									state="done"
+								>
+									<AttachmentMedia>
+										<FileIcon />
+									</AttachmentMedia>
+									<AttachmentContent>
+										<AttachmentTitle>{{ file.name }}</AttachmentTitle>
+										<AttachmentDescription>{{ formatFileSize(file.size) }}</AttachmentDescription>
+									</AttachmentContent>
+									<AttachmentActions>
+										<AttachmentAction
+											type="button"
+											aria-label="Remove file"
+											@click="removeFileAt(field, index)"
+										>
+											<XIcon />
+										</AttachmentAction>
+									</AttachmentActions>
+								</Attachment>
+								<Attachment state="idle">
+									<AttachmentMedia>
+										<PaperclipIcon />
+									</AttachmentMedia>
+									<AttachmentContent>
+										<AttachmentTitle>Add files</AttachmentTitle>
+									</AttachmentContent>
+									<AttachmentTrigger as="label" :for="field.name" />
+								</Attachment>
+							</AttachmentGroup>
 							<FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
 						</Field>
 						<Field v-else :data-invalid="isInvalid(field)">

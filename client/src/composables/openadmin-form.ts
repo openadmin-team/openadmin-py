@@ -2,14 +2,20 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import { computed, toValue, type MaybeRefOrGetter } from "vue"
-import { usePageSpec } from "./openadmin-page"
-import { type FormComponent, formSchema as formResultSchema } from "@/schemas/form"
-import z from "zod"
-import { useMutation, useQueryClient } from "@tanstack/vue-query"
-import { errorSchema } from "@/schemas/error"
-import { toast } from "vue-sonner"
 import { useForm as useTanstackForm } from "@tanstack/vue-form"
+import { useMutation, useQueryClient } from "@tanstack/vue-query"
+import { computed, type MaybeRefOrGetter, toValue } from "vue"
+import { toast } from "vue-sonner"
+import z from "zod"
+import { errorSchema } from "@/schemas/error"
+import { type FormComponent, formSchema as formResultSchema } from "@/schemas/form"
+import { usePageSpec } from "./openadmin-page"
+
+function toValidatable(value: unknown): unknown {
+	if (value instanceof File) return value.name
+	if (Array.isArray(value)) return value.map(toValidatable)
+	return value
+}
 
 export const useForm = ({
 	sectionId,
@@ -45,7 +51,11 @@ export const useForm = ({
 					[formSchema.value, formKeys.value],
 				] as const) {
 					if (!schema || keys.size === 0) continue
-					const slice = Object.fromEntries(Object.entries(value).filter(([key]) => keys.has(key)))
+					const slice = Object.fromEntries(
+						Object.entries(value)
+							.filter(([key]) => keys.has(key))
+							.map(([key, val]) => [key, toValidatable(val)]),
+					)
 					const result = schema.safeParse(slice)
 					if (result.success) continue
 					for (const issue of result.error.issues) {
@@ -63,19 +73,24 @@ export const useForm = ({
 				if (val !== undefined && val !== null) query.set(key, String(val))
 			}
 
-			const body = bodyKeys.value.size
-				? Object.fromEntries(Object.entries(value).filter(([key]) => bodyKeys.value.has(key)))
-				: null
-
 			let formData: FormData | null = null
 			if (formKeys.value.size) {
 				formData = new FormData()
-				for (const key of formKeys.value) {
-					const val = value[key]
-					if (val instanceof Blob) formData.append(key, val)
-					else if (val !== undefined && val !== null) formData.append(key, String(val))
+				const append = (key: string, val: unknown) => {
+					if (Array.isArray(val)) for (const item of val) append(key, item)
+					else if (val instanceof Blob) formData?.append(key, val)
+					else if (val !== undefined && val !== null) formData?.append(key, String(val))
 				}
+				// A request body can't be both multipart and JSON, so once there's a
+				// file to upload, body fields ride along as regular multipart parts.
+				for (const key of formKeys.value) append(key, value[key])
+				for (const key of bodyKeys.value) append(key, value[key])
 			}
+
+			const body =
+				!formData && bodyKeys.value.size
+					? Object.fromEntries(Object.entries(value).filter(([key]) => bodyKeys.value.has(key)))
+					: null
 
 			mutate({ query: queryKeys.value.size ? query : null, body, formData })
 		},
