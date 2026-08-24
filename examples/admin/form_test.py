@@ -29,7 +29,7 @@ def get_info(
     string: str,
     int: int,
     float: float,
-    date: datetime,
+    date: list[datetime],
     bool: bool,
     list_of_strings: list[str],
     list_of_ints: list[int],
