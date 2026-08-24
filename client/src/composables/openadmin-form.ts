@@ -37,10 +37,12 @@ export const useFormSchema = ({ form }: { form: MaybeRefOrGetter<FormComponent |
 		const query = toValue(form)?.query
 		return query ? z.fromJSONSchema(query as z.core.JSONSchema.JSONSchema) : null
 	})
+	
 	const bodySchema = computed(() => {
 		const body = toValue(form)?.body
 		return body ? z.fromJSONSchema(body as z.core.JSONSchema.JSONSchema) : null
 	})
+	
 	const formSchema = computed(() => {
 		const formValue = toValue(form)?.form
 		return formValue ? z.fromJSONSchema(formValue as z.core.JSONSchema.JSONSchema) : null
