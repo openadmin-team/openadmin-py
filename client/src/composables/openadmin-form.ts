@@ -9,6 +9,7 @@ import z from "zod"
 import { useMutation, useQueryClient } from "@tanstack/vue-query"
 import { errorSchema } from "@/schemas/error"
 import { toast } from "vue-sonner"
+import { useForm as useTanstackForm } from "@tanstack/vue-form"
 
 export const useForm = ({
 	sectionId,
@@ -26,13 +27,56 @@ export const useForm = ({
 		),
 	)
 	const { querySchema, formSchema, bodySchema } = useFormSchema({ form })
-	const { mutate, mutateAsync, isPending } = useFormMutation({ sectionId, pageId, formId, form })
+
+	const { mutate } = useFormMutation({ sectionId, pageId, formId, form })
+
+	const queryForm = useTanstackForm({
+		defaultValues: {} as Record<string, unknown>,
+		validators: {
+			onChange: ({ value }) => querySchema.value?.safeParse(value).error?.issues,
+		},
+		onSubmit: async ({ value }) => {
+			const query = new URLSearchParams()
+			for (const [key, val] of Object.entries(value)) {
+				if (val !== undefined && val !== null) query.set(key, String(val))
+			}
+			mutate({ query })
+		},
+	})
+
+	const bodyForm = useTanstackForm({
+		defaultValues: {} as Record<string, unknown>,
+		validators: {
+			onChange: ({ value }) => bodySchema.value?.safeParse(value).error?.issues,
+		},
+		onSubmit: async ({ value }) => {
+			mutate({ body: value })
+		},
+	})
+
+	const formForm = useTanstackForm({
+		defaultValues: {} as Record<string, unknown>,
+		validators: {
+			onChange: ({ value }) => formSchema.value?.safeParse(value).error?.issues,
+		},
+		onSubmit: async ({ value }) => {
+			const formData = new FormData()
+			for (const [key, val] of Object.entries(value)) {
+				if (val instanceof Blob) formData.append(key, val)
+				else if (val !== undefined && val !== null) formData.append(key, String(val))
+			}
+			mutate({ formData })
+		},
+	})
 
 	return {
 		form,
 		querySchema,
 		formSchema,
 		bodySchema,
+		queryForm,
+		bodyForm,
+		formForm,
 	}
 }
 
