@@ -22,6 +22,7 @@ from .admin import (
     reports,
     tags,
     weekdays,
+    form_test,
 )
 from .lib import lifespan
 
@@ -62,6 +63,6 @@ admin_panel.section(
     icon="server",
     pages=[health.page, reports.page, overview.page, control_panel.page],
 )
-admin_panel.section("Weekdays", icon="calendar-days", pages=[weekdays.page])
+admin_panel.section("Weekdays", icon="calendar-days", pages=[weekdays.page, form_test.page])
 
 app.mount("/admin", admin_panel.app, name="admin_panel")
