@@ -62,11 +62,15 @@ function isInvalid(field: AnyFieldApi) {
 								:model-value="!!field.state.value"
 								@update:model-value="(value) => field.handleChange(!!value)"
 							/>
-							<FieldLabel :for="field.name">{{ f.label }}</FieldLabel>
+							<FieldLabel :for="field.name">
+								{{ f.label }}<span v-if="f.required" class="text-destructive"> *</span>
+							</FieldLabel>
 							<FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
 						</Field>
 						<Field v-else :data-invalid="isInvalid(field)">
-							<FieldLabel :for="field.name">{{ f.label }}</FieldLabel>
+							<FieldLabel :for="field.name">
+								{{ f.label }}<span v-if="f.required" class="text-destructive"> *</span>
+							</FieldLabel>
 							<Input
 								:id="field.name"
 								:name="field.name"
@@ -86,7 +90,7 @@ function isInvalid(field: AnyFieldApi) {
 						</Field>
 					</template>
 				</dataForm.Field>
-				<Field class="col-span-full mt-12">
+				<Field class="col-span-full mt-48 items-end">
 					<Button class="max-w-48" type="submit">Submit</Button>
 				</Field>
 			</FieldGroup>
