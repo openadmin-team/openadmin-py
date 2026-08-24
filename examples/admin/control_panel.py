@@ -509,6 +509,15 @@ async def rename_environment(
 )
 async def schedule_config_reset(
     config_id: int = Query(..., description="Config entry to reset"),
+    environment: str = Query("production", description="Environment to target"),
+    reason: str = Query(..., description="Why the reset is needed"),
+    scheduled_by: str = Query(..., description="Who is requesting the reset"),
+    maintenance_window: str = Query(
+        ..., description="Maintenance window label, e.g. Sat 02:00 UTC"
+    ),
+    notify_owner: bool = Query(True, description="Notify the config owner beforehand"),
+    dry_run: bool = Query(False, description="Preview the reset without scheduling it"),
+    retry_count: int = Query(0, description="Number of retries if the reset fails"),
 ) -> spec.Form:
     return None
 
