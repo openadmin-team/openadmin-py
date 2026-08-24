@@ -5,10 +5,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts">
-import { RouterLink, useRoute } from "vue-router"
+import { RouterLink, useRoute, useRouter } from "vue-router"
 import {
 	Sidebar,
 	SidebarContent,
+	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupContent,
 	SidebarGroupLabel,
@@ -18,12 +19,21 @@ import {
 	SidebarMenuItem,
 	SidebarRail,
 } from "@/components/ui/sidebar"
+import { useLogout } from "@/composables/auth"
 import { useSpec } from "@/composables/openadmin-spec"
 import { Icon } from "@iconify/vue"
 import logo from "@/assets/images/logo.png"
 
 const { data: spec } = useSpec()
 const route = useRoute()
+const router = useRouter()
+const { mutate: logout } = useLogout()
+
+function handleLogout() {
+	logout(undefined, {
+		onSuccess: () => router.push({ name: "login" }),
+	})
+}
 </script>
 
 <template>
@@ -62,6 +72,16 @@ const route = useRoute()
 				</SidebarGroupContent>
 			</SidebarGroup>
 		</SidebarContent>
+		<SidebarFooter>
+			<SidebarMenu>
+				<SidebarMenuItem>
+					<SidebarMenuButton tooltip="Logout" @click="handleLogout">
+						<Icon icon="lucide:log-out" />
+						<span>Logout</span>
+					</SidebarMenuButton>
+				</SidebarMenuItem>
+			</SidebarMenu>
+		</SidebarFooter>
 		<SidebarRail />
 	</Sidebar>
 </template>
