@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts">
 import { ChevronDown } from "@lucide/vue"
 import { ListboxContent, ListboxFilter, ListboxItem, ListboxRoot, useFilter } from "reka-ui"
-import { computed, ref } from "vue"
+import { computed, ref, watch } from "vue"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverAnchor, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from "."
@@ -38,8 +38,17 @@ const filteredOptions = computed(() =>
 	),
 )
 
+watch(searchTerm, () => {
+	open.value = true
+})
+
 function onUpdateModelValue(value: unknown) {
-	emit("update:modelValue", (value as string[] | undefined) ?? [])
+	const next = (value as string[] | undefined) ?? []
+	// TagsInputInput clears its own DOM value via a raw `target.value = ""` when Enter
+	// adds a manually typed tag, which the ListboxFilter's controlled `v-model` then
+	// clobbers back on the next render unless we also clear our own `searchTerm`.
+	if (next.length > props.modelValue.length) searchTerm.value = ""
+	emit("update:modelValue", next)
 }
 </script>
 
@@ -65,7 +74,6 @@ function onUpdateModelValue(value: unknown) {
 					<ListboxFilter v-model="searchTerm" as-child>
 						<TagsInputInput
 							:placeholder="placeholder"
-							@keydown.enter.prevent
 							@keydown.down="open = true"
 							@blur="emit('blur')"
 						/>
@@ -95,7 +103,6 @@ function onUpdateModelValue(value: unknown) {
 						:key="option"
 						:value="option"
 						class="data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-						@select="searchTerm = ''"
 					>
 						{{ option }}
 					</ListboxItem>
