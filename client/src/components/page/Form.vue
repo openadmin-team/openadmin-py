@@ -5,9 +5,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts">
-import { useColor } from "@/composables/colors"
-import { Button } from "@/components/ui/button"
-import { Icon } from "@iconify/vue"
 import { useForm } from "@/composables/openadmin-form"
 
 const props = defineProps<{
@@ -15,17 +12,14 @@ const props = defineProps<{
 	pageId: string
 	formId: string
 }>()
+
 const { form } = useForm({
 	sectionId: props.sectionId,
 	pageId: props.pageId,
 	formId: props.formId,
 })
-const { style } = useColor(() => form.value?.color || "slate")
 </script>
 
 <template>
-	<Button v-if="form" size="sm" variant="outline">
-		<Icon v-if="form.icon" :icon="`lucide:${form.icon}`" :class="style.text" />
-		{{ form.name }}
-	</Button>
+	<h1>Form ! {{ form }}</h1>
 </template>

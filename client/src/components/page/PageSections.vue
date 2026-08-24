@@ -7,8 +7,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts">
 import { Icon } from "@iconify/vue"
 import { computed } from "vue"
-import Action from "@/components/page/Action.vue"
-import Form from "@/components/page/Form.vue"
+import ActionButton from "@/components/page/ActionButton.vue"
+import FormButton from "@/components/page/FormButton.vue"
 import Markdown from "@/components/page/Markdown.vue"
 import Stat from "@/components/page/Stat.vue"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -36,13 +36,18 @@ const tabItems = computed(() =>
 <template>
 	<div class="flex flex-col gap-24">
 		<section v-if="actions.length" class="flex flex-wrap justify-end gap-2">
-			<Action
+			<ActionButton
 				v-for="action in actions"
 				:section-id="sectionId"
 				:page-id="pageId"
 				:action-id="action.id"
 			/>
-			<Form v-for="form in forms" :section-id="sectionId" :page-id="pageId" :form-id="form.id" />
+			<FormButton
+				v-for="form in forms"
+				:section-id="sectionId"
+				:page-id="pageId"
+				:form-id="form.id"
+			/>
 		</section>
 		<section v-if="stats.length" class="flex flex-wrap justify-center gap-4">
 			<Stat v-for="stat in stats" :section-id="sectionId" :page-id="pageId" :stat-id="stat.id" />
