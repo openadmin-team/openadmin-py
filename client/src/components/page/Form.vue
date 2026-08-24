@@ -50,9 +50,9 @@ function isInvalid(field: AnyFieldApi) {
 </script>
 
 <template>
-	<div v-if="form" class="flex flex-col gap-8 p-6">
+	<div v-if="form" class="mx-auto flex w-full max-w-2xl flex-col gap-8 p-6">
 		<form v-if="fields.length" @submit.prevent="dataForm.handleSubmit">
-			<FieldGroup>
+			<FieldGroup class="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-x-8 gap-y-4">
 				<dataForm.Field v-for="f in fields" :key="f.key" :name="f.key">
 					<template #default="{ field }">
 						<Field v-if="f.boolean" orientation="horizontal" :data-invalid="isInvalid(field)">
@@ -86,7 +86,7 @@ function isInvalid(field: AnyFieldApi) {
 						</Field>
 					</template>
 				</dataForm.Field>
-				<Field>
+				<Field class="col-span-full">
 					<Button type="submit">Submit</Button>
 				</Field>
 			</FieldGroup>
