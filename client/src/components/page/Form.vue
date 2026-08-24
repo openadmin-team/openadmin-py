@@ -186,6 +186,21 @@ function formatFileSize(bytes: number) {
 	return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
+function isImageFile(file: File) {
+	return file.type.startsWith("image/")
+}
+
+const objectUrls = new WeakMap<File, string>()
+
+function objectUrlFor(file: File) {
+	let url = objectUrls.get(file)
+	if (!url) {
+		url = URL.createObjectURL(file)
+		objectUrls.set(file, url)
+	}
+	return url
+}
+
 function onFileChange(field: AnyFieldApi, event: Event) {
 	const input = event.target as HTMLInputElement
 	const file = input.files?.[0]
@@ -331,7 +346,16 @@ function removeFileAt(field: AnyFieldApi, index: number) {
 								@blur="field.handleBlur"
 							>
 							<Attachment :state="field.state.value ? 'done' : 'idle'">
-								<AttachmentMedia>
+								<AttachmentMedia
+									v-if="field.state.value && isImageFile(field.state.value as File)"
+									variant="image"
+								>
+									<img
+										:src="objectUrlFor(field.state.value as File)"
+										:alt="(field.state.value as File).name"
+									>
+								</AttachmentMedia>
+								<AttachmentMedia v-else>
 									<PaperclipIcon v-if="!field.state.value" />
 									<FileIcon v-else />
 								</AttachmentMedia>
@@ -375,7 +399,10 @@ function removeFileAt(field: AnyFieldApi, index: number) {
 									:key="`${index}-${file.name}`"
 									state="done"
 								>
-									<AttachmentMedia>
+									<AttachmentMedia v-if="isImageFile(file)" variant="image">
+										<img :src="objectUrlFor(file)" :alt="file.name">
+									</AttachmentMedia>
+									<AttachmentMedia v-else>
 										<FileIcon />
 									</AttachmentMedia>
 									<AttachmentContent>
