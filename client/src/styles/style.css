@@ -9,6 +9,7 @@
 @import "@fontsource/geist-mono";
 
 @import "tailwindcss";
+@import "shadcn-vue/tailwind.css";
 @import "tw-animate-css";
 @import "./typeset.css";
 
