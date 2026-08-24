@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/select"
 import {
 	TagsInput,
+	TagsInputCalendar,
 	TagsInputInput,
 	TagsInputItem,
 	TagsInputItemDelete,
@@ -340,6 +341,15 @@ function removeFileAt(field: AnyFieldApi, index: number) {
 								:id="field.name"
 								:options="f.itemOptions ?? []"
 								:model-value="(field.state.value as string[] | undefined) ?? []"
+								:aria-invalid="isInvalid(field)"
+								@update:model-value="(values) => field.handleChange(values)"
+								@blur="field.handleBlur"
+							/>
+							<TagsInputCalendar
+								v-else-if="f.itemKind === 'date' || f.itemKind === 'date-time'"
+								:id="field.name"
+								:model-value="(field.state.value as string[] | undefined) ?? []"
+								:with-time="f.itemKind === 'date-time'"
 								:aria-invalid="isInvalid(field)"
 								@update:model-value="(values) => field.handleChange(values)"
 								@blur="field.handleBlur"

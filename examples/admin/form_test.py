@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from datetime import datetime
+from datetime import date, datetime
 from enum import Enum, StrEnum
 from typing import Literal
 
@@ -30,6 +30,7 @@ def get_info(
     int: int,
     float: float,
     date: list[datetime],
+    dates: list[date],
     bool: bool,
     list_of_strings: list[str],
     list_of_ints: list[int],
@@ -43,5 +44,5 @@ def get_info(
     list_str_enum: list[MethodsStr],
 ) -> spec.Form:
     return {
-        "toast": f"All good ! {list_literals=} {list_str_enum=} {list_enum=} {enum=} {literals=} {str_enum} {string=} {int=} {float=} {date=} {bool=} {list_of_ints=} {list_of_strings=} {file.filename=} {len(files)=}"
+        "toast": f"All good ! {list_literals=} {list_str_enum=} {list_enum=} {enum=} {literals=} {str_enum} {string=} {int=} {float=} {date=} {dates=} {bool=} {list_of_ints=} {list_of_strings=} {file.filename=} {len(files)=}"
     }
