@@ -160,7 +160,6 @@ class AddAuthorBody(BaseModel):
     first_name: str
     last_name: str
     bio: str | None = None
-    friend: int
 
 
 @page.form(

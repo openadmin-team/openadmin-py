@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script setup lang="ts">
 import { computed } from "vue"
+import { useRouter } from "vue-router"
 import { Button } from "@/components/ui/button"
 import { Field, FieldGroup } from "@/components/ui/field"
 import { useForm } from "@/composables/openadmin-form"
@@ -28,10 +29,13 @@ const props = defineProps<{
 	formId: string
 }>()
 
+const router = useRouter()
+
 const { form, dataForm } = useForm({
 	sectionId: props.sectionId,
 	pageId: props.pageId,
 	formId: props.formId,
+	onSuccess: () => router.back(),
 })
 
 function resolveRef(schema: JsonSchema | undefined, root: JsonSchema): JsonSchema | undefined {

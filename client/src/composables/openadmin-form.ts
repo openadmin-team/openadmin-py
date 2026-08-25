@@ -21,10 +21,12 @@ export const useForm = ({
 	sectionId,
 	pageId,
 	formId,
+	onSuccess,
 }: {
 	sectionId: MaybeRefOrGetter<string>
 	pageId: MaybeRefOrGetter<string>
 	formId: MaybeRefOrGetter<string>
+	onSuccess?: () => void
 }) => {
 	const { page } = usePageSpec({ sectionId, pageId })
 	const form = computed(() =>
@@ -34,7 +36,7 @@ export const useForm = ({
 	)
 	const { querySchema, formSchema, bodySchema } = useFormSchema({ form })
 
-	const { mutate } = useFormMutation({ sectionId, pageId, formId, form })
+	const { mutate } = useFormMutation({ sectionId, pageId, formId, form, onSuccess })
 
 	const queryKeys = computed(() => new Set(Object.keys(toValue(form)?.query?.properties ?? {})))
 	const bodyKeys = computed(() => new Set(Object.keys(toValue(form)?.body?.properties ?? {})))
@@ -133,11 +135,13 @@ const useFormMutation = ({
 	pageId,
 	formId,
 	form,
+	onSuccess,
 }: {
 	sectionId: MaybeRefOrGetter<string>
 	pageId: MaybeRefOrGetter<string>
 	formId: MaybeRefOrGetter<string>
 	form: MaybeRefOrGetter<FormComponent | undefined>
+	onSuccess?: () => void
 }) => {
 	const queryClient = useQueryClient()
 
@@ -178,6 +182,7 @@ const useFormMutation = ({
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["openadmin-data"] })
+			onSuccess?.()
 		},
 	})
 }
