@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 OpenAdmin
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script setup lang="ts">
 import type { NumberFieldIncrementProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
@@ -14,9 +20,13 @@ const forwarded = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <NumberFieldIncrement data-slot="increment" v-bind="forwarded" :class="cn('absolute top-1/2 -translate-y-1/2 right-0 disabled:cursor-not-allowed disabled:opacity-20 p-3', props.class)">
-    <slot>
-      <Plus class="h-4 w-4" />
-    </slot>
-  </NumberFieldIncrement>
+	<NumberFieldIncrement
+		data-slot="increment"
+		v-bind="forwarded"
+		:class="cn('absolute top-1/2 -translate-y-1/2 right-0 disabled:cursor-not-allowed disabled:opacity-20 p-3', props.class)"
+	>
+		<slot>
+			<Plus class="h-4 w-4" />
+		</slot>
+	</NumberFieldIncrement>
 </template>
