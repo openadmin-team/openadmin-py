@@ -447,17 +447,7 @@ class WebhookBody(BaseModel):
     color="teal",
 )
 async def create_webhook(body: WebhookBody) -> spec.Form:
-    return {
-        "icon": "webhook",
-        "color": "teal",
-        "toast": "Webhook created",
-        "message": f"Would create a webhook for '{body.event}' -> {body.url}",
-        "table": {
-            "data": [{"id": 1, "url": body.url, "event": body.event}],
-            "icon": "webhook",
-            "color": "teal",
-        },
-    }
+    return {"toast": f"Would create a webhook for '{body.event}' -> {body.url}"}
 
 
 class RateLimitBody(BaseModel):
@@ -475,8 +465,6 @@ class RateLimitBody(BaseModel):
 )
 async def update_rate_limit(body: RateLimitBody) -> spec.Form:
     return {
-        "icon": "gauge",
-        "color": "cyan",
         "toast": f"Rate limit set to {body.requests_per_minute}/min "
         f"(burst {body.burst_size}) — example only, nothing was saved",
     }

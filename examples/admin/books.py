@@ -161,10 +161,7 @@ async def add_book(body: AddBookBody, session: AsyncSessionDep) -> spec.Form:
     session.add(book)
     await session.commit()
     await session.refresh(book)
-    return {
-        "message": f"Added book '{book.title}'",
-        "table": {"id": book.id, "title": book.title},
-    }
+    return {"toast": f"Added book '{book.title}'"}
 
 
 @page.action("Delete Book", method="delete", description="Remove a book by ID")
