@@ -30,9 +30,23 @@ class MethodsStr(StrEnum):
     icon="university", 
     color="green",
     fields={
-        'rich_text': {
-            'style': 'rich-text',
-        }
+        'string': {'icon': 'type', 'color': 'blue'},
+        'int': {'icon': 'hash', 'color': 'indigo'},
+        'float': {'icon': 'binary', 'color': 'violet'},
+        'date': {'icon': 'calendar-days', 'color': 'purple'},
+        'dates': {'icon': 'calendar', 'color': 'fuchsia'},
+        'bool': {'icon': 'toggle-left', 'color': 'pink'},
+        'list_of_strings': {'icon': 'list', 'color': 'rose'},
+        'list_of_ints': {'icon': 'list-ordered', 'color': 'red'},
+        'file': {'icon': 'file-up', 'color': 'orange'},
+        'files': {'icon': 'files', 'color': 'amber'},
+        'rich_text': {'icon': 'pilcrow', 'color': 'yellow', 'style': 'rich-text'},
+        'literals': {'icon': 'list-filter', 'color': 'lime'},
+        'enum': {'icon': 'tag', 'color': 'green'},
+        'str_enum': {'icon': 'tags', 'color': 'emerald'},
+        'list_literals': {'icon': 'list-checks', 'color': 'teal'},
+        'list_enum': {'icon': 'layers', 'color': 'cyan'},
+        'list_str_enum': {'icon': 'list-tree', 'color': 'sky'},
     }
 )
 def get_info(
