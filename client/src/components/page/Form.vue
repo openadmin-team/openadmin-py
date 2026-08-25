@@ -266,16 +266,16 @@ function removeFileAt(field: AnyFieldApi, index: number) {
 				<dataForm.Field v-for="f in fields" :key="f.key" :name="f.key">
 					<template #default="{ field }">
 						<Field v-if="f.boolean" :data-invalid="isInvalid(field)">
-							<div class="flex items-center gap-2">
+							<FieldLabel :for="field.name">
+								{{ f.label }}<span v-if="f.required" class="text-destructive"> *</span>
+							</FieldLabel>
+							<div class="flex h-9 items-center">
 								<Checkbox
 									:id="field.name"
 									:name="field.name"
 									:model-value="!!field.state.value"
 									@update:model-value="(value) => field.handleChange(!!value)"
 								/>
-								<FieldLabel :for="field.name">
-									{{ f.label }}<span v-if="f.required" class="text-destructive"> *</span>
-								</FieldLabel>
 							</div>
 							<FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
 						</Field>
