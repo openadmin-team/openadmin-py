@@ -36,11 +36,7 @@ class FormComponent(TypedDict):
 
 
 class FormResponse(TypedDict):
-    icon: NotRequired[Icon]
-    color: NotRequired[Color]
     toast: NotRequired[str]
-    table: NotRequired[dict | object]
-    message: NotRequired[str]
 
 
 type Form = FormResponse | None | str
