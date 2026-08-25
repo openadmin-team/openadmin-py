@@ -15,6 +15,7 @@ import {
 	NumberFieldInput,
 } from "@/components/ui/number-field"
 import { type FieldDef, isInvalid } from "./field"
+import FieldLabelText from "./FieldLabelText.vue"
 
 const props = defineProps<{
 	field: AnyFieldApi
@@ -25,7 +26,7 @@ const props = defineProps<{
 <template>
 	<Field :data-invalid="isInvalid(props.field)">
 		<FieldLabel :for="props.field.name">
-			{{ props.def.label }}<span v-if="props.def.required" class="text-destructive"> *</span>
+			<FieldLabelText :def="props.def" />
 		</FieldLabel>
 		<NumberField
 			:id="props.field.name"

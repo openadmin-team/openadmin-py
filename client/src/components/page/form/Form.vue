@@ -9,6 +9,7 @@ import { computed } from "vue"
 import { Button } from "@/components/ui/button"
 import { Field, FieldGroup } from "@/components/ui/field"
 import { useForm } from "@/composables/openadmin-form"
+import type { FieldConfig } from "@/schemas/form"
 import type { JsonSchema } from "@/schemas/json-schema"
 import type { ArrayItemKind, FieldDef } from "./field"
 import FieldArray from "./FieldArray.vue"
@@ -54,6 +55,7 @@ function arrayItemKind(items: JsonSchema["items"], root: JsonSchema): ArrayItemK
 function fieldsOf(
 	schema: JsonSchema | null | undefined,
 	source: "query" | "body" | "form",
+	fieldConfigs: Record<string, FieldConfig> | null | undefined,
 ): FieldDef[] {
 	if (!schema?.properties) return []
 	const required = new Set(schema.required ?? [])
@@ -67,6 +69,8 @@ function fieldsOf(
 			key,
 			label: rawProperty.title ?? key,
 			required: required.has(key),
+			icon: fieldConfigs?.[key]?.icon,
+			color: fieldConfigs?.[key]?.color,
 			boolean: property.type === "boolean",
 			numeric: property.type === "number" || property.type === "integer",
 			integer: property.type === "integer",
@@ -84,9 +88,9 @@ function fieldsOf(
 }
 
 const fields = computed<FieldDef[]>(() => [
-	...fieldsOf(form.value?.query, "query"),
-	...fieldsOf(form.value?.body, "body"),
-	...fieldsOf(form.value?.form, "form"),
+	...fieldsOf(form.value?.query, "query", form.value?.fields),
+	...fieldsOf(form.value?.body, "body", form.value?.fields),
+	...fieldsOf(form.value?.form, "form", form.value?.fields),
 ])
 </script>
 

@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/attachment"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { type FieldDef, formatFileSize, isImageFile, isInvalid, objectUrlFor } from "./field"
+import FieldLabelText from "./FieldLabelText.vue"
 
 const props = defineProps<{
 	field: AnyFieldApi
@@ -45,7 +46,7 @@ function removeFileAt(index: number) {
 <template>
 	<Field :data-invalid="isInvalid(props.field)">
 		<FieldLabel :for="props.field.name">
-			{{ props.def.label }}<span v-if="props.def.required" class="text-destructive"> *</span>
+			<FieldLabelText :def="props.def" />
 		</FieldLabel>
 		<input
 			:id="props.field.name"

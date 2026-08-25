@@ -17,6 +17,7 @@ import {
 	TagsInputSuggestions,
 } from "@/components/ui/tags-input"
 import { type ArrayItemKind, type FieldDef, isInvalid } from "./field"
+import FieldLabelText from "./FieldLabelText.vue"
 
 const props = defineProps<{
 	field: AnyFieldApi
@@ -61,7 +62,7 @@ function arrayPlaceholder(kind: ArrayItemKind | undefined) {
 <template>
 	<Field :data-invalid="isInvalid(props.field)">
 		<FieldLabel :for="props.field.name">
-			{{ props.def.label }}<span v-if="props.def.required" class="text-destructive"> *</span>
+			<FieldLabelText :def="props.def" />
 		</FieldLabel>
 		<TagsInputSuggestions
 			v-if="props.def.itemKind === 'enum'"

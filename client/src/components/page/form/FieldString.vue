@@ -9,6 +9,7 @@ import type { AnyFieldApi } from "@tanstack/vue-form"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { type FieldDef, isInvalid } from "./field"
+import FieldLabelText from "./FieldLabelText.vue"
 
 const props = defineProps<{
 	field: AnyFieldApi
@@ -19,7 +20,7 @@ const props = defineProps<{
 <template>
 	<Field :data-invalid="isInvalid(props.field)">
 		<FieldLabel :for="props.field.name">
-			{{ props.def.label }}<span v-if="props.def.required" class="text-destructive"> *</span>
+			<FieldLabelText :def="props.def" />
 		</FieldLabel>
 		<Input
 			:id="props.field.name"

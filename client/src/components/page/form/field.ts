@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import type { AnyFieldApi } from "@tanstack/vue-form"
+import type { Color } from "@/schemas/color"
+import type { Icon } from "@/schemas/icon"
 
 export type ArrayItemKind =
 	| "integer"
@@ -17,6 +19,8 @@ export interface FieldDef {
 	key: string
 	label: string
 	required: boolean
+	icon?: Icon
+	color?: Color
 	boolean: boolean
 	numeric: boolean
 	integer: boolean

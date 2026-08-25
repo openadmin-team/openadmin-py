@@ -23,6 +23,7 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { type FieldDef, isInvalid } from "./field"
+import FieldLabelText from "./FieldLabelText.vue"
 
 const props = defineProps<{
 	field: AnyFieldApi
@@ -71,7 +72,7 @@ function onTimeInput(event: Event) {
 <template>
 	<Field :data-invalid="isInvalid(props.field)">
 		<FieldLabel :for="props.field.name">
-			{{ props.def.label }}<span v-if="props.def.required" class="text-destructive"> *</span>
+			<FieldLabelText :def="props.def" />
 		</FieldLabel>
 		<Popover>
 			<PopoverTrigger as-child>
