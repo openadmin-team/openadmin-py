@@ -35,6 +35,13 @@ import { Calendar } from "@/components/ui/calendar"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import {
+	NumberField,
+	NumberFieldContent,
+	NumberFieldDecrement,
+	NumberFieldIncrement,
+	NumberFieldInput,
+} from "@/components/ui/number-field"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
 	Select,
@@ -103,6 +110,7 @@ const fieldsOf = (schema: JsonSchema | null | undefined, source: "query" | "body
 			required: required.has(key),
 			boolean: property.type === "boolean",
 			numeric: property.type === "number" || property.type === "integer",
+			integer: property.type === "integer",
 			date: property.type === "string" && property.format === "date",
 			datetime: property.type === "string" && property.format === "date-time",
 			file: source === "form" && property.type === "string",
@@ -503,6 +511,25 @@ function removeFileAt(field: AnyFieldApi, index: number) {
 							</Select>
 							<FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
 						</Field>
+						<Field v-else-if="f.numeric" :data-invalid="isInvalid(field)">
+							<FieldLabel :for="field.name">
+								{{ f.label }}<span v-if="f.required" class="text-destructive"> *</span>
+							</FieldLabel>
+							<NumberField
+								:id="field.name"
+								:name="field.name"
+								:step-snapping="f.integer"
+								:model-value="field.state.value as number | undefined"
+								@update:model-value="(value) => field.handleChange(value)"
+							>
+								<NumberFieldContent>
+									<NumberFieldDecrement />
+									<NumberFieldInput :aria-invalid="isInvalid(field)" @blur="field.handleBlur" />
+									<NumberFieldIncrement />
+								</NumberFieldContent>
+							</NumberField>
+							<FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
+						</Field>
 						<Field v-else :data-invalid="isInvalid(field)">
 							<FieldLabel :for="field.name">
 								{{ f.label }}<span v-if="f.required" class="text-destructive"> *</span>
@@ -510,17 +537,11 @@ function removeFileAt(field: AnyFieldApi, index: number) {
 							<Input
 								:id="field.name"
 								:name="field.name"
-								:type="f.numeric ? 'number' : 'text'"
-								:model-value="field.state.value as string | number | undefined"
+								type="text"
+								:model-value="field.state.value as string | undefined"
 								:aria-invalid="isInvalid(field)"
 								@blur="field.handleBlur"
-								@input="
-									field.handleChange(
-										f.numeric
-											? Number(($event.target as HTMLInputElement).value)
-											: ($event.target as HTMLInputElement).value,
-									)
-								"
+								@input="field.handleChange(($event.target as HTMLInputElement).value)"
 							/>
 							<FieldError v-if="isInvalid(field)" :errors="field.state.meta.errors" />
 						</Field>
