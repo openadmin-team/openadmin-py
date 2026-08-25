@@ -14,7 +14,7 @@ from .bar_chart import (
 from .colors import COLORS, Color
 from .component import Component
 from .error import Error
-from .form import FieldConfig, Form, FormComponent, FormResponse
+from .form import FieldConfig, Form, FormComponent, FormResponse, FieldStyle
 from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
@@ -86,4 +86,5 @@ __all__ = [
     "TableData",
     "TableResponse",
     "ValueConfigValue",
+    "FieldStyle",
 ]
