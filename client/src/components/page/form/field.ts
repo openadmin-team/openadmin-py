@@ -31,6 +31,7 @@ export interface FieldDef {
 	array: boolean
 	itemKind?: ArrayItemKind
 	select: boolean
+	richText: boolean
 	options?: string[]
 	itemOptions?: string[]
 }

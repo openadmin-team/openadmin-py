@@ -20,6 +20,7 @@ import FieldDateTime from "./FieldDateTime.vue"
 import FieldFile from "./FieldFile.vue"
 import FieldFileArray from "./FieldFileArray.vue"
 import FieldNumeric from "./FieldNumeric.vue"
+import FieldRichText from "./FieldRichText.vue"
 import FieldSelect from "./FieldSelect.vue"
 import FieldString from "./FieldString.vue"
 
@@ -87,6 +88,11 @@ function fieldsOf(
 			select: !array && Array.isArray(property.enum),
 			options: !array && Array.isArray(property.enum) ? property.enum.map(String) : undefined,
 			itemOptions: itemSchema?.enum ? itemSchema.enum.map(String) : undefined,
+			richText:
+				source !== "form" &&
+				!array &&
+				property.type === "string" &&
+				fieldConfigs?.[key]?.style === "rich-text",
 		}
 	})
 }
@@ -111,6 +117,7 @@ const fields = computed<FieldDef[]>(() => [
 						<FieldFile v-else-if="f.file" :field="field" :def="f" />
 						<FieldFileArray v-else-if="f.fileArray" :field="field" :def="f" />
 						<FieldSelect v-else-if="f.select" :field="field" :def="f" />
+						<FieldRichText v-else-if="f.richText" :field="field" :def="f" />
 						<FieldNumeric v-else-if="f.numeric" :field="field" :def="f" />
 						<FieldString v-else :field="field" :def="f" />
 					</template>
