@@ -261,8 +261,8 @@ function removeFileAt(field: AnyFieldApi, index: number) {
 
 <template>
 	<div v-if="form" class="flex min-h-full items-center justify-center p-6">
-		<form v-if="fields.length" class="w-full max-w-5xl" @submit.prevent="dataForm.handleSubmit">
-			<FieldGroup class="grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-x-8 gap-y-4">
+		<form v-if="fields.length" class="w-full max-w-xl" @submit.prevent="dataForm.handleSubmit">
+			<FieldGroup class="grid grid-cols-1 gap-y-4">
 				<dataForm.Field v-for="f in fields" :key="f.key" :name="f.key">
 					<template #default="{ field }">
 						<Field v-if="f.boolean" :data-invalid="isInvalid(field)">
