@@ -72,7 +72,8 @@ export const useTable = ({
 
 	const { data, isLoading, isFetching, isPlaceholderData } = useQuery<Table, AppError>({
 		queryKey: computed(() => [
-			"openadmin-stat",
+			"openadmin-data",
+			"table",
 			toValue(sectionId),
 			toValue(pageId),
 			toValue(tableId),

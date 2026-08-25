@@ -28,7 +28,8 @@ export const useMarkdown = ({
 
 	const { data, isLoading, isFetching } = useQuery<Markdown, AppError>({
 		queryKey: computed(() => [
-			"openadmin-markdown",
+			"openadmin-data",
+			"markdown",
 			toValue(sectionId),
 			toValue(pageId),
 			toValue(markdownId),
