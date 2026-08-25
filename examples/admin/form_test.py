@@ -24,7 +24,17 @@ class MethodsStr(StrEnum):
     POST = "POST"
 
 
-@page.form("Test all fields", method="post", icon="university", color="green")
+@page.form(
+    "Test all fields", 
+    method="post", 
+    icon="university", 
+    color="green",
+    fields={
+        'rich_text': {
+            'style': 'rich-text',
+        }
+    }
+)
 def get_info(
     string: str,
     int: int,
@@ -36,6 +46,7 @@ def get_info(
     list_of_ints: list[int],
     file: UploadFile,
     files: list[UploadFile],
+    rich_text: str,
     literals: Literal["get", "post"],
     enum: Methods,
     str_enum: MethodsStr,
@@ -44,5 +55,5 @@ def get_info(
     list_str_enum: list[MethodsStr],
 ) -> spec.Form:
     return {
-        "toast": f"All good ! {list_literals=} {list_str_enum=} {list_enum=} {enum=} {literals=} {str_enum} {string=} {int=} {float=} {date=} {dates=} {bool=} {list_of_ints=} {list_of_strings=} {file.filename=} {len(files)=}"
+        "toast": f"All good ! {rich_text=} {list_literals=} {list_str_enum=} {list_enum=} {enum=} {literals=} {str_enum} {string=} {int=} {float=} {date=} {dates=} {bool=} {list_of_ints=} {list_of_strings=} {file.filename=} {len(files)=}"
     }
