@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts">
 import { computed } from "vue"
 import { useRoute } from "vue-router"
-import Form from "@/components/page/Form.vue"
+import Form from "@/components/page/form/Form.vue"
 
 const route = useRoute()
 
