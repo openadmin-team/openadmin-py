@@ -8,11 +8,18 @@ import { httpMethodSchema } from "./http-method"
 import { iconSchema } from "./icon"
 import { jsonSchemaSchema } from "./json-schema"
 
+export const FIELD_STYLES = ["rich-text"] as const
+
+export const fieldStyleSchema = z.enum(FIELD_STYLES)
+
+export type FieldStyle = z.infer<typeof fieldStyleSchema>
+
 export const fieldConfigSchema = z.object({
 	reference: z.string().nullable().optional(),
 	reference_field: z.string().optional(),
 	icon: iconSchema.optional(),
 	color: colorSchema.optional(),
+	style: fieldStyleSchema.optional(),
 })
 
 export type FieldConfig = z.infer<typeof fieldConfigSchema>
@@ -35,11 +42,7 @@ export const formComponentSchema = z.object({
 export type FormComponent = z.infer<typeof formComponentSchema>
 
 export const formResponseSchema = z.object({
-	icon: iconSchema.optional(),
-	color: colorSchema.optional(),
 	toast: z.string().optional(),
-	table: z.unknown().optional(),
-	message: z.string().optional(),
 })
 
 export type FormResponse = z.infer<typeof formResponseSchema>
