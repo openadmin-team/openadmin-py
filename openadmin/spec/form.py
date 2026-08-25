@@ -11,6 +11,7 @@ from .json_schema import JsonSchema
 
 type FieldStyle = Literal["rich-text"]
 
+
 class FieldConfig(TypedDict):
     reference: NotRequired[str | None]
     reference_field: NotRequired[str]
