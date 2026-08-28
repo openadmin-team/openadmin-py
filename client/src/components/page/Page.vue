@@ -7,14 +7,14 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts">
 import { Icon } from "@iconify/vue"
 import { computed } from "vue"
-import ActionButton from "@/components/page/ActionButton.vue"
-import FormButton from "@/components/page/FormButton.vue"
-import Markdown from "@/components/page/Markdown.vue"
-import Stat from "@/components/page/Stat.vue"
+import ActionButton from "@/components/action/ActionButton.vue"
+import FormButton from "@/components/form/FormButton.vue"
+import Markdown from "@/components/markdown/Markdown.vue"
+import Stat from "@/components/stat/Stat.vue"
+import Table from "@/components/table/Table.vue"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useColor } from "@/composables/colors"
 import { usePageSpec } from "@/composables/openadmin-page"
-import Table from "./Table.vue"
 
 const props = defineProps<{
 	sectionId: string
