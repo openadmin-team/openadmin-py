@@ -238,7 +238,7 @@ const useActionMutation = ({
 			}
 
 			const result = actionResultSchema.parse(data)
-			const message = typeof result === "string" ? result : (result?.toast ?? result?.message)
+			const message = typeof result === "string" ? result : result?.toast
 			if (message) toast.success(message)
 
 			return result
