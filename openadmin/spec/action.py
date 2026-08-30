@@ -25,11 +25,7 @@ class ActionComponent(TypedDict):
 
 
 class ActionResponse(TypedDict):
-    icon: NotRequired[Icon]
-    color: NotRequired[Color]
     toast: NotRequired[str]
-    table: NotRequired[dict | object]
-    message: NotRequired[str]
 
 
 type Action = ActionResponse | None | str
