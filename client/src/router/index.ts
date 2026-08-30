@@ -30,6 +30,11 @@ export const router = createRouter({
 					name: "page",
 					component: () => import("@/views/PageView.vue"),
 				},
+				{
+					path: ":sectionId/:pageId/forms/:formId",
+					name: "form",
+					component: () => import("@/views/FormView.vue"),
+				},
 			],
 		},
 	],

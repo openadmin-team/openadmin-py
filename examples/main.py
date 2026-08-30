@@ -15,6 +15,7 @@ from .admin import (
     books,
     control_panel,
     docs,
+    form_test,
     genres,
     health,
     overview,
@@ -62,6 +63,8 @@ admin_panel.section(
     icon="server",
     pages=[health.page, reports.page, overview.page, control_panel.page],
 )
-admin_panel.section("Weekdays", icon="calendar-days", pages=[weekdays.page])
+admin_panel.section(
+    "Weekdays", icon="calendar-days", pages=[weekdays.page, form_test.page]
+)
 
 app.mount("/admin", admin_panel.app, name="admin_panel")

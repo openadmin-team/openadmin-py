@@ -25,6 +25,28 @@ export const useLoginForm = ({ onSuccess }: { onSuccess?: () => void } = {}) => 
 	})
 }
 
+export const useLogout = () => {
+	const queryClient = useQueryClient()
+
+	return useMutation({
+		mutationFn: async () => {
+			const response = await fetch("auth/logout", {
+				method: "POST",
+			})
+
+			if (!response.ok) {
+				const data = await response.json()
+				const error = errorSchema.parse(data)
+				toast.error(error.message)
+				throw error
+			}
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["openadmin-spec"] })
+		},
+	})
+}
+
 const useLogin = ({ onSuccess }: { onSuccess?: () => void } = {}) => {
 	const queryClient = useQueryClient()
 

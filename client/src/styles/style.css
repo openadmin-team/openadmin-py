@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
 @import "@fontsource/geist";
 @import "@fontsource/geist-mono";
 
 @import "tailwindcss";
+@import "shadcn-vue/tailwind.css";
 @import "tw-animate-css";
 @import "./typeset.css";
 

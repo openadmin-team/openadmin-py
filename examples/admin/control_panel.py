@@ -48,10 +48,8 @@ async def ping_service(
     target: str = Query("api", description="Service name to ping"),
 ) -> spec.Action:
     return {
-        "icon": "activity",
-        "color": "green",
-        "toast": f"{target} responded in 12ms",
-        "message": f"Pinged '{target}' — reachable (example response, nothing was contacted)",
+        "toast": f"Pinged '{target}' — reachable in 12ms "
+        "(example response, nothing was contacted)"
     }
 
 
@@ -93,11 +91,7 @@ async def update_feature_flag(
     flag_name: str = Query(..., description="Flag key, e.g. new-dashboard"),
     enabled: bool = Query(..., description="New flag state"),
 ) -> spec.Action:
-    return {
-        "toast": f"{flag_name} -> {enabled}",
-        "message": "Preview of the change below (example data, flag was not modified)",
-        "table": [{"flag": flag_name, "previous": not enabled, "new": enabled}],
-    }
+    return {"toast": f"{flag_name} -> {enabled} (example only, flag was not modified)"}
 
 
 @page.action(
@@ -124,12 +118,10 @@ async def rotate_api_key(
 async def purge_temp_files(
     older_than_days: int = Query(7, ge=0, description="Age threshold in days"),
 ) -> spec.Action:
-    return {
-        "message": (
-            f"Would delete files older than {older_than_days} days "
-            "(example — nothing was purged)"
-        )
-    }
+    return (
+        f"Would delete files older than {older_than_days} days "
+        "(example — nothing was purged)"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -447,17 +439,7 @@ class WebhookBody(BaseModel):
     color="teal",
 )
 async def create_webhook(body: WebhookBody) -> spec.Form:
-    return {
-        "icon": "webhook",
-        "color": "teal",
-        "toast": "Webhook created",
-        "message": f"Would create a webhook for '{body.event}' -> {body.url}",
-        "table": {
-            "data": [{"id": 1, "url": body.url, "event": body.event}],
-            "icon": "webhook",
-            "color": "teal",
-        },
-    }
+    return {"toast": f"Would create a webhook for '{body.event}' -> {body.url}"}
 
 
 class RateLimitBody(BaseModel):
@@ -475,8 +457,6 @@ class RateLimitBody(BaseModel):
 )
 async def update_rate_limit(body: RateLimitBody) -> spec.Form:
     return {
-        "icon": "gauge",
-        "color": "cyan",
         "toast": f"Rate limit set to {body.requests_per_minute}/min "
         f"(burst {body.burst_size}) — example only, nothing was saved",
     }
@@ -509,6 +489,15 @@ async def rename_environment(
 )
 async def schedule_config_reset(
     config_id: int = Query(..., description="Config entry to reset"),
+    environment: str = Query("production", description="Environment to target"),
+    reason: str = Query(..., description="Why the reset is needed"),
+    scheduled_by: str = Query(..., description="Who is requesting the reset"),
+    maintenance_window: str = Query(
+        ..., description="Maintenance window label, e.g. Sat 02:00 UTC"
+    ),
+    notify_owner: bool = Query(True, description="Notify the config owner beforehand"),
+    dry_run: bool = Query(False, description="Preview the reset without scheduling it"),
+    retry_count: int = Query(0, description="Number of retries if the reset fails"),
 ) -> spec.Form:
     return None
 

@@ -26,10 +26,13 @@ export default defineConfig({
 				changeOrigin: true,
 			},
 			// component data endpoints, e.g. /{sectionId}/{pageId}/stat/{statId}
-			"^/[^/]+/[^/]+/(stat|table|action|form|markdown|bar-chart|pie-chart)/[^/]+$": {
-				target: "http://localhost:8000/admin",
-				changeOrigin: true,
-			},
+			// (excludes /src/... and /node_modules/... so dev-server source
+			// requests, e.g. /src/components/table/Table.vue, aren't caught)
+			"^/(?!src/|node_modules/|@vite/|@fs/|@id/)[^/]+/[^/]+/(stat|table|action|form|markdown|bar-chart|pie-chart)/[^/]+$":
+				{
+					target: "http://localhost:8000/admin",
+					changeOrigin: true,
+				},
 		},
 	},
 })

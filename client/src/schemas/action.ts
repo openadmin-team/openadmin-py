@@ -25,11 +25,7 @@ export const actionComponentSchema = z.object({
 export type ActionComponent = z.infer<typeof actionComponentSchema>
 
 export const actionResponseSchema = z.object({
-	icon: iconSchema.optional(),
-	color: colorSchema.optional(),
 	toast: z.string().optional(),
-	table: z.unknown().optional(),
-	message: z.string().optional(),
 })
 
 export type ActionResponse = z.infer<typeof actionResponseSchema>

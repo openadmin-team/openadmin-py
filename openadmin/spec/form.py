@@ -9,12 +9,15 @@ from .http_methods import HttpMethod
 from .icons import Icon
 from .json_schema import JsonSchema
 
+type FieldStyle = Literal["rich-text"]
+
 
 class FieldConfig(TypedDict):
     reference: NotRequired[str | None]
     reference_field: NotRequired[str]
     icon: NotRequired[Icon]
     color: NotRequired[Color]
+    style: NotRequired[FieldStyle]
 
 
 class FormComponent(TypedDict):
@@ -33,11 +36,7 @@ class FormComponent(TypedDict):
 
 
 class FormResponse(TypedDict):
-    icon: NotRequired[Icon]
-    color: NotRequired[Color]
     toast: NotRequired[str]
-    table: NotRequired[dict | object]
-    message: NotRequired[str]
 
 
 type Form = FormResponse | None | str

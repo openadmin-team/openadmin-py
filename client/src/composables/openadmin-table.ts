@@ -6,7 +6,7 @@ import { keepPreviousData, useQuery } from "@tanstack/vue-query"
 import { type ColumnDef, createColumnHelper } from "@tanstack/vue-table"
 import { Icon } from "@iconify/vue"
 import { computed, h, type MaybeRefOrGetter, ref, toValue, watch } from "vue"
-import DataTableDropDown from "@/components/page/DataTableDropDown.vue"
+import DataTableDropDown from "@/components/table/DataTableDropDown.vue"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Kbd } from "@/components/ui/kbd"
@@ -72,7 +72,8 @@ export const useTable = ({
 
 	const { data, isLoading, isFetching, isPlaceholderData } = useQuery<Table, AppError>({
 		queryKey: computed(() => [
-			"openadmin-stat",
+			"openadmin-data",
+			"table",
 			toValue(sectionId),
 			toValue(pageId),
 			toValue(tableId),
@@ -232,7 +233,12 @@ export const useTable = ({
 				columnHelper.value.display({
 					id: "__actions__",
 					enableHiding: false,
-					cell: ({ row }) => h(DataTableDropDown, { actions: row.original.__actions__ ?? [] }),
+					cell: ({ row }) =>
+						h(DataTableDropDown, {
+							sectionId: toValue(sectionId),
+							pageId: toValue(pageId),
+							actions: row.original.__actions__ ?? [],
+						}),
 				}),
 			)
 		}

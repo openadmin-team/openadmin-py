@@ -86,7 +86,7 @@ Foreign keys are enforced at the application layer.
 )
 async def ping_database(session: AsyncSessionDep) -> spec.Action:
     await session.execute(text("SELECT 1"))
-    return {"message": "Database is reachable"}
+    return {"toast": "Database is reachable"}
 
 
 async def _all_table_counts(session: AsyncSessionDep) -> list[tuple[str, int]]:

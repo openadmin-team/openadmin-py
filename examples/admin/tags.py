@@ -12,7 +12,9 @@ from openadmin.fastapi.deps import PageDep
 from ..lib import models
 from ..lib.database import AsyncSessionDep
 
-page = AdminPage("Tags", icon="tag", description="Manage and analyze book tags")
+page = AdminPage(
+    "Tags", icon="tag", description="Manage and analyze book tags", color="red"
+)
 
 
 @page.stat("Total Tags")
@@ -97,9 +99,8 @@ async def remove_tag_from_book(
         await session.delete(link)
         await session.commit()
     removed = link is not None
-    return {
-        "message": f"Removed tag #{tag_id} from book #{book_id}"
+    return (
+        f"Removed tag #{tag_id} from book #{book_id}"
         if removed
-        else f"No such tag assignment (book #{book_id}, tag #{tag_id})",
-        "table": {"book_id": book_id, "tag_id": tag_id, "removed": removed},
-    }
+        else f"No such tag assignment (book #{book_id}, tag #{tag_id})"
+    )

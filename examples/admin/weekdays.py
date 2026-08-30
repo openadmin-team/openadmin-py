@@ -15,10 +15,7 @@ WEEKDAYS: list[dict[str, Any]] = [
     {"day": "Friday", "books": 10, "coffe": 9},
 ]
 
-page = fastapi.AdminPage(
-    "Week Days",
-    icon="calendar",
-)
+page = fastapi.AdminPage("Week Days", icon="calendar", color="green")
 
 
 @page.pie_chart(

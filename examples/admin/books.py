@@ -43,6 +43,15 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
 
 BOOK_COVER_URL = "https://img.magnific.com/free-photo/beautiful-tropical-beach-sea-ocean-with-white-cloud-blue-sky-copyspace_74190-8663.jpg?semt=ais_hybrid&w=740&q=80"
 
+from fastapi import UploadFile
+from openadmin.fastapi import reference_action
+
+@page.action(
+    'Upload cover',
+    is_hidden=True,
+)
+async def upload_cover(id: int, cover: UploadFile) -> spec.Action:
+    return f'File uploaded {cover.filename} {id=}'
 
 @page.table(
     "All Books",
@@ -112,6 +121,12 @@ async def get_all_books(
                     "reference": {"label": "Link to the book"},
                     "attachment": {"label": "Book in pdf"},
                 },
+                '__actions__': [{
+                    'action': reference_action(upload_cover),
+                    'form': {
+                        'id': book.id
+                    }
+                }]
             }
             for book, author in result.all()
         ],
@@ -161,10 +176,7 @@ async def add_book(body: AddBookBody, session: AsyncSessionDep) -> spec.Form:
     session.add(book)
     await session.commit()
     await session.refresh(book)
-    return {
-        "message": f"Added book '{book.title}'",
-        "table": {"id": book.id, "title": book.title},
-    }
+    return {"toast": f"Added book '{book.title}'"}
 
 
 @page.action("Delete Book", method="delete", description="Remove a book by ID")
@@ -177,9 +189,4 @@ async def delete_book(
         await session.delete(book)
         await session.commit()
     found = book is not None
-    return {
-        "message": f"Deleted book #{book_id}"
-        if found
-        else f"Book #{book_id} not found",
-        "table": {"deleted": book_id, "found": found},
-    }
+    return f"Deleted book #{book_id}" if found else f"Book #{book_id} not found"

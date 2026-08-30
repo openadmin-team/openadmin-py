@@ -5,7 +5,10 @@
 from openadmin.fastapi import AdminPage
 
 page = AdminPage(
-    "Health", icon="heart-pulse", description="System health and infrastructure metrics"
+    "Health",
+    icon="heart-pulse",
+    description="System health and infrastructure metrics",
+    color="blue",
 )
 
 

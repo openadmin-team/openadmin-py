@@ -13,3 +13,4 @@
 
 # Built frontend (bundled into the package at build time, see [tool.hatch.build] in pyproject.toml)
 openadmin/__client__
+.notes

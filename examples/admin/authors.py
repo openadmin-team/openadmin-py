@@ -160,7 +160,6 @@ class AddAuthorBody(BaseModel):
     first_name: str
     last_name: str
     bio: str | None = None
-    friend: int
 
 
 @page.form(
@@ -181,7 +180,4 @@ async def add_author(body: AddAuthorBody, session: AsyncSessionDep) -> spec.Form
     await session.commit()
     await session.refresh(author)
     name = f"{author.first_name} {author.last_name}"
-    return {
-        "message": f"Added author '{name}'",
-        "table": {"id": author.id, "name": name},
-    }
+    return {"toast": f"Added author '{name}'"}

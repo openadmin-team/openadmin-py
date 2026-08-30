@@ -99,7 +99,4 @@ async def add_publisher(body: AddPublisherBody, session: AsyncSessionDep) -> spe
     session.add(publisher)
     await session.commit()
     await session.refresh(publisher)
-    return {
-        "message": f"Added publisher '{publisher.name}'",
-        "table": {"id": publisher.id, "name": publisher.name},
-    }
+    return {"toast": f"Added publisher '{publisher.name}'"}

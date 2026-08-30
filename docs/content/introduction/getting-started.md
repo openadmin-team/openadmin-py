@@ -10,13 +10,13 @@ This walks through building a minimal admin panel from scratch: one page, one st
 ## Installation
 
 ```bash
-pip install openadmin-py
+pip install openadmin
 ```
 
 or with `uv`:
 
 ```bash
-uv add openadmin-py
+uv add openadmin
 ```
 
 ## Build a page
