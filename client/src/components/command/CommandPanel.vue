@@ -1,1 +1,9 @@
-<template><h1>A</h1></template>
+<script setup lang="ts">
+import { useSpec } from '@/composables/openadmin-spec';
+
+const { data } = useSpec();
+</script>
+
+<template>
+    {{ data }}
+</template>
