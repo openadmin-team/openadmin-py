@@ -18,6 +18,7 @@ WEEKDAYS: list[dict[str, Any]] = [
 page = fastapi.AdminPage(
     "Week Days",
     icon="calendar",
+    color='green'
 )
 
 

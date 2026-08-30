@@ -12,7 +12,7 @@ from openadmin.fastapi.deps import PageDep
 from ..lib import models
 from ..lib.database import AsyncSessionDep
 
-page = AdminPage("Tags", icon="tag", description="Manage and analyze book tags")
+page = AdminPage("Tags", icon="tag", description="Manage and analyze book tags", color='red')
 
 
 @page.stat("Total Tags")
