@@ -45,7 +45,7 @@ async def get_authors_with_bio(session: AsyncSessionDep):
 async def delete_author(id: str) -> spec.Action:
     return {
         "toast": f"User with id {id} deleted and id is saved into clipboard",
-        'clipboard': id,
+        "clipboard": id,
     }
 
 
