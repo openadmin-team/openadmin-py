@@ -26,6 +26,7 @@ export type ActionComponent = z.infer<typeof actionComponentSchema>
 
 export const actionResponseSchema = z.object({
 	toast: z.string().optional(),
+	clipboard: z.string().optional(),
 })
 
 export type ActionResponse = z.infer<typeof actionResponseSchema>

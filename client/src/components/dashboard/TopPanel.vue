@@ -8,6 +8,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 import { Icon } from "@iconify/vue"
 import { computed } from "vue"
 import { useRoute } from "vue-router"
+import CommandPanel from "@/components/command/CommandPanel.vue"
+import CommandTrigger from "@/components/command/CommandTrigger.vue"
 import ThemeToggle from "@/components/dashboard/ThemeToggle.vue"
 import {
 	Breadcrumb,
@@ -61,6 +63,8 @@ const { style } = useColor(() => form.value?.color || "slate")
 				</BreadcrumbItem>
 			</BreadcrumbList>
 		</Breadcrumb>
-		<ThemeToggle class="ml-auto" />
+		<CommandTrigger class="ml-auto" />
+		<ThemeToggle />
 	</header>
+	<CommandPanel />
 </template>
