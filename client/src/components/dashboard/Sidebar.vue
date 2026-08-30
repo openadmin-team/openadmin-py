@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/sidebar"
 import { useLogout } from "@/composables/auth"
 import { useSpec } from "@/composables/openadmin-spec"
+import { useColor } from "@/composables/colors"
+import type { Color } from "@/schemas/color"
 import { Icon } from "@iconify/vue"
 import logo from "@/assets/images/logo.png"
 
@@ -33,6 +35,11 @@ function handleLogout() {
 	logout(undefined, {
 		onSuccess: () => router.push({ name: "login" }),
 	})
+}
+
+function pageColorStyle(color: Color | null) {
+	if (!color) return null
+	return useColor(color).style.value
 }
 </script>
 
@@ -63,7 +70,15 @@ function handleLogout() {
 								<RouterLink
 									:to="{ name: 'page', params: { sectionId: section.id, pageId: page.id } }"
 								>
-									<Icon v-if="page.icon" :icon="`lucide:${page.icon}`" />
+									<Icon
+										v-if="page.icon"
+										:icon="`lucide:${page.icon}`"
+										:class="pageColorStyle(page.color)?.text"
+									/>
+									<span
+										v-else-if="page.color"
+										:class="[pageColorStyle(page.color)?.dot, 'size-1.5 rounded-full shrink-0']"
+									/>
 									<span>{{ page.name }}</span>
 								</RouterLink>
 							</SidebarMenuButton>
