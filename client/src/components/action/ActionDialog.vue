@@ -64,10 +64,6 @@ watch(open, (value) => {
 	<Dialog v-if="action" v-model:open="open">
 		<DialogContent>
 			<form @submit.prevent="dataForm.handleSubmit">
-				<DialogHeader>
-					<DialogTitle>{{ action.name }}</DialogTitle>
-					<DialogDescription v-if="action.description">{{ action.description }}</DialogDescription>
-				</DialogHeader>
 				<FieldGroup v-if="fields.length" class="grid grid-cols-1 gap-y-4 py-4">
 					<dataForm.Field v-for="f in fields" :key="f.key" :name="f.key">
 						<template #default="{ field }">
