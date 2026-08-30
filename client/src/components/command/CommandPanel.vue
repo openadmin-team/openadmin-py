@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script setup lang="ts">
 import { Icon } from "@iconify/vue"
+import { useMagicKeys, whenever } from "@vueuse/core"
 import {
 	CommandDialog,
 	CommandEmpty,
@@ -23,6 +24,22 @@ import type { Component } from "@/schemas/component"
 import type { Icon as IconName } from "@/schemas/icon"
 
 const { data: spec } = useSpec()
+
+const { meta_p, ctrl_p } = useMagicKeys({
+	passive: false,
+	onEventFired(event) {
+		if (event.key.toLowerCase() === "p" && (event.metaKey || event.ctrlKey)) {
+			event.preventDefault()
+		}
+	},
+})
+
+whenever(meta_p, () => {
+	isCommandPanelOpen.value = true
+})
+whenever(ctrl_p, () => {
+	isCommandPanelOpen.value = true
+})
 
 // area-chart and line-chart components don't carry icon/color fields at all,
 // unlike every other component type, so access has to be guarded.
