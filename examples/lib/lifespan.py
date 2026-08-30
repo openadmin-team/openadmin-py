@@ -13,3 +13,10 @@ from . import database
 async def lifespan(_: FastAPI):
     async with database.lifespan():
         yield
+
+
+@asynccontextmanager
+async def admin_panel_lifespan(_: FastAPI):
+    print("Admin Sturtup")
+    yield
+    print("Admin Shutdown")
