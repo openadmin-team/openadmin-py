@@ -42,6 +42,7 @@ admin_panel = AdminPanel(
     "Book Library Admin",
     description="Manage and explore the book catalog",
     auth=auth.auth,
+    lifespan=lifespan.admin_panel_lifespan,
 )
 
 admin_panel.section(
