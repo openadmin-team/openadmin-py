@@ -174,9 +174,4 @@ async def delete_book(
         await session.delete(book)
         await session.commit()
     found = book is not None
-    return {
-        "message": f"Deleted book #{book_id}"
-        if found
-        else f"Book #{book_id} not found",
-        "table": {"deleted": book_id, "found": found},
-    }
+    return f"Deleted book #{book_id}" if found else f"Book #{book_id} not found"

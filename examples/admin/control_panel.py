@@ -48,10 +48,8 @@ async def ping_service(
     target: str = Query("api", description="Service name to ping"),
 ) -> spec.Action:
     return {
-        "icon": "activity",
-        "color": "green",
-        "toast": f"{target} responded in 12ms",
-        "message": f"Pinged '{target}' — reachable (example response, nothing was contacted)",
+        "toast": f"Pinged '{target}' — reachable in 12ms "
+        "(example response, nothing was contacted)"
     }
 
 
@@ -93,11 +91,7 @@ async def update_feature_flag(
     flag_name: str = Query(..., description="Flag key, e.g. new-dashboard"),
     enabled: bool = Query(..., description="New flag state"),
 ) -> spec.Action:
-    return {
-        "toast": f"{flag_name} -> {enabled}",
-        "message": "Preview of the change below (example data, flag was not modified)",
-        "table": [{"flag": flag_name, "previous": not enabled, "new": enabled}],
-    }
+    return {"toast": f"{flag_name} -> {enabled} (example only, flag was not modified)"}
 
 
 @page.action(
@@ -124,12 +118,10 @@ async def rotate_api_key(
 async def purge_temp_files(
     older_than_days: int = Query(7, ge=0, description="Age threshold in days"),
 ) -> spec.Action:
-    return {
-        "message": (
-            f"Would delete files older than {older_than_days} days "
-            "(example — nothing was purged)"
-        )
-    }
+    return (
+        f"Would delete files older than {older_than_days} days "
+        "(example — nothing was purged)"
+    )
 
 
 # ---------------------------------------------------------------------------
