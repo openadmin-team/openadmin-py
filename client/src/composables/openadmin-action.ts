@@ -241,6 +241,9 @@ const useActionMutation = ({
 			const message = typeof result === "string" ? result : result?.toast
 			if (message) toast.success(message)
 
+			const clipboard = typeof result === "string" ? undefined : result?.clipboard
+			if (clipboard) await navigator.clipboard.writeText(clipboard)
+
 			return result
 		},
 		onSuccess: () => {
