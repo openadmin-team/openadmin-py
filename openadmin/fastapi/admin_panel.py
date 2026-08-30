@@ -5,6 +5,8 @@
 
 from pathlib import Path
 
+from starlette.types import Lifespan
+
 from fastapi import APIRouter, FastAPI, HTTPException, status
 from openadmin import spec
 
@@ -22,6 +24,7 @@ class AdminPanel:
         *,
         description: str | None = None,
         auth: AdminAuth | None = None,
+        lifespan: Lifespan[FastAPI] | None = None,
     ) -> None:
         self.version = "1.0.0"
         self.name = name
@@ -34,6 +37,7 @@ class AdminPanel:
                 HTTPException: exc_handler.http_exception_handler,
                 Exception: exc_handler.app_exception_handler,
             },
+            lifespan=lifespan,
         )
         self.frontend_router = APIRouter()
         self.api_router = APIRouter(
