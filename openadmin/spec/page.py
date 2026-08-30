@@ -5,6 +5,7 @@
 
 from typing import TypedDict
 
+from .colors import Color
 from .component import Component
 from .icons import Icon
 
@@ -14,4 +15,5 @@ class Page(TypedDict):
     name: str
     description: str | None
     icon: Icon | None
+    color: Color | None
     components: list[Component]

@@ -17,12 +17,14 @@ class AdminPage:
         name: str,
         *,
         icon: spec.Icon | None = None,
+        color: spec.Color | None = None,
         description: str | None = None,
     ) -> None:
         self.id = utils.get_id(name)
         self.name = name
         self.description = description
         self.icon: spec.Icon | None = icon
+        self.color: spec.Color | None = color
         self.components: list[spec.Component] = []
 
         self.router = APIRouter(
@@ -442,6 +444,7 @@ class AdminPage:
             "name": self.name,
             "description": self.description,
             "icon": self.icon,
+            "color": self.color,
             "components": self.components,
         }
 
