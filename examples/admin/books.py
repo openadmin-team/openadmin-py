@@ -43,6 +43,15 @@ async def get_books_without_publisher(session: AsyncSessionDep) -> int:
 
 BOOK_COVER_URL = "https://img.magnific.com/free-photo/beautiful-tropical-beach-sea-ocean-with-white-cloud-blue-sky-copyspace_74190-8663.jpg?semt=ais_hybrid&w=740&q=80"
 
+from fastapi import UploadFile
+from openadmin.fastapi import reference_action
+
+@page.action(
+    'Upload cover',
+    is_hidden=True,
+)
+async def upload_cover(id: int, cover: UploadFile) -> spec.Action:
+    return f'File uploaded {cover.filename}'
 
 @page.table(
     "All Books",
@@ -112,6 +121,12 @@ async def get_all_books(
                     "reference": {"label": "Link to the book"},
                     "attachment": {"label": "Book in pdf"},
                 },
+                '__actions__': [{
+                    'action': reference_action(upload_cover),
+                    'form': {
+                        'id': book.id
+                    }
+                }]
             }
             for book, author in result.all()
         ],
