@@ -7,6 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts">
 import { Icon } from "@iconify/vue"
 import { useMagicKeys, whenever } from "@vueuse/core"
+import { useRouter } from "vue-router"
 import {
 	CommandDialog,
 	CommandEmpty,
@@ -23,7 +24,14 @@ import type { Color } from "@/schemas/color"
 import type { Component } from "@/schemas/component"
 import type { Icon as IconName } from "@/schemas/icon"
 
+const router = useRouter()
+
 const { data: spec } = useSpec()
+
+function selectPage(sectionId: string, pageId: string) {
+	isCommandPanelOpen.value = false
+	router.push({ name: "page", params: { sectionId, pageId } })
+}
 
 const { meta_p, ctrl_p } = useMagicKeys({
 	passive: false,
@@ -81,7 +89,7 @@ function dotClass(color: Color | null) {
 					</div>
 
 					<template v-for="page in section.pages" :key="page.id">
-						<CommandItem :value="page.id">
+						<CommandItem :value="page.id" @select="selectPage(section.id, page.id)">
 							<Icon v-if="page.icon" :icon="`lucide:${page.icon}`" :class="textClass(page.color)" />
 							<span v-else-if="page.color" :class="dotClass(page.color)" />
 							<span>{{ page.name }}</span>
