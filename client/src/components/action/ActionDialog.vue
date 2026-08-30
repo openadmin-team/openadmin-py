@@ -7,12 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 <script setup lang="ts">
 import { computed, watch } from "vue"
 import { Button } from "@/components/ui/button"
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogFooter,
-} from "@/components/ui/dialog"
+import { Dialog, DialogClose, DialogContent, DialogFooter } from "@/components/ui/dialog"
 import { FieldGroup } from "@/components/ui/field"
 import { Spinner } from "@/components/ui/spinner"
 import { useActionForm } from "@/composables/openadmin-action"
