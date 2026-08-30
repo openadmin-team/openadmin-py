@@ -5,7 +5,7 @@
 import { z } from "zod"
 import { componentSchema } from "./component"
 import { iconSchema } from "./icon"
-import {colorSchema} from './color'
+import { colorSchema } from "./color"
 
 export const pageSchema = z.object({
 	id: z.string(),
