@@ -51,7 +51,7 @@ from openadmin.fastapi import reference_action
     is_hidden=True,
 )
 async def upload_cover(id: int, cover: UploadFile) -> spec.Action:
-    return f'File uploaded {cover.filename}'
+    return f'File uploaded {cover.filename} {id=}'
 
 @page.table(
     "All Books",
