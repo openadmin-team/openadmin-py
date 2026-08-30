@@ -233,7 +233,12 @@ export const useTable = ({
 				columnHelper.value.display({
 					id: "__actions__",
 					enableHiding: false,
-					cell: ({ row }) => h(DataTableDropDown, { actions: row.original.__actions__ ?? [] }),
+					cell: ({ row }) =>
+						h(DataTableDropDown, {
+							sectionId: toValue(sectionId),
+							pageId: toValue(pageId),
+							actions: row.original.__actions__ ?? [],
+						}),
 				}),
 			)
 		}

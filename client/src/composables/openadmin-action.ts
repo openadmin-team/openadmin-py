@@ -17,6 +17,29 @@ function toValidatable(value: unknown): unknown {
 	return value
 }
 
+function propertyType(action: ActionComponent | undefined, key: string): string | undefined {
+	const property =
+		action?.query?.properties?.[key] ??
+		action?.body?.properties?.[key] ??
+		action?.form?.properties?.[key]
+	const type = property?.type
+	return Array.isArray(type) ? type.find((t) => t !== "null") : type
+}
+
+// Row actions prefill from raw backend values (e.g. a numeric id), which may not
+// match the type the target field's schema declares (e.g. `id: str`) — coerce so
+// client-side validation sees the same type a user filling the field in would.
+function coerceInitialValue(type: string | undefined, value: unknown): unknown {
+	if (value === null || value === undefined) return value
+	if (type === "string") return typeof value === "string" ? value : String(value)
+	if ((type === "number" || type === "integer") && typeof value !== "number") {
+		const parsed = Number(value)
+		return Number.isNaN(parsed) ? value : parsed
+	}
+	if (type === "boolean" && typeof value !== "boolean") return value === "true" || value === true
+	return value
+}
+
 export const useAction = ({
 	sectionId,
 	pageId,
@@ -42,11 +65,13 @@ export const useActionForm = ({
 	sectionId,
 	pageId,
 	actionId,
+	initialValues,
 	onSuccess,
 }: {
 	sectionId: MaybeRefOrGetter<string>
 	pageId: MaybeRefOrGetter<string>
 	actionId: MaybeRefOrGetter<string>
+	initialValues?: Record<string, unknown>
 	onSuccess?: () => void
 }) => {
 	const { action } = useAction({ sectionId, pageId, actionId })
@@ -64,8 +89,15 @@ export const useActionForm = ({
 	const bodyKeys = computed(() => new Set(Object.keys(toValue(action)?.body?.properties ?? {})))
 	const formKeys = computed(() => new Set(Object.keys(toValue(action)?.form?.properties ?? {})))
 
+	const defaultValues = Object.fromEntries(
+		Object.entries(initialValues ?? {}).map(([key, value]) => [
+			key,
+			coerceInitialValue(propertyType(toValue(action), key), value),
+		]),
+	)
+
 	const dataForm = useTanstackForm({
-		defaultValues: {} as Record<string, unknown>,
+		defaultValues: defaultValues as Record<string, unknown>,
 		validators: {
 			onChange: ({ value }) => {
 				const fields: Record<string, string[]> = {}
