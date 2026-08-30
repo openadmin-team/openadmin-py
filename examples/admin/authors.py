@@ -43,7 +43,10 @@ async def get_authors_with_bio(session: AsyncSessionDep):
     is_hidden=True,
 )
 async def delete_author(id: str) -> spec.Action:
-    return {"toast": f"User with id {id} deleted"}
+    return {
+        "toast": f"User with id {id} deleted and id is saved into clipboard",
+        'clipboard': id,
+    }
 
 
 @page.stat(

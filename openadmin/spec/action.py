@@ -26,6 +26,7 @@ class ActionComponent(TypedDict):
 
 class ActionResponse(TypedDict):
     toast: NotRequired[str]
+    clipboard: NotRequired[str]
 
 
 type Action = ActionResponse | None | str
