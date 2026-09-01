@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 
 from openadmin import spec
-from openadmin.fastapi import AdminPage, reference, reference
+from openadmin.fastapi import AdminPage, reference
 from openadmin.fastapi.deps import PageDep, SearchDep
 
 from ..lib import models
