@@ -17,11 +17,10 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useColor } from "@/composables/colors"
+import { useReference } from "@/composables/openadmin-reference"
 import type { ActionConfig } from "@/schemas/table"
 
 const props = defineProps<{
-	sectionId: string
-	pageId: string
 	actions: ActionConfig[]
 }>()
 
@@ -45,6 +44,10 @@ const initialValues = computed(() => ({
 	...selected.value?.body,
 	...selected.value?.form,
 }))
+
+const { sectionId, pageId } = useReference({
+	componentId: computed(() => selected.value?.action ?? ""),
+})
 </script>
 
 <template>
@@ -63,7 +66,7 @@ const initialValues = computed(() => ({
 		</DropdownMenuContent>
 	</DropdownMenu>
 	<ActionDialog
-		v-if="selected"
+		v-if="selected && sectionId && pageId"
 		:key="selected.action"
 		:section-id="sectionId"
 		:page-id="pageId"
