@@ -46,7 +46,7 @@ class AddBookBody(BaseModel):
 ## 3. Point the field at the table
 
 ```python
-from openadmin.fastapi import AdminPage, reference_table
+from openadmin.fastapi import AdminPage, reference
 
 from .authors import get_all_authors
 
@@ -57,7 +57,7 @@ page = AdminPage("Books", icon="book")
     "Add Book",
     fields={
         "author_id": {
-            "reference": reference_table(get_all_authors),
+            "reference": reference(get_all_authors),
             "reference_field": "id",
             "icon": "user-pen",
             "color": "violet",
@@ -72,10 +72,10 @@ async def add_book(body: AddBookBody, session: AsyncSessionDep) -> spec.Form:
     return {"message": f"Added book '{book.title}'"}
 ```
 
-- **`reference`** is the referenced table's generated ID, obtained with `reference_table(get_all_authors)` — pass the function itself, not a string, so a rename of the table doesn't silently break the link.
+- **`reference`** is the referenced table's generated ID, obtained with `reference(get_all_authors)` — pass the function itself, not a string, so a rename of the table doesn't silently break the link.
 - **`reference_field`** is the column of the referenced table's rows to actually submit as `author_id`'s value. The picker shows each row's `__view__` label, but writes `row[reference_field]` when one is chosen — here, the author's `id`.
 
-Because `reference_table` reads an attribute the `@page.table(...)` decorator stamps directly onto `get_all_authors`, that function must already be decorated by the time `add_book` is defined — in practice, just make sure the module defining the table is imported before the module defining the form runs, as in the example above.
+Because `reference` reads an attribute the `@page.table(...)` decorator stamps directly onto `get_all_authors`, that function must already be decorated by the time `add_book` is defined — in practice, just make sure the module defining the table is imported before the module defining the form runs, as in the example above.
 
 ## 4. Cross-page references
 
@@ -83,4 +83,4 @@ The referenced table doesn't have to live on the same `AdminPage` as the form �
 
 ## Referencing an action instead of a table
 
-The equivalent helper for attaching an action to a table row is `reference_action`, covered in [Implementing a Table](/cookbook/implementing-table). Both helpers work the same way — they read an ID the decorator stamped onto an already-decorated function.
+The equivalent helper for attaching an action to a table row is `reference`, covered in [Implementing a Table](/cookbook/implementing-table). Both helpers work the same way — they read an ID the decorator stamped onto an already-decorated function.

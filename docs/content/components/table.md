@@ -117,15 +117,15 @@ return {"data": [...], "total": total_count}
 A row dict can include three special keys alongside your own columns:
 
 - **`__view__`** — a compact label used to represent the whole row elsewhere (for example, when the row is offered as an option in a form's reference picker — see [Implementing a Form with a Reference](/cookbook/implementing-form-with-reference)).
-- **`__actions__`** — a list of buttons attached to that row. Each entry references an action registered elsewhere on the page via `reference_action`:
+- **`__actions__`** — a list of buttons attached to that row. Each entry references an action registered elsewhere on the page via `reference`:
 
   ```python
-  from openadmin.fastapi import reference_action
+  from openadmin.fastapi import reference
 
   "__actions__": [
       {
           "label": "Delete this user",
-          "action": reference_action(delete_author),
+          "action": reference(delete_author),
           "query": {"id": author.id},
           "color": "red",
           "icon": "trash",
