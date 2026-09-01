@@ -472,7 +472,7 @@ class AdminPage:
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
 
-            func.__openadmin_table_id__ = item["id"]  # type: ignore
+            func.__openadmin_id__ = item["id"]  # type: ignore
 
             return fastapi_decorator(func)
 
@@ -488,7 +488,7 @@ class AdminPage:
             item["body"] = utils.get_body_params(func)
             item["form"] = utils.get_form_params(func)
 
-            func.__openadmin_action_id__ = item["id"]  # type: ignore
+            func.__openadmin_id__ = item["id"]  # type: ignore
 
             return fastapi_decorator(func)
 

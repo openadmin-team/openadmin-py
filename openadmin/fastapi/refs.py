@@ -5,9 +5,5 @@
 from collections.abc import Callable
 
 
-def reference_table(func: Callable) -> str:
-    return func.__openadmin_table_id__  # type: ignore
-
-
-def reference_action(func: Callable) -> str:
-    return func.__openadmin_action_id__  # type: ignore
+def reference(func: Callable) -> str:
+    return func.__openadmin_id__  # type: ignore
