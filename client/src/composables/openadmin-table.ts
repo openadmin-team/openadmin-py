@@ -235,8 +235,6 @@ export const useTable = ({
 					enableHiding: false,
 					cell: ({ row }) =>
 						h(DataTableDropDown, {
-							sectionId: toValue(sectionId),
-							pageId: toValue(pageId),
 							actions: row.original.__actions__ ?? [],
 						}),
 				}),

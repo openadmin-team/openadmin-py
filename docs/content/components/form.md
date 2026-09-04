@@ -78,14 +78,14 @@ class FieldConfig(TypedDict):
 ```
 
 ```python
-from openadmin.fastapi import reference_table
+from openadmin.fastapi import reference
 
 
 @page.form(
     "Add Author",
     fields={
         "friend": {
-            "reference": reference_table(get_all_authors),
+            "reference": reference(get_all_authors),
             "reference_field": "id",
             "icon": "user",
             "color": "blue",
@@ -95,7 +95,7 @@ from openadmin.fastapi import reference_table
 async def add_author(body: AddAuthorBody, session: AsyncSessionDep) -> spec.Form: ...
 ```
 
-`reference` is the ID of a table (obtained with `reference_table`, so `get_all_authors` must already be decorated with `@page.table(...)`); `reference_field` is the column of that table's rows to submit as the field's value. See [Implementing a Form with a Reference](/cookbook/implementing-form-with-reference) for the full walkthrough.
+`reference` is the ID of a table (obtained with `reference`, so `get_all_authors` must already be decorated with `@page.table(...)`); `reference_field` is the column of that table's rows to submit as the field's value. See [Implementing a Form with a Reference](/cookbook/implementing-form-with-reference) for the full walkthrough.
 
 ## Other HTTP methods
 

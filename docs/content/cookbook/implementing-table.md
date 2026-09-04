@@ -11,7 +11,7 @@ A step-by-step recipe for a searchable, paginated table with styled columns and 
 ```python
 # admin/users.py
 from openadmin import spec
-from openadmin.fastapi import AdminPage, reference_action
+from openadmin.fastapi import AdminPage, reference
 from openadmin.fastapi.deps import PageDep, SearchDep
 
 page = AdminPage("Users", icon="users")
@@ -99,7 +99,7 @@ async def get_all_users(...) -> spec.Table:
                 "__actions__": [
                     {
                         "label": "Delete",
-                        "action": reference_action(delete_user),
+                        "action": reference(delete_user),
                         "query": {"user_id": u.id},
                         "icon": "trash",
                         "color": "red",
@@ -112,7 +112,7 @@ async def get_all_users(...) -> spec.Table:
     }
 ```
 
-`reference_action` reads the ID that `@page.action(...)` stamped onto `delete_user`, so `delete_user` needs to be defined (decorated) above `get_all_users` in the file, or at least imported before this function runs — plain Python name resolution, nothing OpenAdmin-specific.
+`reference` reads the ID that `@page.action(...)` stamped onto `delete_user`, so `delete_user` needs to be defined (decorated) above `get_all_users` in the file, or at least imported before this function runs — plain Python name resolution, nothing OpenAdmin-specific.
 
 The action's own `query`/`body`/`form` schema (inferred from `Query(...)` on `user_id`) still applies — the `query` dict in `__actions__` is what actually gets sent as that action's parameters when the row's button is clicked.
 

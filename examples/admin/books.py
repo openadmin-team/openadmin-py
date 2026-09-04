@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 
 from openadmin import spec
-from openadmin.fastapi import AdminPage, reference_action
+from openadmin.fastapi import AdminPage, reference
 from openadmin.fastapi.deps import PageDep, SearchDep
 
 from ..lib import models
@@ -121,7 +121,7 @@ async def get_all_books(
                     "attachment": {"label": "Book in pdf"},
                 },
                 "__actions__": [
-                    {"action": reference_action(upload_cover), "form": {"id": book.id}}
+                    {"action": reference(upload_cover), "form": {"id": book.id}}
                 ],
             }
             for book, author in result.all()

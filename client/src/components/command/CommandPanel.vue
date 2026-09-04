@@ -33,6 +33,15 @@ function selectPage(sectionId: string, pageId: string) {
 	router.push({ name: "page", params: { sectionId, pageId } })
 }
 
+function selectComponent(sectionId: string, pageId: string, component: Component) {
+	isCommandPanelOpen.value = false
+	if (component.type === "form") {
+		router.push({ name: "form", params: { sectionId, pageId, formId: component.id } })
+	} else {
+		router.push({ name: "page", params: { sectionId, pageId } })
+	}
+}
+
 const { meta_p, ctrl_p } = useMagicKeys({
 	passive: false,
 	onEventFired(event) {
@@ -100,6 +109,7 @@ function dotClass(color: Color | null) {
 							:key="component.id"
 							:value="component.id"
 							class="pl-8"
+							@select="selectComponent(section.id, page.id, component)"
 						>
 							<Icon
 								v-if="componentIcon(component)"

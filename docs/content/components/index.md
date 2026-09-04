@@ -29,10 +29,10 @@ A few things apply to every component, not just one:
 Two helpers let one component point at another by its generated ID, instead of hardcoding route paths:
 
 ```python
-from openadmin.fastapi import reference_action, reference_table
+from openadmin.fastapi import reference, reference
 ```
 
-- `reference_table(table_func)` — returns the ID of a `@page.table(...)`-decorated function. Used in a form field's `reference` to source a value picker from that table's rows.
-- `reference_action(action_func)` — returns the ID of a `@page.action(...)`-decorated function. Used in a table row's `__actions__` to attach that action as a row button.
+- `reference(table_func)` — returns the ID of a `@page.table(...)`-decorated function. Used in a form field's `reference` to source a value picker from that table's rows.
+- `reference(action_func)` — returns the ID of a `@page.action(...)`-decorated function. Used in a table row's `__actions__` to attach that action as a row button.
 
 Both simply read an attribute (`__openadmin_table_id__` / `__openadmin_action_id__`) that the decorator stamped onto the function, so the referenced function must already be decorated — but not necessarily called — before you reference it.

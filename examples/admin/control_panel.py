@@ -11,7 +11,7 @@ from fastapi import Body, Depends, Form, Query
 from pydantic import BaseModel
 
 from openadmin import spec
-from openadmin.fastapi import AdminPage, reference_action
+from openadmin.fastapi import AdminPage, reference
 from openadmin.fastapi.deps import PageDep, SearchDep
 
 page = AdminPage(
@@ -393,7 +393,7 @@ async def get_feature_flags(search: SearchDep, pagination: PageDep) -> spec.Tabl
                 "__actions__": [
                     {
                         "label": "Disable",
-                        "action": reference_action(disable_feature_flag),
+                        "action": reference(disable_feature_flag),
                         "query": {"name": flag["name"]},
                         "icon": "toggle-left",
                         "color": "red",
@@ -401,7 +401,7 @@ async def get_feature_flags(search: SearchDep, pagination: PageDep) -> spec.Tabl
                     if flag["enabled"]
                     else {
                         "label": "Enable",
-                        "action": reference_action(enable_feature_flag),
+                        "action": reference(enable_feature_flag),
                         "query": {"name": flag["name"]},
                         "icon": "toggle-right",
                         "color": "green",

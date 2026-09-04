@@ -69,10 +69,10 @@ async def rotate_api_key(
 
 ## Attaching an action to a table row
 
-Give an action `is_hidden=True` when its only purpose is to be triggered from a row, then reference it from that row's `__actions__` with `reference_action`:
+Give an action `is_hidden=True` when its only purpose is to be triggered from a row, then reference it from that row's `__actions__` with `reference`:
 
 ```python
-from openadmin.fastapi import reference_action
+from openadmin.fastapi import reference
 
 @page.action("Delete Author", is_hidden=True)
 async def delete_author(id: str) -> spec.Action:
@@ -90,7 +90,7 @@ async def get_all_authors(...) -> spec.Table:
                 "__actions__": [
                     {
                         "label": "Delete this user",
-                        "action": reference_action(delete_author),
+                        "action": reference(delete_author),
                         "query": {"id": author.id},
                         "color": "red",
                         "icon": "trash",
@@ -102,4 +102,4 @@ async def get_all_authors(...) -> spec.Table:
     }
 ```
 
-`reference_action` reads the ID that the `@page.action(...)` decorator stamped onto `delete_author`, so `delete_author` must already be decorated before it's referenced this way — a plain top-to-bottom ordering requirement, not special behavior. See [Implementing a Table](/cookbook/implementing-table) for the full recipe.
+`reference` reads the ID that the `@page.action(...)` decorator stamped onto `delete_author`, so `delete_author` must already be decorated before it's referenced this way — a plain top-to-bottom ordering requirement, not special behavior. See [Implementing a Table](/cookbook/implementing-table) for the full recipe.

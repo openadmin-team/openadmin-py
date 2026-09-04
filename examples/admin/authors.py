@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 
 from openadmin import spec
-from openadmin.fastapi import AdminPage, reference_action, reference_table
+from openadmin.fastapi import AdminPage, reference
 from openadmin.fastapi.deps import PageDep, SearchDep
 
 from ..lib import models
@@ -107,7 +107,7 @@ async def get_all_authors(
                 "__actions__": [
                     {
                         "label": "Delete this user",
-                        "action": reference_action(delete_author),
+                        "action": reference(delete_author),
                         "query": {
                             "id": author.id,
                         },
@@ -116,7 +116,7 @@ async def get_all_authors(
                     },
                     {
                         "label": "Bun this user",
-                        "action": reference_action(delete_author),
+                        "action": reference(delete_author),
                         "query": {
                             "id": author.id,
                         },
@@ -125,7 +125,7 @@ async def get_all_authors(
                     },
                     {
                         "label": "Unban this user",
-                        "action": reference_action(delete_author),
+                        "action": reference(delete_author),
                         "query": {
                             "id": author.id,
                         },
@@ -170,7 +170,7 @@ class AddAuthorBody(BaseModel):
     description="Register a new author in the catalog",
     fields={
         "friend": {
-            "reference": reference_table(get_all_authors),
+            "reference": reference(get_all_authors),
             "icon": "user",
             "color": "blue",
             "reference_field": "id",
