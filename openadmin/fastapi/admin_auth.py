@@ -3,10 +3,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 from collections.abc import Awaitable, Callable
+from typing import Any
 
 from fastapi import APIRouter, Request
-
-from .req import LoginReq
 
 
 class AdminAuth:
@@ -15,10 +14,10 @@ class AdminAuth:
         self.authenticate_func: Callable[[Request], None | Awaitable[None]] = (
             self.__create_default_authenticate()
         )
-        self.login_func: Callable[[Request, LoginReq], None | Awaitable[None]] = (
+        self.login_func: Callable[[Any], None | Awaitable[None]] = (
             self.__create_default_login()
         )
-        self.logout_func: Callable[[Request], None | Awaitable[None]] = (
+        self.logout_func: Callable[[Any], None | Awaitable[None]] = (
             self.__create_default_logout()
         )
 
@@ -35,7 +34,7 @@ class AdminAuth:
         self,
     ):
         def _(
-            func: Callable[[Request, LoginReq], None],
+            func: Callable[..., None | Awaitable[None]],
         ) -> Callable:
 
             self.login_func = func
@@ -61,7 +60,7 @@ class AdminAuth:
         self,
     ):
         def _(
-            func: Callable[[Request], None | Awaitable[None]],
+            func: Callable[..., None | Awaitable[None]],
         ) -> Callable:
 
             self.logout_func = func
@@ -72,7 +71,7 @@ class AdminAuth:
 
     def __create_default_login(
         self,
-    ) -> Callable[[Request, LoginReq], None | Awaitable[None]]: ...
+    ) -> Callable[[Any], None | Awaitable[None]]: ...
 
     def __create_default_authenticate(
         self,
@@ -80,4 +79,4 @@ class AdminAuth:
 
     def __create_default_logout(
         self,
-    ) -> Callable[[Request], None | Awaitable[None]]: ...
+    ) -> Callable[[Any], None | Awaitable[None]]: ...
