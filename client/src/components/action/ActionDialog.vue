@@ -61,8 +61,8 @@ function isPrefilled(key: string): boolean {
 
 const revealed = ref(false)
 
-const hiddenCount = computed(
-	() => (revealed.value ? 0 : fields.value.filter((f) => isPrefilled(f.key)).length),
+const hiddenCount = computed(() =>
+	revealed.value ? 0 : fields.value.filter((f) => isPrefilled(f.key)).length,
 )
 
 watch(open, (value) => {
