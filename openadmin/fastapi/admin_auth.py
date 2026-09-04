@@ -34,7 +34,7 @@ class AdminAuth:
         self,
     ):
         def _(
-            func: Callable[[Any], None | Awaitable[None]],
+            func: Callable[..., None | Awaitable[None]],
         ) -> Callable:
 
             self.login_func = func
@@ -60,7 +60,7 @@ class AdminAuth:
         self,
     ):
         def _(
-            func: Callable[[Any], None | Awaitable[None]],
+            func: Callable[..., None | Awaitable[None]],
         ) -> Callable:
 
             self.logout_func = func
