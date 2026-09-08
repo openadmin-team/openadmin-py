@@ -46,7 +46,7 @@ const initialValues = computed(() => ({
 }))
 
 const { sectionId, pageId } = useReference({
-	componentId: computed(() => selected.value?.action ?? ""),
+	componentId: computed(() => selected.value?.reference ?? ""),
 })
 </script>
 
@@ -59,18 +59,18 @@ const { sectionId, pageId } = useReference({
 			</Button>
 		</DropdownMenuTrigger>
 		<DropdownMenuContent align="end">
-			<DropdownMenuItem v-for="item in items" :key="item.action" @click="runAction(item)">
+			<DropdownMenuItem v-for="item in items" :key="item.reference" @click="runAction(item)">
 				<Icon v-if="item.icon" :icon="`lucide:${item.icon}`" :class="item.textClass" />
-				{{ item.label ?? item.action }}
+				{{ item.label ?? item.reference }}
 			</DropdownMenuItem>
 		</DropdownMenuContent>
 	</DropdownMenu>
 	<ActionDialog
 		v-if="selected && sectionId && pageId"
-		:key="selected.action"
+		:key="selected.reference"
 		:section-id="sectionId"
 		:page-id="pageId"
-		:action-id="selected.action"
+		:action-id="selected.reference"
 		:initial-values="initialValues"
 		v-model:open="open"
 	/>

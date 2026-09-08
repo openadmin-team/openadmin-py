@@ -393,7 +393,7 @@ async def get_feature_flags(search: SearchDep, pagination: PageDep) -> spec.Tabl
                 "__actions__": [
                     {
                         "label": "Disable",
-                        "action": reference(disable_feature_flag),
+                        "reference": reference(disable_feature_flag),
                         "query": {"name": flag["name"]},
                         "icon": "toggle-left",
                         "color": "red",
@@ -401,7 +401,7 @@ async def get_feature_flags(search: SearchDep, pagination: PageDep) -> spec.Tabl
                     if flag["enabled"]
                     else {
                         "label": "Enable",
-                        "action": reference(enable_feature_flag),
+                        "reference": reference(enable_feature_flag),
                         "query": {"name": flag["name"]},
                         "icon": "toggle-right",
                         "color": "green",

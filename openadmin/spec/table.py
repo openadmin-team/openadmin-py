@@ -30,7 +30,7 @@ class ValueConfigValue(TypedDict):
 
 
 class ActionConfig(TypedDict):
-    action: str
+    reference: str
     label: NotRequired[str]
     icon: NotRequired[Icon]
     color: NotRequired[Color]

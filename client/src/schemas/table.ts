@@ -33,7 +33,7 @@ export const valueConfigValueSchema = z.object({
 export type ValueConfigValue = z.infer<typeof valueConfigValueSchema>
 
 export const actionConfigSchema = z.object({
-	action: z.string(),
+	reference: z.string(),
 	label: z.string().optional(),
 	icon: iconSchema.optional(),
 	color: colorSchema.optional(),
