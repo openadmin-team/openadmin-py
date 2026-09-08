@@ -4,29 +4,33 @@
 
 import type { MaybeRefOrGetter } from "vue"
 import { computed, toValue } from "vue"
+import type { Component } from "@/schemas/component"
 import { useSpec } from "./openadmin-spec"
 
 export const useReference = ({ componentId }: { componentId: MaybeRefOrGetter<string> }) => {
 	const { data, ...rest } = useSpec()
 
-	const location = computed(() => {
-		const id = toValue(componentId)
-
+	const find = (id: string) => {
 		for (const section of data.value?.sections ?? []) {
 			for (const page of section.pages) {
-				if (page.components.some((component) => component.id === id)) {
-					return { componentId: id, pageId: page.id, sectionId: section.id }
+				const component = page.components.find((component) => component.id === id)
+				if (component) {
+					return { component, pageId: page.id, sectionId: section.id }
 				}
 			}
 		}
 
 		return null
-	})
+	}
+
+	const location = computed(() => find(toValue(componentId)))
 
 	return {
-		componentId: computed(() => location.value?.componentId ?? null),
+		componentId: computed(() => (location.value ? toValue(componentId) : null)),
 		pageId: computed(() => location.value?.pageId ?? null),
 		sectionId: computed(() => location.value?.sectionId ?? null),
+		component: computed<Component | null>(() => location.value?.component ?? null),
+		find,
 		...rest,
 	}
 }
