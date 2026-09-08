@@ -121,7 +121,7 @@ async def get_all_books(
                     "attachment": {"label": "Book in pdf"},
                 },
                 "__actions__": [
-                    {"reference": reference(upload_cover), "form": {"id": book.id}}
+                    {"reference": reference(upload_cover), "params": {"id": book.id}}
                 ],
             }
             for book, author in result.all()

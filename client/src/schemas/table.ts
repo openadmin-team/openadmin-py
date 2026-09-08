@@ -37,9 +37,7 @@ export const actionConfigSchema = z.object({
 	label: z.string().optional(),
 	icon: iconSchema.optional(),
 	color: colorSchema.optional(),
-	query: z.record(z.string(), z.unknown()),
-	body: z.record(z.string(), z.unknown()),
-	form: z.record(z.string(), z.unknown()),
+	params: z.record(z.string(), z.unknown()).optional(),
 })
 
 export type ActionConfig = z.infer<typeof actionConfigSchema>

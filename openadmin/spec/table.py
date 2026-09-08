@@ -35,9 +35,7 @@ class ActionConfig(TypedDict):
     icon: NotRequired[Icon]
     color: NotRequired[Color]
 
-    query: dict[str, Any]
-    body: dict[str, Any]
-    form: dict[str, Any]
+    params: NotRequired[dict[str, Any]]
 
 
 class TableComponent(TypedDict):

@@ -40,9 +40,7 @@ function runAction(item: ActionConfig) {
 }
 
 const initialValues = computed(() => ({
-	...selected.value?.query,
-	...selected.value?.body,
-	...selected.value?.form,
+	...selected.value?.params,
 }))
 
 const { sectionId, pageId } = useReference({
