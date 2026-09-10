@@ -107,8 +107,8 @@ async def get_all_authors(
                 "__actions__": [
                     {
                         "label": "Delete this user",
-                        "action": reference(delete_author),
-                        "query": {
+                        "reference": reference(delete_author),
+                        "params": {
                             "id": author.id,
                         },
                         "color": "red",
@@ -116,8 +116,8 @@ async def get_all_authors(
                     },
                     {
                         "label": "Bun this user",
-                        "action": reference(delete_author),
-                        "query": {
+                        "reference": reference(delete_author),
+                        "params": {
                             "id": author.id,
                         },
                         "color": "yellow",
@@ -125,8 +125,8 @@ async def get_all_authors(
                     },
                     {
                         "label": "Unban this user",
-                        "action": reference(delete_author),
-                        "query": {
+                        "reference": reference(delete_author),
+                        "params": {
                             "id": author.id,
                         },
                         "color": "green",
