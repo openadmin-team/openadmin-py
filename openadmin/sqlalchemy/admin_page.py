@@ -21,8 +21,10 @@ class AdminPage(fastapi.AdminPage):
         color: spec.Color | None = None,
         description: str | None = None,
         dependencies: Sequence[Depends] | None = None,
-        model: DeclarativeBase | None = None,
-        stats: types.Stat | None = None,
+        model: type[DeclarativeBase] | None = None,
+        stats: list[types.Stat] | None = None,
+        tables: list[types.Table] | None = None,
+        actions: list[types.Action] | None = None,
     ) -> None:
         super().__init__(
             name=name,
@@ -31,3 +33,8 @@ class AdminPage(fastapi.AdminPage):
             dependencies=dependencies,
             description=description,
         )
+
+        self.model = model or []
+        self.stats = stats or []
+        self.tables = tables or []
+        self.actions = actions or []
