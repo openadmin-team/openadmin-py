@@ -18,4 +18,9 @@ page = sqlalchemy.AdminPage(
             "query": select(func.count()).select_from(Book),
         }
     ],
+    tables=[
+        {
+            'model': Book,
+        }
+    ]
 )
