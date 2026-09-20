@@ -3,11 +3,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 
+from collections.abc import Sequence
 from pathlib import Path
 
 from starlette.types import Lifespan
 
 from fastapi import APIRouter, FastAPI, HTTPException, status
+from fastapi import params as fastapi_params
 from openadmin import spec
 
 from . import deps, exc_handler, utils
@@ -25,6 +27,7 @@ class AdminPanel:
         description: str | None = None,
         auth: AdminAuth | None = None,
         lifespan: Lifespan[FastAPI] | None = None,
+        dependencies: Sequence[fastapi_params.Depends] | None = None,
     ) -> None:
         self.version = "1.0.0"
         self.name = name
@@ -38,6 +41,7 @@ class AdminPanel:
                 Exception: exc_handler.app_exception_handler,
             },
             lifespan=lifespan,
+            dependencies=dependencies,
         )
         self.frontend_router = APIRouter()
         self.api_router = APIRouter(

@@ -2,10 +2,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Sequence
 from datetime import timedelta
 
 from fastapi import APIRouter
+from fastapi import params as fastapi_params
 from openadmin import spec
 
 from . import utils
@@ -19,6 +20,7 @@ class AdminPage:
         icon: spec.Icon | None = None,
         color: spec.Color | None = None,
         description: str | None = None,
+        dependencies: Sequence[fastapi_params.Depends] | None = None,
     ) -> None:
         self.id = utils.get_id(name)
         self.name = name
@@ -29,6 +31,7 @@ class AdminPage:
 
         self.router = APIRouter(
             prefix=f"/{self.id}",
+            dependencies=dependencies,
         )
 
     def table(
