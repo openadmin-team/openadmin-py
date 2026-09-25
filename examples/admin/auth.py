@@ -28,5 +28,5 @@ async def authenticate(req: Request) -> None:
 
 
 @auth.logout()
-def logout(req: Request) -> None:
+async def logout(req: Request) -> None:
     req.session.clear()
