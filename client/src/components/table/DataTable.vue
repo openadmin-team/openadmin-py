@@ -6,7 +6,15 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <script setup lang="ts" generic="TData extends RowData">
 import { Columns3 } from "@lucide/vue"
-import type { Cell, ColumnDef, Header, HeaderGroup, Row, RowData } from "@tanstack/vue-table"
+import type {
+	Cell,
+	ColumnDef,
+	Header,
+	HeaderGroup,
+	Row,
+	RowData,
+	RowSelectionState,
+} from "@tanstack/vue-table"
 import { FlexRender, useTable as useTanStackTable } from "@tanstack/vue-table"
 import { useSortable } from "@vueuse/integrations/useSortable"
 import { type ComponentPublicInstance, computed, ref } from "vue"
@@ -33,9 +41,35 @@ const props = withDefaults(
 		/** True while a newer page/search is loading and `data` still holds the previous result. */
 		isPlaceholderData?: boolean
 		emptyMessage?: string
+		/** Derives a stable row id (e.g. a primary key) instead of the default row index. */
+		getRowId?: (row: TData, index: number) => string
+		/** Controls row selection externally; omit to keep it internally managed. */
+		rowSelection?: RowSelectionState
+		enableRowSelection?: boolean
+		enableMultiRowSelection?: boolean
+		/** Makes each body row act as a single button (e.g. a picker), emitting `rowClick` instead of toggling selection. */
+		rowClickable?: boolean
 	}>(),
-	{ emptyMessage: "No results." },
+	{ emptyMessage: "No results.", enableRowSelection: true, enableMultiRowSelection: true },
 )
+
+const emit = defineEmits<{
+	"update:rowSelection": [value: RowSelectionState]
+	rowClick: [row: TData]
+}>()
+
+// Falls back to an internally-owned selection ref when `rowSelection` isn't
+// passed in, so existing callers keep today's uncontrolled behavior while a
+// caller like a row picker can fully own the selection.
+const internalRowSelection = ref<RowSelectionState>({})
+
+const rowSelectionState = computed<RowSelectionState>({
+	get: () => props.rowSelection ?? internalRowSelection.value,
+	set: (value) => {
+		if (props.rowSelection !== undefined) emit("update:rowSelection", value)
+		else internalRowSelection.value = value
+	},
+})
 
 const table = useTanStackTable({
 	features,
@@ -47,6 +81,24 @@ const table = useTanStackTable({
 	},
 	get manualPagination() {
 		return props.manualPagination
+	},
+	get getRowId() {
+		return props.getRowId
+	},
+	get enableRowSelection() {
+		return props.enableRowSelection
+	},
+	get enableMultiRowSelection() {
+		return props.enableMultiRowSelection
+	},
+	state: {
+		get rowSelection() {
+			return rowSelectionState.value
+		},
+	},
+	onRowSelectionChange: (updater) => {
+		rowSelectionState.value =
+			typeof updater === "function" ? updater(rowSelectionState.value) : updater
 	},
 })
 
@@ -283,11 +335,15 @@ useSortable(() => headerRowEl, dataColumnIds, {
 					<div
 						v-for="row in bodyRows"
 						:key="row.id"
-						role="row"
+						:role="rowClickable ? 'button' : 'row'"
+						:tabindex="rowClickable ? 0 : undefined"
 						:data-state="row.getIsSelected() && 'selected'"
 						class="data-[state=selected]:bg-muted flex border-b transition-colors last:border-0"
-						:class="{ 'hover:bg-muted/50': !showSkeleton }"
+						:class="{ 'hover:bg-muted/50': !showSkeleton, 'cursor-pointer': rowClickable }"
 						:style="rowWidthStyle"
+						@click="rowClickable && emit('rowClick', row.original)"
+						@keydown.enter="rowClickable && emit('rowClick', row.original)"
+						@keydown.space.prevent="rowClickable && emit('rowClick', row.original)"
 					>
 						<div
 							v-if="getCell(row, '__select__')"
@@ -416,7 +472,7 @@ useSortable(() => headerRowEl, dataColumnIds, {
 			</div>
 		</div>
 
-		<div class="text-sm text-muted-foreground">
+		<div v-if="hasSelectColumn" class="text-sm text-muted-foreground">
 			{{ table.getFilteredSelectedRowModel().rows.length }}
 			of
 			{{ table.getFilteredRowModel().rows.length }}

@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 OpenAdmin
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts" setup>
 import type { DrawerDescriptionProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
@@ -11,11 +17,11 @@ const delegatedProps = reactiveOmit(props, "class")
 </script>
 
 <template>
-  <DrawerDescription
-    data-slot="drawer-description"
-    v-bind="delegatedProps"
-    :class="cn('text-muted-foreground text-sm', props.class)"
-  >
-    <slot />
-  </DrawerDescription>
+	<DrawerDescription
+		data-slot="drawer-description"
+		v-bind="delegatedProps"
+		:class="cn('text-muted-foreground text-sm', props.class)"
+	>
+		<slot />
+	</DrawerDescription>
 </template>

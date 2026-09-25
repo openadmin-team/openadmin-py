@@ -1,35 +1,38 @@
+<!--
+SPDX-FileCopyrightText: 2026 OpenAdmin
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <script lang="ts" setup>
 import type { DrawerContentEmits, DrawerContentProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"
-import {
-  DrawerContent,
-  DrawerHandle,
-  DrawerPortal,
-  useForwardPropsEmits,
-} from "reka-ui"
+import { DrawerContent, DrawerHandle, DrawerPortal, useForwardPropsEmits } from "reka-ui"
 import { cn } from "@/lib/utils"
 import DrawerOverlay from "./DrawerOverlay.vue"
 
 defineOptions({
-  inheritAttrs: false,
+	inheritAttrs: false,
 })
 
-const props = defineProps<DrawerContentProps & { class?: HTMLAttributes["class"] }>()
+const props = defineProps<
+	DrawerContentProps & { class?: HTMLAttributes["class"]; overlayClass?: HTMLAttributes["class"] }
+>()
 const emits = defineEmits<DrawerContentEmits>()
 
-const delegatedProps = reactiveOmit(props, "class")
+const delegatedProps = reactiveOmit(props, "class", "overlayClass")
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
-  <DrawerPortal>
-    <DrawerOverlay />
-    <DrawerContent
-      data-slot="drawer-content"
-      v-bind="{ ...$attrs, ...forwarded }"
-      :class="cn(
+	<DrawerPortal>
+		<DrawerOverlay :class="overlayClass" />
+		<DrawerContent
+			data-slot="drawer-content"
+			v-bind="{ ...$attrs, ...forwarded }"
+			:class="cn(
         'group/drawer-content bg-popover text-popover-foreground fixed z-50 flex h-auto flex-col shadow-lg',
         'will-change-transform transform-[translate3d(var(--drawer-swipe-movement-x,0px),var(--drawer-swipe-movement-y,0px),0)]',
         'transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:duration-0 data-swiping:select-none',
@@ -40,9 +43,11 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
         'data-[swipe-direction=left]:inset-y-0 data-[swipe-direction=left]:left-0 data-[swipe-direction=left]:w-3/4 data-[swipe-direction=left]:sm:max-w-sm data-[swipe-direction=left]:border-r data-[swipe-direction=left]:data-[state=open]:slide-in-from-left data-[swipe-direction=left]:data-[state=closed]:slide-out-to-left',
         props.class,
       )"
-    >
-      <DrawerHandle class="bg-muted mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full group-data-[swipe-direction=down]/drawer-content:block" />
-      <slot />
-    </DrawerContent>
-  </DrawerPortal>
+		>
+			<DrawerHandle
+				class="bg-muted mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full group-data-[swipe-direction=down]/drawer-content:block"
+			/>
+			<slot />
+		</DrawerContent>
+	</DrawerPortal>
 </template>

@@ -27,10 +27,12 @@ export const useTable = ({
 	sectionId,
 	pageId,
 	tableId,
+	enabled,
 }: {
 	sectionId: MaybeRefOrGetter<string>
 	pageId: MaybeRefOrGetter<string>
 	tableId: MaybeRefOrGetter<string>
+	enabled?: MaybeRefOrGetter<boolean>
 }) => {
 	const { page } = usePageSpec({ sectionId, pageId })
 
@@ -95,6 +97,7 @@ export const useTable = ({
 		},
 		placeholderData: keepPreviousData,
 		refetchInterval: computed(() => table.value?.refresh ?? false),
+		enabled: computed(() => toValue(enabled) ?? true),
 	})
 
 	const rows = computed<TableData | null>(() => {

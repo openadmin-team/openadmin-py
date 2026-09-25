@@ -20,7 +20,7 @@ page = sqlalchemy.AdminPage(
     ],
     tables=[
         {
-            'model': Book,
+            "model": Book,
         }
-    ]
+    ],
 )

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 OpenAdmin
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export { default as Drawer } from "./Drawer.vue"
 export { default as DrawerClose } from "./DrawerClose.vue"
 export { default as DrawerContent } from "./DrawerContent.vue"

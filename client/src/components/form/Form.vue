@@ -20,6 +20,7 @@ import FieldDateTime from "./FieldDateTime.vue"
 import FieldFile from "./FieldFile.vue"
 import FieldFileArray from "./FieldFileArray.vue"
 import FieldNumeric from "./FieldNumeric.vue"
+import FieldReference from "./FieldReference.vue"
 import FieldRichText from "./FieldRichText.vue"
 import FieldSelect from "./FieldSelect.vue"
 import FieldString from "./FieldString.vue"
@@ -89,6 +90,8 @@ function fieldsOf(
 			options: !array && Array.isArray(property.enum) ? property.enum.map(String) : undefined,
 			itemOptions: itemSchema?.enum ? itemSchema.enum.map(String) : undefined,
 			richText: !array && property.type === "string" && fieldConfigs?.[key]?.style === "rich-text",
+			reference: fieldConfigs?.[key]?.reference ?? undefined,
+			referenceField: fieldConfigs?.[key]?.reference_field ?? "id",
 		}
 	})
 }
@@ -109,6 +112,7 @@ const fields = computed<FieldDef[]>(() => [
 						<FieldBool v-if="f.boolean" :field="field" :def="f" />
 						<FieldDate v-else-if="f.date" :field="field" :def="f" />
 						<FieldDateTime v-else-if="f.datetime" :field="field" :def="f" />
+						<FieldReference v-else-if="f.reference" :field="field" :def="f" />
 						<FieldArray v-else-if="f.array" :field="field" :def="f" />
 						<FieldFile v-else-if="f.file" :field="field" :def="f" />
 						<FieldFileArray v-else-if="f.fileArray" :field="field" :def="f" />

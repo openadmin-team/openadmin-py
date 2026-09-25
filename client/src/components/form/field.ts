@@ -34,6 +34,8 @@ export interface FieldDef {
 	richText: boolean
 	options?: string[]
 	itemOptions?: string[]
+	reference?: string
+	referenceField?: string
 }
 
 export function isInvalid(field: AnyFieldApi) {

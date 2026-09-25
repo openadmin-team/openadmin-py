@@ -15,6 +15,8 @@ from openadmin.fastapi.deps import PageDep, SearchDep
 
 from ..lib import models
 from ..lib.database import AsyncSessionDep
+from .authors import get_all_authors
+from .genres import get_all_genres
 
 page = AdminPage("Books", icon="book", description="Browse and manage the book catalog")
 
@@ -135,6 +137,7 @@ class AddBookBody(BaseModel):
     published_year: int | None = None
     summary: str | None = None
     publisher_id: int | None = None
+    genre_ids: list[int] = []
 
 
 @page.table(
@@ -166,9 +169,32 @@ async def get_books_by_author(session: AsyncSessionDep, pagination: PageDep):
     ]
 
 
-@page.form("Add Book", description="Add a new book to the catalog")
+@page.form(
+    "Add Book",
+    description="Add a new book to the catalog",
+    fields={
+        "author_id": {
+            "reference": reference(get_all_authors),
+            "reference_field": "id",
+            "icon": "user-pen",
+            "color": "violet",
+        },
+        "genre_ids": {
+            "reference": reference(get_all_genres),
+            "reference_field": "id",
+            "icon": "flower",
+            "color": "green",
+        },
+    },
+)
 async def add_book(body: AddBookBody, session: AsyncSessionDep) -> spec.Form:
-    book = models.Book(**body.model_dump())
+    genres = []
+    if body.genre_ids:
+        result = await session.execute(
+            select(models.Genre).where(models.Genre.id.in_(body.genre_ids))
+        )
+        genres = list(result.scalars().all())
+    book = models.Book(**body.model_dump(exclude={"genre_ids"}), genres=genres)
     session.add(book)
     await session.commit()
     await session.refresh(book)
