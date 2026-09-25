@@ -7,10 +7,13 @@ from typing import Any
 
 from fastapi import APIRouter, Request
 
+from .res import Profile
+
 
 class AdminAuth:
     def __init__(self) -> None:
         self.router = APIRouter()
+
         self.authenticate_func: Callable[[Request], None | Awaitable[None]] = (
             self.__create_default_authenticate()
         )
@@ -19,6 +22,9 @@ class AdminAuth:
         )
         self.logout_func: Callable[[Any], None | Awaitable[None]] = (
             self.__create_default_logout()
+        )
+        self.profile_func: Callable[[Any], Profile | Awaitable[Profile]] = (
+            self.__create_default_profile()
         )
 
     def login(self):
@@ -29,6 +35,9 @@ class AdminAuth:
 
     def logout(self):
         return self.__create_logout_decorator()
+
+    def profile(self):
+        return self.__create_profile_decorator()
 
     def __create_login_decorator(
         self,
@@ -69,6 +78,19 @@ class AdminAuth:
 
         return _
 
+    def __create_profile_decorator(
+        self,
+    ):
+        def _(
+            func: Callable[..., Profile | Awaitable[Profile]],
+        ) -> Callable:
+
+            self.profile_func = func
+
+            return func
+
+        return _
+
     def __create_default_login(
         self,
     ) -> Callable[[Any], None | Awaitable[None]]: ...
@@ -80,3 +102,7 @@ class AdminAuth:
     def __create_default_logout(
         self,
     ) -> Callable[[Any], None | Awaitable[None]]: ...
+
+    def __create_default_profile(
+        self,
+    ) -> Callable[[Any], Profile | Awaitable[Profile]]: ...

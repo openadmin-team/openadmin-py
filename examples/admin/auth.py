@@ -4,7 +4,7 @@
 
 from fastapi import HTTPException, Request, status
 
-from openadmin.auth import AdminAuth, LoginReq
+from openadmin.auth import AdminAuth, LoginReq, Profile
 
 auth = AdminAuth()
 
@@ -30,3 +30,11 @@ async def authenticate(req: Request) -> None:
 @auth.logout()
 async def logout(req: Request) -> None:
     req.session.clear()
+
+
+@auth.profile()
+async def profile(_: Request) -> Profile:
+    return {
+        "avatar": "",
+        "username": "",
+    }

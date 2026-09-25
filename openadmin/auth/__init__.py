@@ -5,5 +5,6 @@
 from .admin_auth import AdminAuth
 from .deps import create_authenticate_dep
 from .req import LoginReq
+from .res import Profile
 
-__all__ = ["AdminAuth", "LoginReq", "create_authenticate_dep"]
+__all__ = ["AdminAuth", "LoginReq", "Profile", "create_authenticate_dep"]

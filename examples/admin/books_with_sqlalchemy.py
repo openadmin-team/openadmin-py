@@ -14,7 +14,7 @@ page = sqlalchemy.AdminPage(
     stats=[
         {
             "name": "Total books",
-            "description": "Total ammount of books",
+            "description": "Total amount of books",
             "query": select(func.count()).select_from(Book),
         }
     ],
