@@ -17,12 +17,15 @@ class AdminAuth:
         self.authenticate_func: Callable[[Request], None | Awaitable[None]] = (
             self.__create_default_authenticate()
         )
+        
         self.login_func: Callable[[Any], None | Awaitable[None]] = (
             self.__create_default_login()
         )
+        
         self.logout_func: Callable[[Any], None | Awaitable[None]] = (
             self.__create_default_logout()
         )
+        
         self.profile_func: Callable[[Any], Profile | Awaitable[Profile]] = (
             self.__create_default_profile()
         )
