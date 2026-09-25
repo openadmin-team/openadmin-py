@@ -13,11 +13,11 @@ class AdminWorkspaces:
         self.workspace_func: Callable[[Any], Workspace | Awaitable[Workspace]] = (
             self.__create_default_workspace_func()
         )
-        
+
         self.workspaces_func: Callable[
             [Any], list[Workspace] | Awaitable[list[Workspace]]
         ] = self.__create_default_workspaces_func()
-        
+
         self.select_workspace_func: Callable[[str, Any], None | Awaitable[None]] = (
             self.__create_default_select_workspace_func()
         )

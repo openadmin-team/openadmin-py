@@ -4,18 +4,19 @@
 
 from fastapi import Request
 
-from openadmin.workspaces import AdminWorkspaces
+from openadmin.workspaces import AdminWorkspaces, Workspace
 
 workspeaces = AdminWorkspaces()
 
 
 @workspeaces.workspace()
-async def current_workspace(req: Request):
-    return 1
+async def current_workspace(req: Request) -> Workspace:
+    return {"id": "1", "avatar": "", "name": "a"}
 
 
 @workspeaces.workspaces()
-async def get_workspaces_list(req: Request): ...
+async def get_workspaces_list(req: Request) -> list[Workspace]:
+    return [{"id": "1", "avatar": "", "name": "a"}]
 
 
 @workspeaces.select_workspace()
