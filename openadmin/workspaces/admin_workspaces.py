@@ -5,22 +5,24 @@
 from collections.abc import Awaitable, Callable
 from typing import Any
 
+from .res import Workspace
+
 
 class AdminWorkspaces:
     def __init__(self) -> None:
-        self.workspace_func: Callable[[Any], None | Awaitable[None]] = (
+        self.workspace_func: Callable[[Any], Workspace | Awaitable[Workspace]] = (
             self.__create_default_workspace_func()
         )
-        self.workspaces_func: Callable[[Any], None | Awaitable[None]] = (
-            self.__create_default_workspaces_func()
-        )
+        self.workspaces_func: Callable[
+            [Any], list[Workspace] | Awaitable[list[Workspace]]
+        ] = self.__create_default_workspaces_func()
         self.select_workspace_func: Callable[[str, Any], None | Awaitable[None]] = (
             self.__create_default_select_workspace_func()
         )
 
     def workspace(self):
         def _(
-            func: Callable[..., None | Awaitable[None]],
+            func: Callable[..., Workspace | Awaitable[Workspace]],
         ) -> Callable:
 
             self.workspace_func = func
@@ -31,7 +33,7 @@ class AdminWorkspaces:
 
     def workspaces(self):
         def _(
-            func: Callable[..., None | Awaitable[None]],
+            func: Callable[..., list[Workspace] | Awaitable[list[Workspace]]],
         ) -> Callable:
 
             self.workspaces_func = func
@@ -53,11 +55,11 @@ class AdminWorkspaces:
 
     def __create_default_workspace_func(
         self,
-    ) -> Callable[[Any], None | Awaitable[None]]: ...
+    ) -> Callable[[Any], Workspace | Awaitable[Workspace]]: ...
 
     def __create_default_workspaces_func(
         self,
-    ) -> Callable[[Any], None | Awaitable[None]]: ...
+    ) -> Callable[[Any], list[Workspace] | Awaitable[list[Workspace]]]: ...
 
     def __create_default_select_workspace_func(
         self,

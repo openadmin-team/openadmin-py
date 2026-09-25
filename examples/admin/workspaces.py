@@ -10,7 +10,8 @@ workspeaces = AdminWorkspaces()
 
 
 @workspeaces.workspace()
-async def current_workspace(req: Request): ...
+async def current_workspace(req: Request):
+    return 1
 
 
 @workspeaces.workspaces()
