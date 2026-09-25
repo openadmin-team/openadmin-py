@@ -20,9 +20,7 @@ class Table(TypedDict):
     model: type[DeclarativeBase]
     query: NotRequired[Select]
     columns: NotRequired[list[InstrumentedAttribute]]
-    actions: NotRequired[
-        list[Literal["create", "delete", "update", "read"] | Action]
-    ]
+    actions: NotRequired[list[Literal["create", "delete", "update", "read"] | Action]]
     sort: NotRequired[list[InstrumentedAttribute]]
 
 

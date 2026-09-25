@@ -11,9 +11,9 @@ from starlette.types import Lifespan
 from fastapi import APIRouter, FastAPI, HTTPException, status
 from fastapi import params as fastapi_params
 from openadmin import spec
+from openadmin.auth import AdminAuth, create_authenticate_dep
 
-from . import deps, exc_handler, utils
-from .admin_auth import AdminAuth
+from . import exc_handler, utils
 from .admin_page import AdminPage
 
 _FRONTEND_DIR = Path(__file__).parent.parent / "__client__"
@@ -45,7 +45,7 @@ class AdminPanel:
         )
         self.frontend_router = APIRouter()
         self.api_router = APIRouter(
-            dependencies=[deps.create_authenticate_dep(self.auth.authenticate_func)]
+            dependencies=[create_authenticate_dep(self.auth.authenticate_func)]
             if self.auth
             else None
         )
@@ -114,9 +114,7 @@ class AdminPanel:
                 status_code=status.HTTP_204_NO_CONTENT,
                 summary="Log out",
                 description="Log out user route",
-                dependencies=[
-                    deps.create_authenticate_dep(self.auth.authenticate_func)
-                ],
+                dependencies=[create_authenticate_dep(self.auth.authenticate_func)],
             )(self.auth.logout_func)
 
         self.app.include_router(

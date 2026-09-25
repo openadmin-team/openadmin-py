@@ -4,13 +4,13 @@
 
 from fastapi import HTTPException, Request, status
 
-from openadmin.fastapi import AdminAuth, LoginReq
+from openadmin.auth import AdminAuth, LoginReq
 
 auth = AdminAuth()
 
 
 @auth.login()
-def login(req: Request, login_req: LoginReq) -> None:
+async def login(req: Request, login_req: LoginReq) -> None:
     if login_req.username == "admin" and login_req.password == "admin":
         req.session.update({"token": "admin-token"})
     else:
@@ -20,7 +20,7 @@ def login(req: Request, login_req: LoginReq) -> None:
 
 
 @auth.authenticate()
-def authenticate(req: Request) -> None:
+async def authenticate(req: Request) -> None:
     token = req.session.get("token")
 
     if not token == "admin-token":
