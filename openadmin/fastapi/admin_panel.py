@@ -12,6 +12,7 @@ from fastapi import APIRouter, FastAPI, HTTPException, status
 from fastapi import params as fastapi_params
 from openadmin import spec
 from openadmin.auth import AdminAuth, create_authenticate_dep
+from openadmin.workspaces import AdminWorkspaces
 
 from . import exc_handler, utils
 from .admin_page import AdminPage
@@ -26,6 +27,7 @@ class AdminPanel:
         *,
         description: str | None = None,
         auth: AdminAuth | None = None,
+        workspaces: AdminWorkspaces | None = None,
         lifespan: Lifespan[FastAPI] | None = None,
         dependencies: Sequence[fastapi_params.Depends] | None = None,
     ) -> None:
@@ -34,6 +36,7 @@ class AdminPanel:
         self.description = description
         self.sections: list[spec.Section] = []
         self.auth = auth
+        self.workspaces = workspaces
 
         self.app = FastAPI(
             exception_handlers={
@@ -50,6 +53,11 @@ class AdminPanel:
             else None
         )
         self.auth_router = APIRouter()
+        self.workspaces_router = APIRouter(
+            dependencies=[create_authenticate_dep(self.auth.authenticate_func)]
+            if self.auth
+            else None
+        )
 
         self.__mount_initial_routes()
 
@@ -117,9 +125,35 @@ class AdminPanel:
                 dependencies=[create_authenticate_dep(self.auth.authenticate_func)],
             )(self.auth.logout_func)
 
+        if self.workspaces:
+            self.workspaces_router.get(
+                "/current",
+                status_code=status.HTTP_200_OK,
+                summary="Get current workspace",
+                description="Get current user workspace",
+            )(self.workspaces.workspace_func)
+
+            self.workspaces_router.get(
+                "",
+                status_code=status.HTTP_200_OK,
+                summary="Get all workspaces",
+                description="Get list of user workspaces",
+            )(self.workspaces.workspaces_func)
+
+            self.workspaces_router.post(
+                "",
+                status_code=status.HTTP_204_NO_CONTENT,
+                summary="Select workspace",
+                description="Update current workspace",
+            )(self.workspaces.select_workspace_func)
+
         self.app.include_router(
             prefix="/auth",
             router=self.auth_router,
+        )
+        self.app.include_router(
+            prefix="/worksaces",
+            router=self.workspaces_router,
         )
         self.app.include_router(
             prefix="/api",
