@@ -23,6 +23,7 @@ from .admin import (
     reports,
     tags,
     weekdays,
+    workspaces,
 )
 from .lib import lifespan
 
@@ -42,6 +43,7 @@ admin_panel = AdminPanel(
     "Book Library Admin",
     description="Manage and explore the book catalog",
     auth=auth.auth,
+    workspaces=workspaces.workspeaces,
     lifespan=lifespan.admin_panel_lifespan,
 )
 
