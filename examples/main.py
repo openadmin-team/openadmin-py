@@ -43,7 +43,7 @@ admin_panel = AdminPanel(
     "Book Library Admin",
     description="Manage and explore the book catalog",
     auth=auth.auth,
-    workspaces=workspaces.workspeaces,
+    workspaces=workspaces.admin_workspaces,
     lifespan=lifespan.admin_panel_lifespan,
 )
 
