@@ -24,7 +24,7 @@ import { useSpec } from "@/composables/openadmin-spec"
 import { useColor } from "@/composables/colors"
 import type { Color } from "@/schemas/color"
 import { Icon } from "@iconify/vue"
-import logo from "@/assets/images/logo.png"
+import WorkspaceSwitcher from "@/components/dashboard/WorkspaceSwitcher.vue"
 
 const { data: spec } = useSpec()
 const route = useRoute()
@@ -46,15 +46,7 @@ function pageColorStyle(color: Color | null) {
 <template>
 	<Sidebar collapsible="icon">
 		<SidebarHeader>
-			<div class="flex items-center gap-2 px-2 py-1.5 group-data-[collapsible=icon]:p-0!">
-				<img :src="logo" alt="Logo" class="shrink-0 rounded-md object-contain size-7">
-				<div class="flex flex-col overflow-hidden group-data-[collapsible=icon]:hidden">
-					<span class="truncate text-sm font-semibold">{{ spec?.name ?? "Admin" }}</span>
-					<span v-if="spec?.description" class="text-muted-foreground truncate text-xs">
-						{{ spec.description }}
-					</span>
-				</div>
-			</div>
+			<WorkspaceSwitcher />
 		</SidebarHeader>
 		<SidebarContent>
 			<SidebarGroup v-for="section in spec?.sections ?? []" :key="section.id">

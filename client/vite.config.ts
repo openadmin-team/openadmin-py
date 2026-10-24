@@ -25,6 +25,10 @@ export default defineConfig({
 				target: "http://localhost:8000/admin",
 				changeOrigin: true,
 			},
+			"/workspaces": {
+				target: "http://localhost:8000/admin",
+				changeOrigin: true,
+			},
 			// component data endpoints, e.g. /{sectionId}/{pageId}/stat/{statId}
 			// (excludes /src/... and /node_modules/... so dev-server source
 			// requests, e.g. /src/components/table/Table.vue, aren't caught)

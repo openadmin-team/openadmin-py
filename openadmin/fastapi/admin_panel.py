@@ -152,7 +152,7 @@ class AdminPanel:
             router=self.auth_router,
         )
         self.app.include_router(
-            prefix="/worksaces",
+            prefix="/workspaces",
             router=self.workspaces_router,
         )
         self.app.include_router(
